@@ -287,9 +287,12 @@ char	*expand(char *str)
 	if (str == NULL)
 		return (NULL);
 	ind = 0;
+	count = 0;
 	while (str[ind])
 	{
-		count = 0;
+		if (str[ind] == '\'' && ++ind)
+			while (str[ind] != '\'')
+				ind++;
 		if (str[ind] == '$' && str[ind + 1] != ' ' && str[ind + 1] != '\0')
 		{
 			write (1, "str before var|", 16);
@@ -328,29 +331,57 @@ void	get_here_doc(char *eof, int fd[2])
 	close (fd[1]);
 }
 
+void	quote(char *str)
+{
+	int		ind;
+	char	ch;
+
+	ind = 0;
+	while (*str)
+	{
+		if (str[ind] == '\"' || str[ind] == '\'')
+		{
+			ch = str[ind];
+			ind++;
+			while (str[ind] != ch)
+				ind++;
+			ft_memmove(str + ind, str + ind + 1, ft_strlen(str + ind + 1));
+			ft_memmove(str, str + 1, ft_strlen(str + 1));
+			str += ind - 1;
+		}
+		else
+			str++;
+	}
+}
+
 int	parsing(char *str)
 {
-	char	*stokens[] = {"(", ")", "&", "|", ">", "<", NULL};
-	char	*dtokens[] = {"||", "&&", ">>", "<<", NULL};
-	char	*sep[] = {"'", "\"", "`", NULL};
-	char 	**mat;
-	t_token	tokens;
-
-	if (str == NULL || *str == '\0')
-		return (1);
-	tokens.stokens = stokens;
-	tokens.dtokens = dtokens;
-	mat = tokenization(str, tokens, sep);
-	if (mat == NULL)
-		return (1);
-	init_tree(mat);
-	create_binary_tree(mat, separator_count(mat) + 1, btree());
-	if (btree()->type == ERROR)
-		return (binary_clear(btree()), 1);
+	// char	*stokens[] = {"(", ")", "&", "|", ">", "<", NULL};
+	// char	*dtokens[] = {"||", "&&", ">>", "<<", NULL};
+	// char	*sep[] = {"'", "\"", "`", NULL};
+	// char 	**mat;
+	// t_token	tokens;
+// 
+	// if (str == NULL || *str == '\0')
+		// return (1);
+	// tokens.stokens = stokens;
+	// tokens.dtokens = dtokens;
+	// mat = tokenization(str, tokens, sep);
+	// if (mat == NULL)
+		// return (1);
+	// init_tree(mat);
+	// create_binary_tree(mat, separator_count(mat) + 1, btree());
+	// if (btree()->type == ERROR)
+		// return (binary_clear(btree()), 1);
 
 	// printf("|%s|\n", str);
-	// str = expand(str);
+	// quote(str);
 	// printf("\n|%s|\n", str);
+
+	printf("|%s|\n", str);
+	expand(str);
+	printf("\n|%s|\n", str);
+
 
 	/*int		ind;
 	int		len = ft_strlen(str);
