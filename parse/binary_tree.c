@@ -95,25 +95,6 @@ int	output_comp(char *str)
 		return (1);
 	return (0);
 }
-int	output_comp(char *str)
-{
-	if (strncmp(str, ">>", 3) == 0 || strncmp(str, "&>", 3) == 0\
-		|| strncmp(str, "0>", 3) == 0 || strncmp(str, "1>", 3) == 0\
-			|| strncmp(str, "2>", 3) == 0 || strncmp(str, ">&", 3) == 0)
-					return (0);
-	if (strncmp(str, "0<>", 4) == 0 || strncmp(str, "1<>", 4) == 0 \
-		|| strncmp(str, "&>>", 4) == 0 || strncmp(str, "0>>", 4) == 0\
-			|| strncmp(str, "1>>", 4) == 0 || strncmp(str, "2>>", 4) == 0\
-				|| strncmp(str, "2<>", 4) == 0)\
-						return (0);
-	return (1);
-}
-int	input_comp(char *str)
-{
-	if (strncmp(str, "<<", 3) && strncmp(str, "<>", 3) && strncmp(str, "<", 2))
-		return (1);
-	return (0);
-}
 
 t_infile	*get_infile(char **mat)
 {
@@ -136,24 +117,6 @@ t_infile	*get_infile(char **mat)
 	infile->next = get_infile (mat + ind);
 	return (infile);
 }
-
-int redirect_comp(char *str)
-{
-	if (strncmp(str, "0>&1", 5) == 0 || strncmp(str, "1>&0", 5) == 0\
-		|| strncmp(str, "2>&0", 5) == 0 || strncmp(str, "1>&2", 5) == 0\
-			|| strncmp(str, "2>&1", 5) == 0 || strncmp(str, "0>&2", 5) == 0)
-					return (0);
-	return (1);
-}
-
-//  output is:
-	// ">>", "&>", ">&", "0>", "1>", "2>"
-	// "0<>", "1<>", "2<>", "&>>", "0>>", "1>>", "2>>"
-	// "0>&1", "1>&0", "0>&2", "2>&0", "1>&2", "2>&1"
-// 
-// input is:
-	// "<<", "<", "<>"
-
 
 t_outfile	*get_outfile(char **mat)
 {
@@ -186,16 +149,6 @@ int	find_pipe(char **mat)
 	while (mat[ind] && ft_strncmp(mat[ind], "|", 2))
 		ind++;
 	return ((mat[ind] == NULL) * -1 + (mat[ind] != NULL) * ind);
-}
-
-void	print_files(t_infile	*file)
-{
-	while (file)
-	{
-		printf("red is | file is\n");
-		printf("%s       %s\n", file->token, file->file);
-		file = file->next;
-	}
 }
 
 t_cmds	*get_cmds(char **mat)
@@ -256,7 +209,7 @@ void	create_binary_tree(char **mat, int	shlvl, t_binary *tree)
 	// printf("^===============================================================^\n");
 	create_binary_lvl(mat, shlvl, tree);
 }
-/* 
+
 void	create_binary_lvl(char **mat, int id, t_binary *tree)
 {
 	int			sep;
@@ -289,4 +242,3 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 	create_binary_lvl (mat + sep + 1, 1, tree->right);
 	create_binary_lvl (mat, 1, tree->left);
 }
- */
