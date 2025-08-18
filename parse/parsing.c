@@ -170,7 +170,7 @@ void init_tree(char	**mat)
 	btree()->left_ret = -1;
 	btree()->right_ret = -1;
 	btree()->subshell_ret = -1;
-	btree()->table = NULL;
+	btree()->cmds = NULL;
 	btree()->up = NULL;
 	btree()->left = NULL;
 	btree()->right = NULL;

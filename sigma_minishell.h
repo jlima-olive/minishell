@@ -57,11 +57,6 @@ typedef struct s_cmds
 	struct s_cmds	*next;
 }	t_cmds;
 
-typedef struct s_table
-{
-	t_cmds		*cmds;
-}	t_table;
-
 typedef struct s_binary
 {
 	t_type			type;
@@ -71,7 +66,7 @@ typedef struct s_binary
 	int				subshell_ret;
 	char			**mat;
 	char			**env;
-	t_table			*table;
+	t_cmds			*cmds;
 	struct s_binary	*up;
 	struct s_binary	*left;
 	struct s_binary	*right;
@@ -97,13 +92,11 @@ void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
 
 void		binary_clear(t_binary *binary);
-void		table_clear(t_table *table);
 void		cmds_clear(t_cmds *cmds);
 void		outfile_clear(t_outfile *outfile);
 void		infile_clear(t_infile *infile);
 
-t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table);
-t_table		*table_new(t_infile *infile, t_cmds *cmds);
+t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *table);
 t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);

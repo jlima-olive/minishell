@@ -280,7 +280,7 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 	sep = separator_comp(mat, 1);
 	if (sep == 0)
 	{
-		tree->table = table_new(get_infile(mat), get_cmds(mat));
+		tree->cmds = get_cmds(mat);
 		return ;
 	}
 	tree->left = binary_new(id ,EMPTY, tree, NULL);

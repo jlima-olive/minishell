@@ -36,17 +36,7 @@ t_cmds	*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd)
 	return (new);
 }
 
-t_table	*table_new(t_infile *infile, t_cmds *cmds)
-{
-	t_table	*new;
-
-	new = malloc(sizeof(t_table));
-	new->cmds = cmds;
-	new->infiles = infile;
-	return (new);
-}
-
-t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table)
+t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *cmds)
 {
 	t_binary	*new;
 
@@ -58,7 +48,7 @@ t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table)
 	new->left_ret = -1;
 	new->right_ret = -1;
 	new->subshell_ret = -1;
-	new->table = table;
+	new->cmds = cmds;
 	new->up = up;
 	new->left = NULL;
 	new->right = NULL;

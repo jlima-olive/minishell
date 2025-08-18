@@ -14,14 +14,17 @@ void	print_cmds(t_cmds *cmds)
 {
 	while (cmds)
 	{
-		// printf("===============================================================\n");
-		printf("starts commands\n\n");
+		printf("===============================================================\n");
+		printf("\t\tstarts infile\n");
+		print_files(cmds->infiles);
+		printf("\t\tend infile\n");
+		printf("\t\tstarts commands\n");
 		ft_print_matrix(cmds->cmd);
-		printf("end commands\n\n");
-		printf("starts outfiles\n\n");
+		printf("\t\tend commands\n");
+		printf("\t\tstarts outfiles\n");
 		print_files((t_infile *)cmds->outfiles);
-		printf("end outfiles\n");
-		// printf("===============================================================\n\n");
+		printf("\t\tend outfiles\n");
+		printf("===============================================================\n");
 		cmds = cmds->next;
 	}
 }
@@ -29,39 +32,16 @@ void	print_cmds(t_cmds *cmds)
 
 void	print_tree(t_binary *tree, int sub)
 {
+	if (sub)
+		printf("\nentering subshell\n");
 	if (tree == NULL)
 		return ;
 	print_tree(tree->subshell, 1);
 	print_tree(tree->left, 0);
 	print_tree(tree->right, 0);
 	if (tree->left == NULL && tree->right == NULL)
-	{
-		printf("BEGGINNING table here\n");
-		if (tree->table && tree->table->infiles)
-		{
-			printf("start infiles\n");
-			print_files(tree->table->infiles);
-			printf("end infiles\n");
-		}
-		else
-		{
-			if (tree->up != NULL)
-			{
-				
-			}
-			return ;
-		}
-		if (tree->up == NULL)
-			printf("estamos na head?\n");
-		if (tree->table && tree->table->infiles)
-		{
-			printf("table here\n");
-			printf("start cmds\n");
-			print_cmds(tree->table->cmds);
-			printf("end cmds\n");
-		}
-		printf("ENDING THE table here\n");
-	}
+		if (tree->cmds)
+			print_cmds(tree->cmds);
 	if (sub)
 		printf("\n^exiting shubshell^\n");
 }
@@ -86,7 +66,7 @@ int main(int ac, char **av, char **envp)
 		}
 		btree()->env = envp;
 		parsing(input);
-		// print_tree(btree(), 0);
+		print_tree(btree(), 0);
 		// binary_clear(btree());
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		char *cmd = args[0];  
