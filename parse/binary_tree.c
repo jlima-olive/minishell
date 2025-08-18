@@ -174,7 +174,7 @@ t_cmds	*get_cmds(char **mat)
 		free(mat[sep]);
 		mat[sep] = NULL;
 	}
-	cmds = cmds_new(get_outfile(mat), mat);
+	cmds = cmds_new(get_outfile(mat), get_infile(mat), mat);
 	if (sep != -1)
 		cmds->next = get_cmds(mat + sep + 1);
 	return (cmds);

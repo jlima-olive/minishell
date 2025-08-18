@@ -52,13 +52,13 @@ char *aspas(char *str);
 typedef struct s_cmds
 {
 	char			**cmd;
+	t_infile		*infiles;
 	t_outfile		*outfiles;
 	struct s_cmds	*next;
 }	t_cmds;
 
 typedef struct s_table
 {
-	t_infile	*infiles;
 	t_cmds		*cmds;
 }	t_table;
 
@@ -104,7 +104,7 @@ void		infile_clear(t_infile *infile);
 
 t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table);
 t_table		*table_new(t_infile *infile, t_cmds *cmds);
-t_cmds		*cmds_new(t_outfile *outfile, char **cmd);
+t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);
 

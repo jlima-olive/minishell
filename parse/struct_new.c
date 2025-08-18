@@ -24,13 +24,14 @@ t_infile	*infile_new(char *file, char *token)
 	return (new);
 }
 
-t_cmds	*cmds_new(t_outfile *outfile, char **cmd)
+t_cmds	*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd)
 {
 	t_cmds	*new;
 
 	new = malloc(sizeof(t_cmds));
 	new->cmd = cmd;
 	new->outfiles = outfile;
+	new->infiles = infile;
 	new->next = NULL;
 	return (new);
 }
