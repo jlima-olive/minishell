@@ -293,13 +293,15 @@ char	*expand(char *str)
 		if (str[ind] == '\'' && ++ind)
 			while (str[ind] != '\'')
 				ind++;
-		if (str[ind] == '$' && str[ind + 1] != ' ' && str[ind + 1] != '\0')
+		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?'))
 		{
+			count++;
 			write (1, "str before var|", 16);
 			write(1, str, ind);
 			printf("|\n");
-			while ((str + ind)[count] != ' ' && (str + ind)[count] != '\0'
-				&& str[ind + 1] != '\'' && str[ind + 1] != '\"')
+			if (str[ind + 1] == '?')
+				return (expand_aux(str, ind, 1));
+			while (ft_isalnum((str + ind)[count]))
 				count++;
 			return (expand_aux(str, ind, count));
 		}
