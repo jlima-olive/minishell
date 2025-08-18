@@ -66,7 +66,9 @@ int main(int ac, char **av, char **envp)
 		}
 		btree()->env = envp;
 		parsing(input);
-		print_tree(btree(), 0);
+		// printf("start<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
+		// print_tree(btree(), 0);
+		// printf("close<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 		// binary_clear(btree());
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		char *cmd = args[0];  
