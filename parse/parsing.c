@@ -346,7 +346,7 @@ int	parsing(char *str)
 	if (mat == NULL)
 		return (1);
 	init_tree(mat);
-	init_tree();
+	// init_tree();
 	// subcount = sep_count(mat);
 	// printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%d\n", subcount);
 	// fflush(stdout);

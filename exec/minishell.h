@@ -10,6 +10,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
 typedef enum e_type{
     CMD,
     AND,

@@ -80,7 +80,7 @@ typedef struct s_binary
 
 t_binary	*btree(void);
 int			parsing(char *str);
-void 		init_tree(t_binary	*tree);
+void 		init_tree(char **mat);
 
 char *aspas(char *str);
 int is_builtin(char *cmd);
@@ -94,6 +94,7 @@ void builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_env(void);
+void exec_path(char *cmd, char **args, char **envp);
 
 void		binary_clear(t_binary *binary);
 void		table_clear(t_table *table);

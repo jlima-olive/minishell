@@ -66,7 +66,7 @@ void	print_tree(t_binary *tree, int sub)
 		printf("\n^exiting shubshell^\n");
 }
 
-int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **envp)
 {
 
 	builtin_env();
@@ -84,7 +84,7 @@ int main(int ac, char **av, char **env)
 			free (args);
 			continue;
 		}
-		btree()->env = env;
+		btree()->env = envp;
 		parsing(input);
 		// print_tree(btree(), 0);
 		// binary_clear(btree());
@@ -92,6 +92,8 @@ int main(int ac, char **av, char **env)
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  
 			exec_builtin(cmd, args);
+		else
+			exec_path(cmd, args, envp);
 	}
 	return(printf("Closing Minishell\n"), 0);
 }
