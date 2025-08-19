@@ -301,13 +301,14 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 		tree->type = OR;
 	free (mat[sep]);
 	mat[sep] = NULL;
-	// printf("===============================================================\n");
-	// ft_print_matrix(mat);
+	printf("\t\t\tLEFT\n");
+	ft_print_matrix(mat);
 	create_binary_lvl (mat, 1, tree->left);
 	// print_files(get_infile(mat));
 	// // print_thiscmds(get_cmds(mat));
-	// // printf("^left===============================================================^\n");
-	// ft_print_matrix(mat);
+	// printf("^left===============================================================^\n");
+	printf("\t\t\tRIGHT\n");
+	ft_print_matrix(mat + sep + 1);
 	create_binary_lvl (mat + sep + 1, 1, tree->right);
 	// print_files(get_infile(mat + sep + 1));	
 	// print_thiscmds(get_cmds(mat + sep + 1));

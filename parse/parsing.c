@@ -258,7 +258,7 @@ char	*expand_aux(char *str, int ind, int count)
 
 	temp = ft_strndup(str + ind + 1, count - 1);
 	temp = ft_strjoin_free(temp, "=", 1);
-	printf("\nvar not expanded|%s|", temp);
+	// printf("\nvar not expanded|%s|", temp);
 	if (temp == NULL)
 		return (free (str), NULL);
 	env_var = ft_matnstr(btree()->env, temp, count);
@@ -267,16 +267,18 @@ char	*expand_aux(char *str, int ind, int count)
 		env_var = ft_calloc(1, 1);
 	if (env_var == NULL)
 		return (free (str), NULL);
-	printf("\nvar expanded|%s|\n", env_var);
+	// printf("\nvar expanded|%s|\n", env_var);
 	temp = ft_strdup(str + ind + count);
 	if (temp == NULL)
 		return (free (str), NULL);
-	printf("str after var|%s|\n", str + ind + count);
+	// printf("str after var|%s|\n", str + ind + count);
 	temp = ft_strjoin_free(env_var + count * (*env_var != '\0'), temp, 2);
-	str[ind] = '\0';
 	if (temp == NULL)
 		return (free (str), NULL);
-	return (expand(ft_strjoin_free(str, temp, 0)));
+	str[ind] = '\0';
+	str = ft_strjoin_free(str, temp, 0);
+	// printf("str=|%s|", str);
+	return (expand(str));
 }
 
 char	*expand(char *str)
@@ -296,9 +298,9 @@ char	*expand(char *str)
 		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?'))
 		{
 			count++;
-			write (1, "str before var|", 16);
-			write(1, str, ind);
-			printf("|\n");
+			// write (1, "str before var|", 16);
+			// write(1, str, ind);
+			// printf("|\n");
 			if (str[ind + 1] == '?')
 				return (expand_aux(str, ind, 1));
 			while (ft_isalnum((str + ind)[count]))
@@ -332,57 +334,68 @@ void	get_here_doc(char *eof, int fd[2])
 	close (fd[0]);
 	close (fd[1]);
 }
+// "ola meu caro guerreiro $USER" is your true name '$USER' by any chance?
 
-void	quote(char *str)
+char	*quote(char *str)
 {
-	int		ind;
 	char	ch;
+	int		ind;
+	char	*ret;
 
-	ind = 0;
+	str = expand(str);
+	ret = str;
 	while (*str)
 	{
-		if (str[ind] == '\"' || str[ind] == '\'')
+		if (*str == '\"' || *str == '\'')
 		{
+			ind = 0;
+			// printf("|%s|\n", str + ind);
 			ch = str[ind];
 			ind++;
 			while (str[ind] != ch)
 				ind++;
-			ft_memmove(str + ind, str + ind + 1, ft_strlen(str + ind + 1));
-			ft_memmove(str, str + 1, ft_strlen(str + 1));
+			// printf("%s\nto\n%s", str + ind, str + ind + 1);
+			// printf("\n\nand\n\n%s\nto\n%s", str + ind, str + ind + 1);
+			ft_memmove(str + ind, str + ind + 1, ft_strlen(str + ind));
+			ft_memmove(str, str + 1, ft_strlen(str));
+
+			// printf("\n\nstr goes from\n%s", str);
 			str += ind - 1;
+			// printf("\nto\n%s", str);
 		}
 		else
 			str++;
 	}
+	return (ret);
 }
 
 int	parsing(char *str)
 {
-	// char	*stokens[] = {"(", ")", "&", "|", ">", "<", NULL};
-	// char	*dtokens[] = {"||", "&&", ">>", "<<", NULL};
-	// char	*sep[] = {"'", "\"", "`", NULL};
-	// char 	**mat;
-	// t_token	tokens;
-// 
-	// if (str == NULL || *str == '\0')
-		// return (1);
-	// tokens.stokens = stokens;
-	// tokens.dtokens = dtokens;
-	// mat = tokenization(str, tokens, sep);
-	// if (mat == NULL)
-		// return (1);
-	// init_tree(mat);
-	// create_binary_tree(mat, separator_count(mat) + 1, btree());
-	// if (btree()->type == ERROR)
-		// return (binary_clear(btree()), 1);
+	char	*stokens[] = {"(", ")", "&", "|", ">", "<", NULL};
+	char	*dtokens[] = {"||", "&&", ">>", "<<", NULL};
+	char	*sep[] = {"'", "\"", "`", NULL};
+	char 	**mat;
+	t_token	tokens;
 
+	if (str == NULL || *str == '\0')
+		return (1);
+	tokens.stokens = stokens;
+	tokens.dtokens = dtokens;
+	mat = tokenization(str, tokens, sep);
+	if (mat == NULL)
+		return (1);
+	init_tree(mat);
+	create_binary_tree(mat, separator_count(mat) + 1, btree());
+	if (btree()->type == ERROR)
+		return (binary_clear(btree()), 1);
+// 
 	// printf("|%s|\n", str);
-	// quote(str);
+	// str = quote(str);
 	// printf("\n|%s|\n", str);
 
-	printf("|%s|\n", str);
-	expand(str);
-	printf("\n|%s|\n", str);
+	// printf("|%s|\n", str);
+	// str = expand(str);
+	// printf("\n|%s|\n", str);
 
 
 	/*int		ind;
