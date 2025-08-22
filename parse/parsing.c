@@ -295,15 +295,12 @@ char	*expand(char *str)
 		if (str[ind] == '\'' && ++ind)
 			while (str[ind] != '\'')
 				ind++;
-		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?'))
+		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
 		{
 			count++;
-			// write (1, "str before var|", 16);
-			// write(1, str, ind);
-			// printf("|\n");
 			if (str[ind + 1] == '?')
-				return (expand_aux(str, ind, 1));
-			while (ft_isalnum((str + ind)[count]))
+				return (expand_aux(str, ind, 2));
+			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
 				count++;
 			return (expand_aux(str, ind, count));
 		}
@@ -369,6 +366,32 @@ char	*quote(char *str)
 	return (ret);
 }
 
+// int	check_syntax(char **mat)
+// {
+// 
+// }
+
+
+// char	*wildcard(char *str, char **files)
+// {
+	// int		ind;
+	// int		count;
+	// char	*before;
+// 
+	// if (btree()->type == ERROR)
+		// return (NULL);
+	// ind = 0;
+	// count = 0;
+	// while (str[ind])
+	// {
+		// if (str[ind] == '*')
+			// before = ft_strndup(str, ind);
+		// ft_strnmat(files, before, ft_strndup);
+	// }
+	// return (NULL);
+// }
+
+
 int	parsing(char *str)
 {
 	char	*stokens[] = {"(", ")", "&", "|", ">", "<", NULL};
@@ -382,19 +405,22 @@ int	parsing(char *str)
 	tokens.stokens = stokens;
 	tokens.dtokens = dtokens;
 	mat = tokenization(str, tokens, sep);
+	/*if (check_syntax(mat))
+		return (1);
+		btree()->type = ERROR;*/
 	if (mat == NULL)
 		return (1);
 	init_tree(mat);
 	create_binary_tree(mat, separator_count(mat) + 1, btree());
 	if (btree()->type == ERROR)
 		return (binary_clear(btree()), 1);
-// 
+
 	// printf("|%s|\n", str);
 	// str = quote(str);
 	// printf("\n|%s|\n", str);
 
 	// printf("|%s|\n", str);
-	// str = expand(str);
+	// str = wildcard(str);
 	// printf("\n|%s|\n", str);
 
 

@@ -76,6 +76,7 @@ int main(int ac, char **av, char **envp)
 			exec_builtin(cmd, args);
 		else
 			exec_path(cmd, args, envp);
+		binary_clear(btree());
 	}
 	return(printf("Closing Minishell\n"), 0);
 }

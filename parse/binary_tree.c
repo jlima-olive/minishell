@@ -101,7 +101,7 @@ t_infile	*get_infile(char **mat)
 	t_infile	*infile;
 	int			ind;
 
-	if (mat == NULL || *mat == NULL)
+	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	ind = 0;
 	while (mat[ind] && input_comp(mat[ind]))
@@ -110,7 +110,10 @@ t_infile	*get_infile(char **mat)
 		return (NULL);
 	infile = infile_new(mat[ind + 1], mat[ind]);
 	if (infile == NULL)
+	{
+		btree()->type = ERROR;
 		return (NULL);
+	}
 	mat[ind] = NULL;
 	mat[ind + 1] = NULL;
 	ft_matrix_uni(mat + ind, mat + ind + 2);
@@ -123,7 +126,7 @@ t_outfile	*get_outfile(char **mat)
 	t_outfile	*outfile;
 	int			ind;
 
-	if (mat == NULL || *mat == NULL)
+	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	ind = 0;
 	// test if we really need ft_strncmp(mat[ind], "|", 2), I dont think we do
@@ -133,7 +136,10 @@ t_outfile	*get_outfile(char **mat)
 		return (NULL);
 	outfile = outfile_new(mat[ind + 1], mat[ind]);
 	if (outfile == NULL)
+	{
+		btree()->type = ERROR;
 		return (NULL);
+	}
 	mat[ind] = NULL;
 	mat[ind + 1] = NULL;
 	ft_matrix_uni(mat + ind, mat + ind + 2);
@@ -255,7 +261,7 @@ void    print_thiscmds(t_cmds *cmds)
         cmds = cmds->next;
     }
 }
-// 
+
 // int	check_syntax(char **mat)
 // {
 	// if ()
@@ -266,13 +272,14 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 {
 	int			sep;
 
-	if (mat == NULL || *mat == NULL)
+	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 	{
 		if (tree->up != NULL)
 			free(tree);
 		return ;
 	}
 	mat += open_parethesis(mat);
+	// ft_print_matrix(mat);
 	// if (check_syntax(mat))
 		// btree()->type = ERROR;
 	if (btree()->type == ERROR)
@@ -301,17 +308,8 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 		tree->type = OR;
 	free (mat[sep]);
 	mat[sep] = NULL;
-	printf("\t\t\tLEFT\n");
-	ft_print_matrix(mat);
+	// printf("\t\t\tLEFT\n");
 	create_binary_lvl (mat, 1, tree->left);
-	// print_files(get_infile(mat));
-	// // print_thiscmds(get_cmds(mat));
-	// printf("^left===============================================================^\n");
-	printf("\t\t\tRIGHT\n");
-	ft_print_matrix(mat + sep + 1);
+	// printf("\t\t\tRIGHT\n");
 	create_binary_lvl (mat + sep + 1, 1, tree->right);
-	// print_files(get_infile(mat + sep + 1));	
-	// print_thiscmds(get_cmds(mat + sep + 1));
-	// ft_print_matrix(mat + sep + 1);
-	// printf("^right==============================================================^\n");
 }
