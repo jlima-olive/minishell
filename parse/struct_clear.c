@@ -9,20 +9,10 @@ void	binary_clear(t_binary *binary)
 	binary_clear(binary->left);
 	binary_clear(binary->right);
 	binary_clear(binary->subshell);
-	table_clear(binary->table);
+	cmds_clear(binary->cmds);
+	free(binary->mat);
 	if (binary->up)
 		free(binary);
-	else
-		free(binary->mat);
-}
-
-void	table_clear(t_table *table)
-{
-	if (table == NULL)
-		return ;
-	infile_clear(table->infiles);
-	cmds_clear(table->cmds);
-	free(table);
 }
 
 void	cmds_clear(t_cmds *cmds)
@@ -33,7 +23,7 @@ void	cmds_clear(t_cmds *cmds)
 	while (*(cmds->cmd))
 	{
 		free(*(cmds->cmd));
-			cmds->cmd++;
+		cmds->cmd++;
 	}
 	outfile_clear(cmds->outfiles);
 	free(cmds);

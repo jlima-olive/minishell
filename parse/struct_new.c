@@ -24,28 +24,19 @@ t_infile	*infile_new(char *file, char *token)
 	return (new);
 }
 
-t_cmds	*cmds_new(t_outfile *outfile, char **cmd)
+t_cmds	*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd)
 {
 	t_cmds	*new;
 
 	new = malloc(sizeof(t_cmds));
 	new->cmd = cmd;
 	new->outfiles = outfile;
+	new->infiles = infile;
 	new->next = NULL;
 	return (new);
 }
 
-t_table	*table_new(t_infile *infile, t_cmds *cmds)
-{
-	t_table	*new;
-
-	new = malloc(sizeof(t_table));
-	new->cmds = cmds;
-	new->infiles = infile;
-	return (new);
-}
-
-t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table)
+t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *cmds)
 {
 	t_binary	*new;
 
@@ -57,7 +48,7 @@ t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_table *table)
 	new->left_ret = -1;
 	new->right_ret = -1;
 	new->subshell_ret = -1;
-	new->table = table;
+	new->cmds = cmds;
 	new->up = up;
 	new->left = NULL;
 	new->right = NULL;

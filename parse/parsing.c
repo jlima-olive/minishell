@@ -163,14 +163,14 @@ char **tokenization(char *str, t_token tokens, char **sep)
  	return (ret);
 }
 
-void init_tree(char **mat)
+void init_tree(char	**mat)
 {
 	btree()->sublvl = 0;
 	btree()->type = EMPTY;
 	btree()->left_ret = -1;
 	btree()->right_ret = -1;
 	btree()->subshell_ret = -1;
-	btree()->table = NULL;
+	btree()->cmds = NULL;
 	btree()->up = NULL;
 	btree()->left = NULL;
 	btree()->right = NULL;
@@ -258,7 +258,7 @@ char	*expand_aux(char *str, int ind, int count)
 
 	temp = ft_strndup(str + ind + 1, count - 1);
 	temp = ft_strjoin_free(temp, "=", 1);
-	printf("\nvar not expanded|%s|", temp);
+	// printf("\nvar not expanded|%s|", temp);
 	if (temp == NULL)
 		return (free (str), NULL);
 	env_var = ft_matnstr(btree()->env, temp, count);
@@ -267,16 +267,18 @@ char	*expand_aux(char *str, int ind, int count)
 		env_var = ft_calloc(1, 1);
 	if (env_var == NULL)
 		return (free (str), NULL);
-	printf("\nvar expanded|%s|\n", env_var);
+	// printf("\nvar expanded|%s|\n", env_var);
 	temp = ft_strdup(str + ind + count);
 	if (temp == NULL)
 		return (free (str), NULL);
-	printf("str after var|%s|\n", str + ind + count);
+	// printf("str after var|%s|\n", str + ind + count);
 	temp = ft_strjoin_free(env_var + count * (*env_var != '\0'), temp, 2);
-	str[ind] = '\0';
 	if (temp == NULL)
 		return (free (str), NULL);
-	return (expand(ft_strjoin_free(str, temp, 0)));
+	str[ind] = '\0';
+	str = ft_strjoin_free(str, temp, 0);
+	// printf("str=|%s|", str);
+	return (expand(str));
 }
 
 char	*expand(char *str)
@@ -287,16 +289,18 @@ char	*expand(char *str)
 	if (str == NULL)
 		return (NULL);
 	ind = 0;
+	count = 0;
 	while (str[ind])
 	{
-		count = 0;
-		if (str[ind] == '$' && str[ind + 1] != ' ' && str[ind + 1] != '\0')
+		if (str[ind] == '\'' && ++ind)
+			while (str[ind] != '\'')
+				ind++;
+		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
 		{
-			write (1, "str before var|", 16);
-			write(1, str, ind);
-			printf("|\n");
-			while ((str + ind)[count] != ' ' && (str + ind)[count] != '\0'
-				&& str[ind + 1] != '\'' && str[ind + 1] != '\"')
+			count++;
+			if (str[ind + 1] == '?')
+				return (expand_aux(str, ind, 2));
+			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
 				count++;
 			return (expand_aux(str, ind, count));
 		}
@@ -327,6 +331,66 @@ void	get_here_doc(char *eof, int fd[2])
 	close (fd[0]);
 	close (fd[1]);
 }
+// "ola meu caro guerreiro $USER" is your true name '$USER' by any chance?
+
+char	*quote(char *str)
+{
+	char	ch;
+	int		ind;
+	char	*ret;
+
+	str = expand(str);
+	ret = str;
+	while (*str)
+	{
+		if (*str == '\"' || *str == '\'')
+		{
+			ind = 0;
+			// printf("|%s|\n", str + ind);
+			ch = str[ind];
+			ind++;
+			while (str[ind] != ch)
+				ind++;
+			// printf("%s\nto\n%s", str + ind, str + ind + 1);
+			// printf("\n\nand\n\n%s\nto\n%s", str + ind, str + ind + 1);
+			ft_memmove(str + ind, str + ind + 1, ft_strlen(str + ind));
+			ft_memmove(str, str + 1, ft_strlen(str));
+
+			// printf("\n\nstr goes from\n%s", str);
+			str += ind - 1;
+			// printf("\nto\n%s", str);
+		}
+		else
+			str++;
+	}
+	return (ret);
+}
+
+// int	check_syntax(char **mat)
+// {
+// 
+// }
+
+
+// char	*wildcard(char *str, char **files)
+// {
+	// int		ind;
+	// int		count;
+	// char	*before;
+// 
+	// if (btree()->type == ERROR)
+		// return (NULL);
+	// ind = 0;
+	// count = 0;
+	// while (str[ind])
+	// {
+		// if (str[ind] == '*')
+			// before = ft_strndup(str, ind);
+		// ft_strnmat(files, before, ft_strndup);
+	// }
+	// return (NULL);
+// }
+
 
 int	parsing(char *str)
 {
@@ -335,35 +399,30 @@ int	parsing(char *str)
 	char	*sep[] = {"'", "\"", "`", NULL};
 	char 	**mat;
 	t_token	tokens;
-	// t_binary	*tree;
-	// int		subcount;
 
 	if (str == NULL || *str == '\0')
 		return (1);
 	tokens.stokens = stokens;
 	tokens.dtokens = dtokens;
 	mat = tokenization(str, tokens, sep);
+	/*if (check_syntax(mat))
+		return (1);
+		btree()->type = ERROR;*/
 	if (mat == NULL)
 		return (1);
 	init_tree(mat);
-	// init_tree();
-	// subcount = sep_count(mat);
-	// printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa%d\n", subcount);
-	// fflush(stdout);
-	// tree = binary_new(0, EMPTY, NULL, NULL);
-	// while (subcount--)
-	// {
-		// printf("loop\n");
-		// tree->subshell = binary_new(0, EMPTY, NULL, NULL);
-		// tree = tree->subshell;
-	// }
 	create_binary_tree(mat, separator_count(mat) + 1, btree());
 	if (btree()->type == ERROR)
 		return (binary_clear(btree()), 1);
 
 	// printf("|%s|\n", str);
-	// str = expand(str);
+	// str = quote(str);
 	// printf("\n|%s|\n", str);
+
+	// printf("|%s|\n", str);
+	// str = wildcard(str);
+	// printf("\n|%s|\n", str);
+
 
 	/*int		ind;
 	int		len = ft_strlen(str);
