@@ -50,6 +50,7 @@ void builtin_unset(char **args);
 char *aspas(char *str);
 void    handle_sigint(int sig);
 
+
 typedef struct s_cmds
 {
 	char			**cmd;
@@ -91,6 +92,7 @@ void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
+int exec_tree(t_binary *tree);
 
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);
