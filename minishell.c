@@ -48,7 +48,8 @@ void	print_tree(t_binary *tree, int sub)
 
 int main(int ac, char **av, char **envp)
 {
-
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	builtin_env();
 	while(1)
 	{
@@ -66,11 +67,6 @@ int main(int ac, char **av, char **envp)
 		}
 		btree()->env = envp;
 		parsing(input);
-		// printf("start<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-		// print_tree(btree(), 0);
-		// printf("close<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-		// binary_clear(btree());
-			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  
 			exec_builtin(cmd, args);
