@@ -69,6 +69,7 @@ char *aspas(char *str);
 void    handle_sigint(int sig);
 >>>>>>> 6c0dac5 (handle signals complete)
 
+
 typedef struct s_cmds
 {
 	int				expanded;
@@ -111,6 +112,7 @@ void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
+int exec_tree(t_binary *tree);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
