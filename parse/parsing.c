@@ -138,7 +138,7 @@ char **tokenization(char *str, t_token tokens, char **sep)
 		return (NULL);
 	wc = word_count(str, tokens, sep);
 	if (wc < 0)
-		return (printf("\nUnclosed |%c|\n", -wc), NULL);
+		return (printf("\nUnclosed |%c|\n", -wc), NULL); //ISSO TA A DAR SEGFAULT QUANDO FAZES ECHO "SALV <-- POR EXEMPLO | VINI
 	// printf("\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)

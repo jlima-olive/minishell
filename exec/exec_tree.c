@@ -10,11 +10,11 @@ int exec_tree(t_binary *tree)
     if (!tree)
         return (0);
     if (tree->cmds != NULL)
-        return (exec_pipe);
+        return (exec_pipes(tree->cmds, tree->env));
     if (tree->type == AND)
     {
         ret_left = exec_tree(tree->left);
-        if (ret_left)
+        if (ret_left == 0)
             return (exec_tree(tree->right));
         return (ret_left);
     }

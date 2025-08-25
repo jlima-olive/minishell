@@ -5,7 +5,7 @@
 
 t_binary	*btree(void)
 {
-	static	t_binary	tree;
+	static t_binary	tree;
 
 	return (&tree);
 }
@@ -29,7 +29,6 @@ void	print_cmds(t_cmds *cmds)
 	}
 }
 
-
 void	print_tree(t_binary *tree, int sub)
 {
 	if (sub)
@@ -46,33 +45,41 @@ void	print_tree(t_binary *tree, int sub)
 		printf("\n^exiting shubshell^\n");
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
+	char	*input;
+	char	**args;
+	char	*cmd;
+
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	builtin_env();
-	while(1)
+	while (1)
 	{
-		char *input = readline("minishell$ ");
+		input = readline("minishell$ ");
 		if (!input)
-			break;
+			break ;
 		add_history(input);
-
-		char **args = ft_split(input, ' ');
+		args = ft_split(input, ' ');
 		if (!args || !args[0])
 		{
-			free (input);
-			free (args);
-			continue;
+			free(input);
+			free(args);
+			continue ;
 		}
 		btree()->env = envp;
 		parsing(input);
-		char *cmd = args[0];  
-		if (is_builtin(cmd))  
-			exec_builtin(cmd, args);
+		cmd = args[0];
+		if (ft_strchr(input, '|') == NULL) // <-- DEIXAR ESSE IF PQ SE NAO DA MERDA QUANDO NAO EXISTEM PIPES E TENTA EXEC_BUILTIN
+		{
+		    if (is_builtin(cmd))
+		        exec_builtin(cmd, args);
+		    else
+        		exec_path(cmd, args, envp);
+		}
 		else
-			exec_path(cmd, args, envp);
+			exec_tree(btree());
 		binary_clear(btree());
 	}
-	return(printf("Closing Minishell\n"), 0);
+	return (printf("Closing Minishell\n"), 0);
 }
