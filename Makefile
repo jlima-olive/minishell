@@ -55,6 +55,7 @@ re: fclean all
 r: fclean all
 	$(MAKE) -C $(PARSER_DIR)
 	$(MAKE) -C $(EXEC_DIR)
+	make clean
 	clear && ./minishell
 
 .PHONY: re fclean clean all exec_rule parse_rule

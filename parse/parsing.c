@@ -138,18 +138,9 @@ char **tokenization(char *str, t_token tokens, char **sep)
 		return (NULL);
 	wc = word_count(str, tokens, sep);
 	if (wc < 0)
-		return (printf("\nUnclosed |%c|\n", -wc), NULL); //ISSO TA A DAR SEGFAULT QUANDO FAZES ECHO 'SALV <-- POR EXEMPLO | VINI
-	// FUNCIONA COM DOUBLE QUOTES, NAO FUNCIONA COM SINGLE QUOTES
-	// minishell$ echo 'salve
-	// Unclosed |'|
-	// 'salve
-	// Segmentation fault (core dumped)
-	// make: *** [Makefile:58: r] Error 139
-	// vivaz-ca@c2r7s3:~/42_Cursus/minishell% echo "salv
-	// dquote> "
-	// salv
+		return (printf("\nUnclosed |%c|\n", -wc), NULL);
+	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 
-	// vivaz-ca@c2r7s3:~/42_Cursus/minishell% 
 
 	// printf("\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
