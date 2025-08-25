@@ -1,5 +1,18 @@
 #include "../sigma_minishell.h"
 
+int count_cmds(t_cmds *cmd)
+{
+	size_t i = 0;
+	if (!cmd)
+		return (0);
+	i++;
+	while (cmd->next != NULL)
+	{
+		i++;
+		cmd = cmd->next;
+	}	
+	return (i);
+}
 
 int    exec_pipes(t_cmds *cmd, char **env)
 {
@@ -43,6 +56,6 @@ int    exec_pipes(t_cmds *cmd, char **env)
 		cmd = cmd->next;
 	}
 	int status;
-	while (waitpid(-1, &status, WNOHANG) > 0);
+	while (wait(&status) > 0);
 	return (WEXITSTATUS(status));
 }
