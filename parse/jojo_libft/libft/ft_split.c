@@ -6,13 +6,13 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:50:55 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/06/11 09:09:54 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/08/26 14:28:45 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static int	ft_str_count(char *str, char c)
+int	ft_str_count(char *str, char c)
 {
 	int	ind;
 	int	count;
@@ -68,7 +68,7 @@ static char	**alloc_mem(int str_count)
 {
 	char	**ret;
 
-	ret = ft_calloc((str_count + 1) * sizeof(char *), 1);
+	ret = malloc((str_count + 1) * sizeof(char *), 1);
 	if (ret == NULL)
 		return (NULL);
 	ret[str_count] = NULL;

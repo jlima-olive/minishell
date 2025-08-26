@@ -57,6 +57,11 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "libft.h": "c"
-  }
+	"libft.h": "c",
+	"sigma_minishell.h": "c",
+	"minishell.h": "c",
+	"readline.h": "c",
+	"history.h": "c",
+	"dirent.h": "c"
+}
 }

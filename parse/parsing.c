@@ -251,33 +251,32 @@ int	sep_count(char **mat)
 	return (count);
 }
 
-char	*expand_aux(char *str, int ind, int count)
+char	*expand_aux(char *str, int ind, int count, char *temp)
 {
-	char	*temp;
 	char	*env_var;
 
 	temp = ft_strndup(str + ind + 1, count - 1);
-	temp = ft_strjoin_free(temp, "=", 1);
-	// printf("\nvar not expanded|%s|", temp);
 	if (temp == NULL)
-		return (free (str), NULL);
+		return (btree()->type = ERROR, free (str), NULL);
+	temp = ft_strjoin_free(temp, "=", 1);
+	if (temp == NULL)
+		return (btree()->type = ERROR, free (str), NULL);
 	env_var = ft_matnstr(btree()->env, temp, count);
 	free(temp);
 	if (env_var == NULL)
 		env_var = ft_calloc(1, 1);
 	if (env_var == NULL)
-		return (free (str), NULL);
-	// printf("\nvar expanded|%s|\n", env_var);
+		return (btree()->type = ERROR, free (str), NULL);
 	temp = ft_strdup(str + ind + count);
 	if (temp == NULL)
-		return (free (str), NULL);
-	// printf("str after var|%s|\n", str + ind + count);
+		return (btree()->type = ERROR, free (str), NULL);
 	temp = ft_strjoin_free(env_var + count * (*env_var != '\0'), temp, 2);
 	if (temp == NULL)
-		return (free (str), NULL);
+		return (btree()->type = ERROR, free (str), NULL);
 	str[ind] = '\0';
 	str = ft_strjoin_free(str, temp, 0);
-	// printf("str=|%s|", str);
+	if (str == NULL)
+		return (btree()->type = ERROR, free (str), NULL);
 	return (expand(str));
 }
 
@@ -299,10 +298,10 @@ char	*expand(char *str)
 		{
 			count++;
 			if (str[ind + 1] == '?')
-				return (expand_aux(str, ind, 2));
+				return (expand_aux(str, ind, 2, NULL));
 			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
 				count++;
-			return (expand_aux(str, ind, count));
+			return (expand_aux(str, ind, count, NULL));
 		}
 		ind++;
 	}
@@ -339,26 +338,19 @@ char	*quote(char *str)
 	int		ind;
 	char	*ret;
 
-	str = expand(str);
 	ret = str;
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
 		{
 			ind = 0;
-			// printf("|%s|\n", str + ind);
 			ch = str[ind];
 			ind++;
 			while (str[ind] != ch)
 				ind++;
-			// printf("%s\nto\n%s", str + ind, str + ind + 1);
-			// printf("\n\nand\n\n%s\nto\n%s", str + ind, str + ind + 1);
 			ft_memmove(str + ind, str + ind + 1, ft_strlen(str + ind));
 			ft_memmove(str, str + 1, ft_strlen(str));
-
-			// printf("\n\nstr goes from\n%s", str);
 			str += ind - 1;
-			// printf("\nto\n%s", str);
 		}
 		else
 			str++;
@@ -391,6 +383,89 @@ char	*quote(char *str)
 	// return (NULL);
 // }
 
+char	*find_start(char *str)
+{
+	int		ind;
+	char	*ret;
+
+	ind = 0;
+	while (str[ind] && str[ind] != '*')
+		ind++;
+	if (ind == 0)
+	{
+		ret = ft_calloc(1, 1);
+		if (ret == NULL)
+			btree()->type = ERROR;
+		return (ret);
+	}
+	ret = ft_strndup(str, ind);
+	if (ret == NULL)
+		return (btree()->type = ERROR, NULL);
+	return (ret);
+}
+
+char	*find_end(char *str)
+{
+	int		ind;
+	int		count;
+	char	*ret;
+
+	ind = ft_strlen(str);
+	count = ind;
+	if (str[ind - 1] == '*')
+	{
+		ret = ft_calloc(1, 1);
+		if (ret == NULL)
+			return (btree()->type = ERROR, NULL);
+		return (ret);
+	}
+	while (ind && str[ind] != '*')
+		ind--;
+	ret = ft_strndup(ret + ind + 1, count - ind - 1);
+	if (ret == NULL)
+		return (btree()->type = ERROR, NULL);
+	return (ret);
+}
+
+char	**exp_wildcards(char **mat, int *count)
+{
+	char	**temp;
+	char	*start;
+	char	*end;
+
+	mat[*count] = expand(mat[*count]);
+	start = find_start(mat[*count]);
+	end = find_end(mat[*count]);
+	if (btree()->type == ERROR)
+		return (NULL);
+	temp = ft_split(mat[*count], '*');
+	if (temp == NULL);
+		return (btree()->type = ERROR, NULL);
+
+
+}
+
+char	**wildcards(char **mat, int ind, char ch, int count)
+{
+	if (mat == NULL)
+		return (btree()->type = ERROR, NULL);
+	if (mat[count] == NULL)
+		return (mat);
+	if (ft_strncmp(mat[count], "<<", 3) == 0)
+		return (wildcards(mat, -1, 0, count + 2));
+	while (mat[count][++ind])
+	{
+		if ((mat[count][ind] == '\'' || mat[count][ind] == '\"') && ++ind)
+		{
+			ch = mat[count][ind];
+			while (mat[count][ind] != ch)
+				ind++;
+		}
+		if (mat[count][ind] == '*')
+			return (wildcards(exp_wildcards(mat, &count), -1, 0, count + 1));
+	}
+	return (wildcards(mat, -1, 0, count + 1));
+}
 
 int	parsing(char *str)
 {
@@ -405,9 +480,10 @@ int	parsing(char *str)
 	tokens.stokens = stokens;
 	tokens.dtokens = dtokens;
 	mat = tokenization(str, tokens, sep);
-	/*if (check_syntax(mat))
+	/* if (check_syntax(mat))
 		return (1);
 		btree()->type = ERROR;*/
+	mat = wildcards(mat, -1, 0, 0);
 	if (mat == NULL)
 		return (1);
 	init_tree(mat);

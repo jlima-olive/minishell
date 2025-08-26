@@ -56,7 +56,6 @@ int main(int ac, char **av, char **envp)
 		if (!input)
 			break;
 		add_history(input);
-
 		char **args = ft_split(input, ' ');
 		if (!args || !args[0])
 		{
@@ -66,10 +65,6 @@ int main(int ac, char **av, char **envp)
 		}
 		btree()->env = envp;
 		parsing(input);
-		// printf("start<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-		// print_tree(btree(), 0);
-		// printf("close<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-		// binary_clear(btree());
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  

@@ -7,6 +7,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdbool.h>
+#include <dirent.h>
 
 
 // << = 256
@@ -37,17 +38,17 @@ typedef struct s_os_envs{
 	struct s_os_envs *next;
 }   t_os_envs;
 
-int		is_builtin(char *cmd);
-void	builtin_cd(char *path);
-void	builtin_pwd(void);
-void	builtin_env(void);
-void	builtin_exit(char **args);
-int exec_builtin(char *cmd, char **args);
-void print_env_list(void);
-t_os_envs **get_env_list(void);
-void builtin_export(char **args);
-void builtin_unset(char **args);
-char *aspas(char *str);
+int			is_builtin(char *cmd);
+void		builtin_cd(char *path);
+void		builtin_pwd(void);
+void		builtin_env(void);
+void		builtin_exit(char **args);
+int			exec_builtin(char *cmd, char **args);
+void		print_env_list(void);
+t_os_envs	**get_env_list(void);
+void		builtin_export(char **args);
+void		builtin_unset(char **args);
+char		*aspas(char *str);
 
 typedef struct s_cmds
 {
