@@ -167,12 +167,14 @@ void	print_files(t_infile	*file)
 	}
 }
 
-t_cmds	*get_cmds(char **mat)
+t_cmds	*get_cmds(char **temp)
 {
 	t_cmds	*cmds;
+	char	**mat;
 	int		sep;
 
-	if (mat == NULL || *mat == NULL)
+	mat = wildcards(temp, -1, 0, 0);
+	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	sep = find_pipe(mat);
 	if (sep != -1)
@@ -181,6 +183,9 @@ t_cmds	*get_cmds(char **mat)
 		mat[sep] = NULL;
 	}
 	cmds = cmds_new(get_outfile(mat), get_infile(mat), mat);
+	if (cmds == NULL)
+		return (btree()->type = ERROR, NULL);
+	cmds->expanded = (mat != temp);
 	if (sep != -1)
 		cmds->next = get_cmds(mat + sep + 1);
 	return (cmds);

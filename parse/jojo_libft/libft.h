@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:02:51 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/08/26 14:13:48 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:02:38 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	rdwr_frm_int_fd(char *cmd_path_inc, char **env, int rd, int wr);
 char	*ft_wrdchr(const char *s, int c);
 int		ft_emptystr(const char *str);
 int		ft_str_count(char *str, char c);
+int		ft_strcmp(const char *s1, const char *s2);
 
 typedef struct s_list
 {

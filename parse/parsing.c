@@ -43,7 +43,7 @@ int	word_count(char *str, t_token tokens, char **sep)
 	int		token_found;
 	char	*sep_found;
 
-	ind  = 0;
+	ind = 0;
 	count = 0;
 	while (str[ind])
 	{
@@ -286,7 +286,7 @@ char	*expand(char *str)
 	int		count;
 
 	if (str == NULL)
-		return (NULL);
+		return (btree()->type = ERROR, NULL);
 	ind = 0;
 	count = 0;
 	while (str[ind])
@@ -363,97 +363,228 @@ char	*quote(char *str)
 // 
 // }
 
-
-// char	*wildcard(char *str, char **files)
-// {
-	// int		ind;
-	// int		count;
-	// char	*before;
-// 
-	// if (btree()->type == ERROR)
-		// return (NULL);
-	// ind = 0;
-	// count = 0;
-	// while (str[ind])
-	// {
-		// if (str[ind] == '*')
-			// before = ft_strndup(str, ind);
-		// ft_strnmat(files, before, ft_strndup);
-	// }
-	// return (NULL);
-// }
-
-char	*find_start(char *str)
+void	remove_null(t_wild **head, t_wild *node, t_wild *next)
 {
-	int		ind;
-	char	*ret;
+	while ((*head)->search == NULL)
+	{
+		node = (*head)->next;
+		free (*head);
+		*head = node;
+		if (*head == NULL)
+			return ;
+	}
+	node = (*head);
+	while (node->next)
+	{
+		next = node->next;
+		if (next->search == NULL)
+		{
+			node->next = next->next;
+			free (next);
+		}
+		else
+			node = next;
+	}
+}
+
+void	remove_non_end(t_wild **head, size_t len)
+{
+	t_wild *node;
+	t_wild *next;
+
+	if (len == 0)
+		return ;
+	while (head && *head && ft_strlen((*head)->search) != len)
+	{
+		node = (*head)->next;
+		free (*head);
+		*head = node;
+		if (*head == NULL)
+			return ;
+	}
+	node = (*head);
+	while (node && node->next)
+	{
+		next = node->next;
+		if (ft_strlen(next->search) != len)
+		{
+			node->next = next->next;
+			free (next);
+		}
+		else
+			node = next;
+	}
+}
+
+void	print_wild(t_wild *head)
+{
+	while (head)
+	{
+		printf("%s\n", head->file);
+		head = head->next;
+	}
+}
+
+t_wild	*find_wild_aux(t_wild *head, char **pattern, char *end)
+{
+	t_wild	*temp;
+	// char	**dir_pattern;
+	// int	len;
+
+	while (head != NULL && pattern && *pattern != NULL)
+	{
+		temp = head;
+		while (temp)
+		{
+			// if (find_dir(*pattern))
+				// do_something(head, split(*pattern, '/'), )
+			// printf("ft_strstr(%s, %s) is |%s|\n",temp->file, *pattern, ft_strstr(temp->search, *pattern));
+			temp->search = ft_strstr(temp->search, *pattern);
+			temp = temp->next;
+		}
+		pattern++;
+		remove_null(&head, NULL, NULL);
+	}
+	temp = head;
+	remove_non_end(&head, ft_strlen(end));
+	// printf("start\n");
+	// print_wild(head);
+	// printf("end\n");
+	return (head);
+}
+
+void	add_wild_back(t_wild **lst, t_wild *new)
+{
+	t_wild	*temp;
+
+	if (lst == NULL || new == NULL)
+		return ;
+	if (*lst == NULL)
+		*lst = new;
+	else
+	{
+		temp = *lst;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new;
+	}
+}
+
+int	hidden_file(char *file, char *start)
+{
+	if (*file != '.')
+		return (1);
+	if (*file == '.' && *start == '.')
+		return (1);
+	return (0);
+}
+
+t_wild	*find_wildcards(char **pattern, char **limit, char *dir /*change this*/)
+{
+	t_wild			*head;
+	DIR				*directory;
+	struct dirent	*entry;
+	int				len;
+
+	head = NULL;
+	directory = opendir(dir);
+	if (directory == NULL)
+		return (btree()->type = ERROR, NULL);
+	entry = readdir(directory);
+	len = strlen(limit[0]);
+	while (entry != NULL)
+	{
+		if (ft_strnstr(entry->d_name, limit[0], len) \
+			&& hidden_file(entry->d_name, limit[0]))
+		{
+			add_wild_back(&head, wild_new(entry->d_name, entry->d_type, len));
+			if (btree()->type == ERROR)
+				return (NULL);
+			// printf("%s\n", entry->d_name);
+		}
+		entry = readdir(directory);
+	}
+	closedir(directory);
+	// print_wild(head);
+	return (find_wild_aux(head, pattern, limit[1]));
+}
+
+int	wildsize(t_wild *head)
+{
+	int	ind;
 
 	ind = 0;
-	while (str[ind] && str[ind] != '*')
-		ind++;
-	if (ind == 0)
+	while (head)
 	{
-		ret = ft_calloc(1, 1);
-		if (ret == NULL)
-			btree()->type = ERROR;
-		return (ret);
+		head = head->next;
+		ind++;
 	}
-	ret = ft_strndup(str, ind);
-	if (ret == NULL)
-		return (btree()->type = ERROR, NULL);
-	return (ret);
+	return (ind);
 }
 
-char	*find_end(char *str)
+char	**bind_mat_lst(char **mat, int count, t_wild *head)
 {
 	int		ind;
-	int		count;
-	char	*ret;
+	char	**ret;
 
-	ind = ft_strlen(str);
-	count = ind;
-	if (str[ind - 1] == '*')
-	{
-		ret = ft_calloc(1, 1);
-		if (ret == NULL)
-			return (btree()->type = ERROR, NULL);
-		return (ret);
-	}
-	while (ind && str[ind] != '*')
-		ind--;
-	ret = ft_strndup(ret + ind + 1, count - ind - 1);
+	if (head == NULL)
+		return (mat);
+	ind = wildsize(head);
+	ret = malloc(sizeof(char *)* (ft_matlen(mat) + ind));
 	if (ret == NULL)
 		return (btree()->type = ERROR, NULL);
+	ind = -1;
+	while (++ind < count)
+		ret[ind] = mat[ind];
+	while (head)
+	{
+		ret[ind] = ft_strdup(head->file);
+		if (ret[ind] == NULL)
+			return (btree()->type = ERROR, NULL);
+		head = head->next;
+	}
+	while (mat[count++])
+		ret[ind++] = mat[count];
 	return (ret);
 }
 
-char	**exp_wildcards(char **mat, int *count)
+char	**exp_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 {
-	char	**temp;
-	char	*start;
-	char	*end;
+	char	**pattern;
+	char	*limit[2];
+	int		ind[2];
 
-	mat[*count] = expand(mat[*count]);
-	start = find_start(mat[*count]);
-	end = find_end(mat[*count]);
+	mat[count] = expand(mat[count]);
 	if (btree()->type == ERROR)
 		return (NULL);
-	temp = ft_split(mat[*count], '*');
-	if (temp == NULL);
+	pattern = ft_split(mat[count], '*'); // change to a special split
+	if (pattern == NULL)
 		return (btree()->type = ERROR, NULL);
-
-
+	if (mat[count][0] == '*')
+		limit[0] = empty_str;
+	else
+		limit[0] = *pattern;
+	ind[0] = ft_strlen(mat[count]);
+	ind[1] = ft_matlen(pattern);
+	if (mat[count][ind[0] - (ind[0] > 0)] == '*')
+		limit[1] = empty_str;
+	else
+		limit[1] = pattern[ind[1] - (ind[1] > 0)];
+	head = find_wildcards(pattern + (*limit == *pattern), limit, ".");
+	return (bind_mat_lst(mat, count, head));
 }
 
 char	**wildcards(char **mat, int ind, char ch, int count)
 {
-	if (mat == NULL)
-		return (btree()->type = ERROR, NULL);
+	char	**new;
+
+	if (btree()->type == ERROR)
+		return (NULL);
 	if (mat[count] == NULL)
 		return (mat);
 	if (ft_strncmp(mat[count], "<<", 3) == 0)
-		return (wildcards(mat, -1, 0, count + 2));
-	while (mat[count][++ind])
+		return (wildcards(mat, 0, 0, count + 2));
+	while (mat[count][ind])
 	{
 		if ((mat[count][ind] == '\'' || mat[count][ind] == '\"') && ++ind)
 		{
@@ -462,9 +593,14 @@ char	**wildcards(char **mat, int ind, char ch, int count)
 				ind++;
 		}
 		if (mat[count][ind] == '*')
-			return (wildcards(exp_wildcards(mat, &count), -1, 0, count + 1));
+		{
+			new = exp_wildcards(mat, count, "\0", NULL);
+			count += ft_matlen(new) - ft_matlen(mat);
+			return (wildcards(new, 0, 0, count + 1));
+		}
+		ind++;
 	}
-	return (wildcards(mat, -1, 0, count + 1));
+	return (wildcards(mat, 0, 0, count + 1));
 }
 
 int	parsing(char *str)
@@ -483,13 +619,21 @@ int	parsing(char *str)
 	/* if (check_syntax(mat))
 		return (1);
 		btree()->type = ERROR;*/
-	mat = wildcards(mat, -1, 0, 0);
 	if (mat == NULL)
 		return (1);
-	init_tree(mat);
-	create_binary_tree(mat, separator_count(mat) + 1, btree());
+	// init_tree(mat);
+
+
+	ft_print_matrix(mat);
+	// printf("expanded its:\n");
+	char **new = wildcards(mat, 0, 0, 0);
+	ft_print_matrix(new);
+
+
+	// create_binary_tree(mat, separator_count(mat) + 1, btree());
 	if (btree()->type == ERROR)
 		return (binary_clear(btree()), 1);
+	return (0);
 
 	// printf("|%s|\n", str);
 	// str = quote(str);
@@ -521,5 +665,4 @@ int	parsing(char *str)
 	// if (pipe(fd))
 		// return (printf("error\n"));
 	// get_here_doc(str, fd);
-	return (0);
 }

@@ -25,6 +25,8 @@ void	cmds_clear(t_cmds *cmds)
 		free(*(cmds->cmd));
 		cmds->cmd++;
 	}
+	if (cmds->expanded)
+		free ((cmds->cmd));
 	outfile_clear(cmds->outfiles);
 	free(cmds);
 }

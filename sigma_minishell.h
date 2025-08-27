@@ -13,6 +13,14 @@
 // << = 256
 // >> = 255
 
+typedef struct s_wild
+{
+	char			*file;
+	char			*search;
+	char			d_type;
+	struct	s_wild	*next;
+}	t_wild;
+
 typedef struct s_token
 {
 	char	**stokens;
@@ -52,6 +60,7 @@ char		*aspas(char *str);
 
 typedef struct s_cmds
 {
+	int				expanded;
 	char			**cmd;
 	t_infile		*infiles;
 	t_outfile		*outfiles;
@@ -101,6 +110,7 @@ t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *table);
 t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);
+t_wild		*wild_new(char *file, char d_type, int len);
 
 void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
 t_outfile	*get_outfile(char **mat);
@@ -117,6 +127,7 @@ void	print_files(t_infile	*file);
 
 void	get_here_doc(char *eof, int fd[2]);
 char	*expand(char *str);
-char	*expand_aux(char *str, int ind, int count);
+char	*expand_aux(char *str, int ind, int count, char *temp);
+char	**wildcards(char **mat, int ind, char ch, int count);
 
 #endif

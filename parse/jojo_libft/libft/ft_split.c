@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 13:50:55 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/08/26 14:28:45 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:54:12 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static char	**alloc_mem(int str_count)
 {
 	char	**ret;
 
-	ret = malloc((str_count + 1) * sizeof(char *), 1);
+	ret = malloc((str_count + 1) * sizeof(char *));
 	if (ret == NULL)
 		return (NULL);
 	ret[str_count] = NULL;
