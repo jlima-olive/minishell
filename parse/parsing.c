@@ -434,22 +434,20 @@ t_wild	*find_wild_aux(t_wild *head, char **pattern, char *end)
 	while (head != NULL && pattern && *pattern != NULL)
 	{
 		temp = head;
-		while (temp)
-		{
-			// if (find_dir(*pattern))
-				// do_something(head, split(*pattern, '/'), )
-			// printf("ft_strstr(%s, %s) is |%s|\n",temp->file, *pattern, ft_strstr(temp->search, *pattern));
-			temp->search = ft_strstr(temp->search, *pattern);
-			temp = temp->next;
-		}
+		if (find_slash(*pattern))
+			get_pattern_dir(temp->search, *pattern);
+		else
+			while (temp)
+			{
+				temp->search = ft_strstr(temp->search, *pattern);
+				temp = temp->next;
+			}
 		pattern++;
 		remove_null(&head, NULL, NULL);
 	}
 	temp = head;
 	remove_non_end(&head, ft_strlen(end));
-	// printf("start\n");
-	// print_wild(head);
-	// printf("end\n");
+	print_wild(head);
 	return (head);
 }
 
@@ -479,14 +477,12 @@ int	hidden_file(char *file, char *start)
 	return (0);
 }
 
-t_wild	*find_wildcards(char **pattern, char **limit, char *dir /*change this*/)
+t_wild	*find_wildcards(char **pattern, char **limit, char *dir, t_wild *head)
 {
-	t_wild			*head;
 	DIR				*directory;
 	struct dirent	*entry;
 	int				len;
 
-	head = NULL;
 	directory = opendir(dir);
 	if (directory == NULL)
 		return (btree()->type = ERROR, NULL);
@@ -570,7 +566,7 @@ char	**exp_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 		limit[1] = empty_str;
 	else
 		limit[1] = pattern[ind[1] - (ind[1] > 0)];
-	head = find_wildcards(pattern + (*limit == *pattern), limit, ".");
+	head = find_wildcards(pattern + (*limit == *pattern), limit, "./", NULL);
 	return (bind_mat_lst(mat, count, head));
 }
 
