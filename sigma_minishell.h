@@ -94,6 +94,10 @@ void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
 int    exec_pipes(t_cmds *cmd, char **env);
+void	exec_redirections(t_cmds *cmd);
+int has_redir(t_cmds *cmd);
+void free_matrix(char **table);
+char **array_to_exec(t_cmds *cmd);
 
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);

@@ -48,8 +48,8 @@ void	print_tree(t_binary *tree, int sub)
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
-	char	**args;
-	char	*cmd;
+	t_cmds	*cmds;
+	pid_t	pid;
 
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
@@ -60,25 +60,56 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			break ;
 		add_history(input);
-		args = ft_split(input, ' ');
-		if (!args || !args[0])
+		if (*input == '\0')
 		{
 			free(input);
-			free(args);
 			continue ;
 		}
 		btree()->env = envp;
-		parsing(input);
-		cmd = args[0];
-		if (ft_strchr(input, '|') == NULL) // <-- DEIXAR ESSE IF PQ SE NAO DA MERDA QUANDO NAO EXISTEM PIPES E TENTA EXEC_BUILTIN
+		parsing(input); // Fills btree()->cmds
+		cmds = btree()->cmds;
+		if (!cmds || !cmds->cmd || !cmds->cmd[0])
 		{
-		    if (is_builtin(cmd))
-		        exec_builtin(cmd, args);
-		    else
-        		exec_path(cmd, args, envp);
+			free(input);
+			binary_clear(btree());
+			continue ;
+		}
+		if (!ft_strchr(input, '|'))
+		{
+			if (is_builtin(cmds->cmd[0]))
+			{
+				if (has_redir(cmds))
+				{
+					pid = fork();
+					if (pid == 0)
+					{
+						exec_redirections(cmds);
+						exec_builtin(cmds->cmd[0], cmds->cmd);
+						exit(0);
+					}
+					waitpid(pid, NULL, 0);
+				}
+				else
+					exec_builtin(cmds->cmd[0], cmds->cmd);
+			}
+			else
+			{
+				pid = fork();
+				if (pid == 0)
+				{
+					if (has_redir(cmds))
+						exec_redirections(cmds);
+					exec_path(cmds->cmd[0], cmds->cmd, envp);
+					exit(1);
+				}
+				waitpid(pid, NULL, 0);
+			}
 		}
 		else
+		{
 			exec_tree(btree());
+		}
+		free(input);
 		binary_clear(btree());
 	}
 	return (printf("Closing Minishell\n"), 0);
