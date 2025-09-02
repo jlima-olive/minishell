@@ -2,6 +2,7 @@
 
 int is_redir_token(const char *s)
 {
+	// printf("=======IS_REDIR_TOKEN SENDO RODADA IGUAL SUA MAE\n");
     return (strcmp(s, ">") == 0 || strcmp(s, ">>") == 0
          || strcmp(s, "<") == 0 || strcmp(s, "<<") == 0);
 }
@@ -10,7 +11,8 @@ int has_redir(t_cmds *cmd)
 {
     int i = 0;
     if (!cmd || !cmd->cmd)
-        return 0;
+        return (printf("has_dir tem demencia\n"), 0);
+	// printf("=======ADENTRANDO FUNCAO HAS_REDIR\n");
     while (cmd->cmd[i])
     {
         if (is_redir_token(cmd->cmd[i]))
@@ -20,9 +22,9 @@ int has_redir(t_cmds *cmd)
     return 0;
 }
 
-
 int count_tokens(t_cmds *cmd)
 {
+	// printf("========COUNTING\n");
     int i = 0, count = 0;
     while (cmd->cmd[i])
     {
@@ -42,6 +44,7 @@ char **array_to_exec(t_cmds *cmd)
 
     if (!cmd || !cmd->cmd)
         return NULL;
+	// printf("=======LANCANDO ARRAY TO EXEC\n");
     char **new_argv = malloc(sizeof(char *) * (count_tokens(cmd) + 1));
     if (!new_argv)
         return NULL;
@@ -56,76 +59,72 @@ char **array_to_exec(t_cmds *cmd)
     return new_argv;
 }
 
-void single_right(t_cmds *cmd)
+void exec_redirections(t_cmds *cmd)
 {
-    int fd;
     int i = 0;
-    
+
     if (!cmd || !cmd->cmd)
         return;
-    
+
+    // Loop through all tokens
     while (cmd->cmd[i])
     {
         if (strcmp(cmd->cmd[i], ">") == 0 && cmd->cmd[i + 1])
         {
-            fd = open(cmd->cmd[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            int fd = open(cmd->cmd[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd < 0)
             {
-                perror("Can't deal with this file");
+                perror("open >");
                 exit(1);
             }
             if (dup2(fd, STDOUT_FILENO) < 0)
             {
-                perror("dup2");
+                perror("dup2 >");
                 close(fd);
                 exit(1);
             }
             close(fd);
-            return; // Only handle the first occurrence
+            i += 2; // skip filename
         }
-        i++;
-    }
-}
-
-void double_right(t_cmds *cmd)
-{
-    int fd;
-    int i = 0;
-    
-    if (!cmd || !cmd->cmd)
-        return;
-    
-    while (cmd->cmd[i])
-    {
-        if (strcmp(cmd->cmd[i], ">>") == 0 && cmd->cmd[i + 1])
+        else if (strcmp(cmd->cmd[i], ">>") == 0 && cmd->cmd[i + 1])
         {
-            fd = open(cmd->cmd[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+            int fd = open(cmd->cmd[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
             if (fd < 0)
             {
-                perror("Can't deal with this file");
+                perror("open >>");
                 exit(1);
             }
             if (dup2(fd, STDOUT_FILENO) < 0)
             {
-                perror("dup2");
+                perror("dup2 >>");
                 close(fd);
                 exit(1);
             }
             close(fd);
-            return;
+            i += 2;
         }
-        i++;
+        else if (strcmp(cmd->cmd[i], "<") == 0 && cmd->cmd[i + 1])
+        {
+            int fd = open(cmd->cmd[i + 1], O_RDONLY);
+            if (fd < 0)
+            {
+                perror("open <");
+                exit(1);
+            }
+            if (dup2(fd, STDIN_FILENO) < 0)
+            {
+                perror("dup2 <");
+                close(fd);
+                exit(1);
+            }
+            close(fd);
+            i += 2;
+        }
+        else
+            i++;
     }
 }
 
-void exec_redirections(t_cmds *cmd)
-{
-    if (!cmd || !cmd->cmd)
-        return;
-    
-    single_right(cmd);
-    double_right(cmd);
-}
 
 // int single_left(t_cmds *cmd)
 // {

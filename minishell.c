@@ -1,7 +1,5 @@
 
 #include "sigma_minishell.h"
-#include <readline/history.h>
-#include <stdlib.h>
 
 t_binary	*btree(void)
 {
@@ -12,6 +10,7 @@ t_binary	*btree(void)
 
 void	print_cmds(t_cmds *cmds)
 {
+	int i = 0;
 	while (cmds)
 	{
 		printf("===============================================================\n");
@@ -74,32 +73,41 @@ int	main(int ac, char **av, char **envp)
 			binary_clear(btree());
 			continue ;
 		}
+		// print_cmds(cmds);
 		if (!ft_strchr(input, '|'))
 		{
 			if (is_builtin(cmds->cmd[0]))
 			{
+				// printf("==IS_BUILTIN 1\n");
 				if (has_redir(cmds))
 				{
+					// printf("==HAS_REDIR 1\n");
 					pid = fork();
 					if (pid == 0)
 					{
 						exec_redirections(cmds);
-						exec_builtin(cmds->cmd[0], cmds->cmd);
+						char **cleaned = array_to_exec(cmds);
+						exec_builtin(cleaned[0], cleaned);
+						free_matrix(cleaned);
 						exit(0);
 					}
 					waitpid(pid, NULL, 0);
 				}
 				else
-					exec_builtin(cmds->cmd[0], cmds->cmd);
+					exec_builtin(cmds->cmd[0], cmds->cmd)/* , printf("SOOCBYDOO\n") */;
 			}
 			else
 			{
+				// printf("=======NAO E BUILTIN\n");
 				pid = fork();
 				if (pid == 0)
 				{
+					// printf("=======PID IGUAL A 0\n");
 					if (has_redir(cmds))
 						exec_redirections(cmds);
-					exec_path(cmds->cmd[0], cmds->cmd, envp);
+					char **cleaned = array_to_exec(cmds);
+        			exec_path(cleaned[0], cleaned, envp);
+        			free_matrix(cleaned);
 					exit(1);
 				}
 				waitpid(pid, NULL, 0);
