@@ -90,6 +90,11 @@ void double_right(t_cmds *cmd)
         {
             cmd->outfiles->file = cmd->cmd[i + 1];
             fd = open(cmd->outfiles->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (fd < 0)
+            {
+                perror("Can't deal with this file");
+                exit(1);
+            }
             if (dup2(fd, STDOUT_FILENO) < 0)
             {
                 perror("dup2");
@@ -98,7 +103,6 @@ void double_right(t_cmds *cmd)
             }
             close(fd);
         }
-        close(fd);
         i++;
     }
     cleaned = array_to_exec(cmd->cmd);
