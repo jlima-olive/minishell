@@ -37,7 +37,7 @@ void builtin_pwd(void)
     if (getcwd(buf, sizeof(buf)) == NULL)
         perror("pwd");
     else
-        printf("%s\n", buf);
+        ft_putstr_fd(buf, 1);
 }
 
 void builtin_echo(char **args)
@@ -51,14 +51,14 @@ void builtin_echo(char **args)
     while (args[i])
     {
         cleaned = aspas(args[i]);
-        printf("%s", cleaned);
+        ft_putstr_fd(cleaned, 1);
         free(cleaned);
         if (args[i + 1] != NULL)
-            printf(" ");
+            write(1, " ", 1);
         i++;
     }
     if (!(args[1] && ft_strncmp(args[1], "-n", 2) == 0))
-        printf(("\n"));
+        write(1, "\n", 1);
 }
 
 void    builtin_exit(char **args)

@@ -408,6 +408,8 @@ int	parsing(char *str)
 	tokens.stokens = stokens;
 	tokens.dtokens = dtokens;
 	mat = tokenization(str, tokens, sep);
+	// for (int i = 0; mat[i]; i++)
+	// 	printf("====PARSING TESTING: Token[%d]: |%s|\n", i, mat[i]);
 	/*if (check_syntax(mat))
 		return (1);
 		btree()->type = ERROR;*/

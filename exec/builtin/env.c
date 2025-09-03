@@ -47,7 +47,7 @@ void print_env_list(void)
 {
     t_os_envs *current = *get_env_list();
     while (current) {
-        printf("%s\n", current->linux_envs[0]);
+        ft_putstr_fd(current->linux_envs[0], 1);
         current = current->next;
     }
 }
