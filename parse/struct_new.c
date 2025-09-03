@@ -57,15 +57,17 @@ t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *cmds)
 	return (new);
 }
 
-t_wild	*wild_new(char *file, char d_type, int len)
+t_wild	*wild_new(char *file, char d_type)
 {
 	t_wild	*new;
 
+	if (file == NULL)
+		return (btree()->type = ERROR, NULL);
 	new = malloc(sizeof(t_wild));
 	if (new == NULL)
-		return (NULL);
+		return (btree()->type = ERROR, NULL);
 	new->file = file;
-	new->search = file + len;
+	new->search = file;
 	new->d_type = d_type;
 	new->next = NULL;
 	return (new);

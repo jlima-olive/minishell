@@ -276,6 +276,7 @@ void    print_thiscmds(t_cmds *cmds)
 void	create_binary_lvl(char **mat, int id, t_binary *tree)
 {
 	int			sep;
+	int			parethesis;
 
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 	{
@@ -283,7 +284,14 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 			free(tree);
 		return ;
 	}
-	mat += open_parethesis(mat);
+	parethesis = open_parethesis(mat);
+	while (parethesis)
+	{
+		mat += parethesis;
+		parethesis += open_parethesis(mat);
+	}
+	
+	parethesis += open_parethesis(mat);
 	// ft_print_matrix(mat);
 	// if (check_syntax(mat))
 		// btree()->type = ERROR;

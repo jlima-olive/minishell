@@ -29,7 +29,6 @@ void	print_cmds(t_cmds *cmds)
 	}
 }
 
-
 void	print_tree(t_binary *tree, int sub)
 {
 	if (sub)

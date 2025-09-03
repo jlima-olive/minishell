@@ -13,21 +13,27 @@ void	binary_clear(t_binary *binary)
 	free(binary->mat);
 	if (binary->up)
 		free(binary);
+	else
+		free(btree()->mat);
 }
 
 void	cmds_clear(t_cmds *cmds)
 {
+	int	ind;
+
 	if (cmds == NULL)
 		return ;
 	cmds_clear(cmds->next);
-	while (*(cmds->cmd))
+	outfile_clear(cmds->outfiles);
+	infile_clear(cmds->infiles);
+	ind = 0;
+	while (cmds->cmd[ind])
 	{
-		free(*(cmds->cmd));
-		cmds->cmd++;
+		free(cmds->cmd[ind]);
+		ind++;
 	}
 	if (cmds->expanded)
-		free ((cmds->cmd));
-	outfile_clear(cmds->outfiles);
+		free (cmds->cmd);
 	free(cmds);
 }
 
@@ -49,4 +55,13 @@ void	outfile_clear(t_outfile *outfile)
 	free(outfile->file);
 	free(outfile->token);
 	free(outfile);
+}
+
+void	wild_clear(t_wild *node)
+{
+	if (node == NULL)
+		return ;
+	wild_clear(node->next);
+	free(node->file);
+	free(node);
 }

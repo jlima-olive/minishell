@@ -105,12 +105,13 @@ void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);
 void		outfile_clear(t_outfile *outfile);
 void		infile_clear(t_infile *infile);
+void	wild_clear(t_wild *node);
 
 t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *table);
 t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);
-t_wild		*wild_new(char *file, char d_type, int len);
+t_wild		*wild_new(char *file, char d_type);
 
 void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
 t_outfile	*get_outfile(char **mat);
