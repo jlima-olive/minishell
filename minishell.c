@@ -14,7 +14,7 @@ void	print_cmds(t_cmds *cmds)
 	int i = 0;
 	while (cmds)
 	{
-		printf("===============================================================\n");
+		// printf("===============================================================\n");
 		printf("\t\tstarts infile\n");
 		print_files(cmds->infiles);
 		printf("\t\tend infile\n");
@@ -24,7 +24,7 @@ void	print_cmds(t_cmds *cmds)
 		printf("\t\tstarts outfiles\n");
 		print_files((t_infile *)cmds->outfiles);
 		printf("\t\tend outfiles\n");
-		printf("===============================================================\n");
+		// printf("===============================================================\n");
 		cmds = cmds->next;
 	}
 }
@@ -74,29 +74,20 @@ int	main(int ac, char **av, char **envp)
 			binary_clear(btree());
 			continue ;
 		}
-		// printf("cmd->cmd = ");
-		// int i = 0;
-		// while (cmds->cmd[i])
-		// {
-		//     printf("|%s| ", cmds->cmd[i]);
-		//     i++;
-		// }
-		// printf("\n");
-		print_cmds(cmds);
+		// print_cmds(cmds);
 		if (!ft_strchr(input, '|'))
 		{
 			if (is_builtin(cmds->cmd[0]))
 			{
-				printf("==IS_BUILTIN 1\n");
+				// printf("==IS_BUILTIN 1\n");
 				if (has_redir(cmds))
 				{
-					printf("==HAS_REDIR 1\n");
+					// printf("==HAS_REDIR 1\n");
 					pid = fork();
 					if (pid == 0)
 					{
-						printf("==== I AM ABOUT TO EXEC_REDIRECTIONS 1\n");
+						// printf("==== I AM ABOUT TO EXEC_REDIRECTIONS 1\n");
 						exec_redirections(cmds);
-						write(STDOUT_FILENO, "=====TESTING BECAUSE PERPLEXITY WANTS 1\n", 41);
 						char **cleaned = array_to_exec(cmds);
 						exec_builtin(cleaned[0], cleaned);
 						free_matrix(cleaned);
@@ -105,17 +96,17 @@ int	main(int ac, char **av, char **envp)
 					waitpid(pid, NULL, 0);
 				}
 				else
-					exec_builtin(cmds->cmd[0], cmds->cmd)/* , printf("SOOCBYDOO\n") */;
+					exec_builtin(cmds->cmd[0], cmds->cmd);
 			}
 			else
 			{
-				printf("=======NAO E BUILTIN\n");
+				// printf("=======NAO E BUILTIN\n");
 				pid = fork();
 				if (pid == 0)
 				{
-					printf("=======PID IGUAL A 0\n");
+					// printf("=======PID IGUAL A 0\n");
 					if (has_redir(cmds))
-						exec_redirections(cmds), write(STDOUT_FILENO, "======I EXEC_REDIRECT\n=====TESTING BECAUSE PERPLEXITY WANTS 2\n", 63);;
+						exec_redirections(cmds);
 					char **cleaned = array_to_exec(cmds);
         			exec_path(cleaned[0], cleaned, envp);
         			free_matrix(cleaned);
