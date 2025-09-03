@@ -66,7 +66,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		btree()->env = envp;
-		parsing(input); // Fills btree()->cmds
+		parsing(input);
 		cmds = btree()->cmds;
 		if (!cmds || !cmds->cmd || !cmds->cmd[0])
 		{
@@ -74,19 +74,15 @@ int	main(int ac, char **av, char **envp)
 			binary_clear(btree());
 			continue ;
 		}
-		// print_cmds(cmds);
 		if (!ft_strchr(input, '|'))
 		{
 			if (is_builtin(cmds->cmd[0]))
 			{
-				// printf("==IS_BUILTIN 1\n");
 				if (has_redir(cmds))
 				{
-					// printf("==HAS_REDIR 1\n");
 					pid = fork();
 					if (pid == 0)
 					{
-						// printf("==== I AM ABOUT TO EXEC_REDIRECTIONS 1\n");
 						exec_redirections(cmds);
 						char **cleaned = array_to_exec(cmds);
 						exec_builtin(cleaned[0], cleaned);
@@ -100,11 +96,9 @@ int	main(int ac, char **av, char **envp)
 			}
 			else
 			{
-				// printf("=======NAO E BUILTIN\n");
 				pid = fork();
 				if (pid == 0)
 				{
-					// printf("=======PID IGUAL A 0\n");
 					if (has_redir(cmds))
 						exec_redirections(cmds);
 					char **cleaned = array_to_exec(cmds);
