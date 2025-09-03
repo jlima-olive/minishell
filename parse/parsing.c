@@ -727,13 +727,22 @@ char	**wildcards(char **mat, int ind, char ch, int count)
 	return (wildcards(mat, 0, 0, count + 1));
 }
 
-int check_next(char *str);
+/* int check_next(char *str)
+{
+	if (*(mat + 1) && (!ft_strcmp(*(mat + 1), ")") || \
+		!ft_strcmp(*(mat + 1), "&&") || !ft_strcmp(*(mat + 1), "||") \
+			|| !ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&")))
+		return (1);
+	return (0);
+} */
 
 int	check_parethesis(char **mat, int count)
 {
 	if (ft_strcmp(*mat, "(") == 0)
 	{
-		if (check_next(*(mat + 1)))
+		if (*(mat + 1) && (!ft_strcmp(*(mat + 1), ")") || \
+			!ft_strcmp(*(mat + 1), "&&") || !ft_strcmp(*(mat + 1), "||") \
+				|| !ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&")))
 			return (write(1, "syntax error near unexpected token `('", 39));
 		return (1);
 	}
@@ -745,36 +754,53 @@ int	check_parethesis(char **mat, int count)
 			return (write(1, "syntax error near unexpected token `)'", 39));
 		return (-1);
 	}
-}
-
-int check_next(char *str)
-{
-	if (str && (!ft_strcmp(str, ")") || \
-		!ft_strcmp(str, "&&") || !ft_strcmp(str, "||")) \
-			|| !ft_strcmp(str, "|") || !ft_strcmp(str, "&"))
-		return (1);
 	return (0);
 }
-int	check_first(char **mat)
+
+void	syntax_error_msg(char *str)
 {
-	if (!ft_strcmp(*mat, "&&") || !ft_strcmp(*mat, "||") || \
-		!ft_strcmp(*mat, "&") || !ft_strcmp(*mat, "|") || \
-			!ft_strcmp(*mat, ")"))
+	write(1, "syntax error near unexpected token `", 36);
+	write(1, str, ft_strlen(str));
+	write(1, "'", 2);
+}
+
+int	check_first(char *str)
+{
+	if (!ft_strcmp(str, "&&") || !ft_strcmp(str, "||") || \
+		!ft_strcmp(str, "&") || !ft_strcmp(str, "|") || \
+			!ft_strcmp(str, ")"))
 	{
-		write(1, "syntax error near unexpected token `", 36);
-		write(1, *mat, ft_strlen(*mat));
-		write(1, "'", 2);
+		syntax_error_msg(str);
 		return (1);
 	}
 	return (0);
 }
 
-int	syntax_error_msg(char *str)
+int	check_last(char *str)
 {
-	write(1, "syntax error near unexpected token `", 36);
-	write(1, str, ft_strlen(str));
-	write(1, "'", 2);
-	return (1);
+	if (!ft_strcmp(str, "&&") || !ft_strcmp(str, "||") || \
+		!ft_strcmp(str, "|") || !ft_strcmp(str, "(") || \
+			!ft_strcmp(str, ">") || !ft_strcmp(str, ">>") || \
+				!ft_strcmp(str, "<") || !ft_strcmp(str, "<<"))
+	{
+		syntax_error_msg("newline");
+		return (1);
+	}
+	return (0);
+}
+
+int	check_tokens(char **mat, t_token tokens)
+{
+	if (!ft_strcmp(*mat, "&&") || !ft_strcmp(*mat, "||") || \
+		!ft_strcmp(*mat, "|") || !ft_strcmp(*mat, "&"))
+		if (!ft_strcmp(*(mat + 1), "&&") || !ft_strcmp(*(mat + 1), "||") || \
+			!ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&"))
+			return (syntax_error_msg(*(mat + 1)), 1);
+	if (!ft_strcmp(*mat, ">") || !ft_strcmp(*mat, ">>") || \
+		!ft_strcmp(*mat, "<") || !ft_strcmp(*mat, "<<"))
+		if (find_tokens(*(mat + 1), tokens))
+			return (syntax_error_msg(*(mat + 1)), 1);
+	return (0);
 }
 
 int	check_syntax(char **mat, t_token tokens)
@@ -782,21 +808,20 @@ int	check_syntax(char **mat, t_token tokens)
 	int	count;
 	int	temp;
 
-	if (check_first(mat))
+	if (*mat && check_first(*mat))
 		return (1);
 	count = 0;
 	while (*mat && *(mat + 1))
 	{
-		if (!ft_strcmp(*mat, ">") || !ft_strcmp(*mat, ">>") || \
-			!ft_strcmp(*mat, "<") || !ft_strcmp(*mat, "<<"))
-			if (find_tokens(*(mat + 1), tokens))
-				return (syntax_error_msg(*(mat + 1)));
+		if (check_tokens(mat, tokens))
+			return (syntax_error_msg(*(mat + 1)), 1);
 		temp = check_parethesis(mat, count);
-		if (temp > 1 || temp < -1);
+		if (temp > 1 || temp < -1)
 			return (1);
 		count += temp;
+		mat++;
 	}
-	if (check_last(mat))
+	if (*mat && check_last(*mat))
 		return (1);
 	if (count > 0)
 		return (write(1, "syntax error near unexpected token `)'", 39));
@@ -811,7 +836,6 @@ int	parsing(char *str)
 	char	*dtokens[] = {"||", "&&", ">>", "<<", NULL};
 	char	*sep[] = {"'", "\"", "`", NULL};
 	char 	**mat;
-	int		parethesis;
 	t_token	tokens;
 
 	if (str == NULL || *str == '\0')
@@ -823,11 +847,7 @@ int	parsing(char *str)
 		return (printf("mat is null\n"), 1);
 	if (check_syntax(mat, tokens))
 		return (1);
-	while (parethesis)
-	{
-		mat =+ parethesis;
-		parethesis += open_parethesis(mat);
-	}
+	ft_print_matrix(mat);
 	init_tree(mat);
 	create_binary_tree(mat, separator_count(mat) + 1, btree());
 	if (btree()->type == ERROR)

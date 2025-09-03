@@ -119,6 +119,7 @@ int	find_pipe(char **mat);
 t_cmds	*get_cmds(char **mat);
 void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
 void	create_binary_lvl(char **mat, int id, t_binary *tree);
+int		open_parethesis(char **mat);
 
 // future libft.h
 void	ft_matrix_uni(char **dest, char **src);

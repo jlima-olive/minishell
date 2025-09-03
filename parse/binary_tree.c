@@ -173,7 +173,7 @@ t_cmds	*get_cmds(char **temp)
 	char	**mat;
 	int		sep;
 
-	mat = wildcards(temp, -1, 0, 0);
+	mat = wildcards(temp, 0, 0, 0);
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	sep = find_pipe(mat);
@@ -288,13 +288,8 @@ void	create_binary_lvl(char **mat, int id, t_binary *tree)
 	while (parethesis)
 	{
 		mat += parethesis;
-		parethesis += open_parethesis(mat);
+		parethesis = open_parethesis(mat);
 	}
-	
-	parethesis += open_parethesis(mat);
-	// ft_print_matrix(mat);
-	// if (check_syntax(mat))
-		// btree()->type = ERROR;
 	if (btree()->type == ERROR)
 		return ;
 	sep = separator_comp(mat, 1);

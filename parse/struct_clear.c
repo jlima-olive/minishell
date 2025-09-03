@@ -13,8 +13,6 @@ void	binary_clear(t_binary *binary)
 	free(binary->mat);
 	if (binary->up)
 		free(binary);
-	else
-		free(btree()->mat);
 }
 
 void	cmds_clear(t_cmds *cmds)
@@ -27,7 +25,7 @@ void	cmds_clear(t_cmds *cmds)
 	outfile_clear(cmds->outfiles);
 	infile_clear(cmds->infiles);
 	ind = 0;
-	while (cmds->cmd[ind])
+	while (cmds->cmd && cmds->cmd[ind])
 	{
 		free(cmds->cmd[ind]);
 		ind++;
