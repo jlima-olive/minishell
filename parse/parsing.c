@@ -743,15 +743,15 @@ int	check_parethesis(char **mat, int count)
 		if (*(mat + 1) && (!ft_strcmp(*(mat + 1), ")") || \
 			!ft_strcmp(*(mat + 1), "&&") || !ft_strcmp(*(mat + 1), "||") \
 				|| !ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&")))
-			return (write(1, "syntax error near unexpected token `('", 39));
+			return (write(1, "syntax error near unexpected token `('\n", 39));
 		return (1);
 	}
 	if (ft_strcmp(*mat, ")") == 0)
 	{
 		if (count <= 0)
-			return (write(1, "syntax error near unexpected token `)'", 39));
+			return (write(1, "syntax error near unexpected token `)'\n", 39));
 		if (*mat && ft_strcmp(*mat, "(") == 0)
-			return (write(1, "syntax error near unexpected token `)'", 39));
+			return (write(1, "syntax error near unexpected token `)'\n", 39));
 		return (-1);
 	}
 	return (0);
@@ -761,7 +761,7 @@ void	syntax_error_msg(char *str)
 {
 	write(1, "syntax error near unexpected token `", 36);
 	write(1, str, ft_strlen(str));
-	write(1, "'", 2);
+	write(1, "'\n", 2);
 }
 
 int	check_first(char *str)
@@ -824,9 +824,9 @@ int	check_syntax(char **mat, t_token tokens)
 	if (*mat && check_last(*mat))
 		return (1);
 	if (count > 0)
-		return (write(1, "syntax error near unexpected token `)'", 39));
+		return (write(1, "syntax error near unexpected token `)'\n", 39));
 	if (count < 0)
-		return (write(1, "syntax error near unexpected token `('", 39));
+		return (write(1, "syntax error near unexpected token `('\n", 39));
 	return (0);
 }
 
@@ -847,10 +847,9 @@ int	parsing(char *str)
 		return (printf("mat is null\n"), 1);
 	if (check_syntax(mat, tokens))
 		return (1);
-	ft_print_matrix(mat);
 	init_tree(mat);
 	create_binary_tree(mat, separator_count(mat) + 1, btree());
 	if (btree()->type == ERROR)
-		return (binary_clear(btree()), 1);
+		return (1);
 	return (0);
 }
