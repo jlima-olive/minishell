@@ -37,7 +37,7 @@ void builtin_pwd(void)
     if (getcwd(buf, sizeof(buf)) == NULL)
         perror("pwd");
     else
-        ft_putstr_fd(buf, 1);
+        printf("%s\n", buf);
 }
 
 void builtin_echo(char **args)

@@ -23,13 +23,13 @@ char **split_path(char **envp)
     return (vars);
 }
 
-void exec_path(char *cmd, char **args, char **envp)
+int exec_system_path(char *cmd, char **args, char **envp)
 {
     char **paths_to_search = split_path(envp);
     if (!paths_to_search)
     {
         write(2, "PATH not found\n", 15);
-        exit(1);
+        return -1;
     }
     int i = 0;
     while (paths_to_search[i])
@@ -38,7 +38,11 @@ void exec_path(char *cmd, char **args, char **envp)
         if (!full_path)
         {
             perror("malloc failed");
-            exit(1);
+            int j = 0;
+            while (paths_to_search[j])
+                free(paths_to_search[j++]);
+            free(paths_to_search);
+            return -1;
         }
         strcpy(full_path, paths_to_search[i]);
         strcat(full_path, "/");
@@ -48,7 +52,12 @@ void exec_path(char *cmd, char **args, char **envp)
             execve(full_path, args, envp);
             perror("execve failed");
             free(full_path);
-            exit(1);
+            // Clean up remaining memory before returning error
+            int j = 0;
+            while (paths_to_search[j])
+                free(paths_to_search[j++]);
+            free(paths_to_search);
+            return -1;
         }
         free(full_path);
         i++;
@@ -57,12 +66,31 @@ void exec_path(char *cmd, char **args, char **envp)
     while (paths_to_search[i])
         free(paths_to_search[i++]);
     free(paths_to_search);
-    char *executables = cmd;
-    if (access(executables, X_OK) == 0)
-        execv(executables, args);
-    
-    free(executables);
-    write(2, "command not found\n", 18);
-    exit(1);
+    return -1;
+}
+
+int exec_path(char *cmd, char **args, char **envp)
+{
+    char *executables;
+    if (exec_system_path(cmd, args, envp) == 0)
+        return (0);
+    if (strchr(cmd, '/'))
+    {
+        if (access(cmd, X_OK) == 0)
+        {
+            execve(cmd, args, envp);
+            return (perror("execve failed"), -1);
+        }
+    }
+    else
+    {
+        if (access(cmd, X_OK) == 0)
+        {
+            execve(cmd, args, envp);
+            return (perror("execve failed"), -1);
+        }
+    }
+    printf("Command not found 2\n");
+    return (-1);
 }
 

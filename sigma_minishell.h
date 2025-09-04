@@ -91,7 +91,7 @@ void builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_env(void);
-void exec_path(char *cmd, char **args, char **envp);
+int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
 int    exec_pipes(t_cmds *cmd, char **env);
 void	exec_redirections(t_cmds *cmd);
