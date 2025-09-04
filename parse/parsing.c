@@ -113,9 +113,9 @@ int	parsing(char *str)
 		mat = tokenization(str, tokens, sep, word_count(str, tokens, sep));
 	if (mat == NULL)
 		return (1);
-	printf("printing matrix\n");
-	ft_print_matrix(mat);
-	printf("done printing matrix\n");
+	// printf("printing matrix\n");
+	// ft_print_matrix(mat);
+	// printf("done printing matrix\n");
 	if (check_syntax(mat, tokens))
 		return (1);
 	init_tree(mat);
