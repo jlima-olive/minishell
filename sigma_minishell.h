@@ -9,10 +9,6 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-
-// << = 256
-// >> = 255
-
 typedef struct s_wild
 {
 	char			*file;

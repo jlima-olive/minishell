@@ -1,6 +1,4 @@
 #include "../sigma_minishell.h"
-#include "jojo_libft/libft.h"
-
 
 /* void	print_wild(t_wild *head)
 {
@@ -34,6 +32,13 @@ void	get_here_doc(char *eof, int fd[2])
 	close (fd[1]);
 }
 
+int	single_error_msg(int wc)
+{
+	ft_putstr_fd(2 , "syntax error near unexpected token `");
+	ft_putstr_fd(2 , &wc);
+	ft_putstr_fd(2 , "'");
+}
+
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
 {
 	int		ind;
@@ -41,7 +46,7 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	char	**ret;
 
 	if (wc < 0)
-		return (fprintf(stderr, "syntax error near unexpected token `%c'", -wc), NULL);
+		return (single_error_msg(wc), NULL);
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
@@ -77,20 +82,6 @@ void init_tree(char	**mat)
 	btree()->mat = mat;
 }
 
-/* int	separator_count(char **mat)
-{
-	int	count;
-
-	count = 0;
-	while (*mat)
-	{
-		if (strncmp(*mat, "&", 2))
-			count++;
-		mat++;
-	}
-	return (count);
-} */
-
 int	sep_count(char **mat)
 {
 	int	count;
@@ -104,18 +95,6 @@ int	sep_count(char **mat)
 	}
 	return (count);
 }
-/* 
-char	*dtokens[] = {"<>", "||", "&&", ">>", "<<", "&>", ">&", "0>", "1>", "2>", NULL};
-char	*ttokens[] = {"0<>", "1<>", "2<>", "&>>", "0>>", "1>>", "2>>", NULL};
-char	*qtokens[] = {"0>&1", "1>&0", / ignore left? /"0>&2", "2>&0", "1>&2", "2>&1", NULL};
-tokens.ttokens = ttokens;
-tokens.qtokens = qtokens;
- if (check_syntax(mat, tokens))
-	 printf("wrongggggggg\n");
- else 
-	 printf("rightttttttttt\n");
-	 return (ft_free_matrix(mat), 1);
- */
 
 int	parsing(char *str)
 {
