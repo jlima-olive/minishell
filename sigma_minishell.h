@@ -101,35 +101,63 @@ t_os_envs **get_env_list(void);
 void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
 
+// struct_clear.c
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);
 void		outfile_clear(t_outfile *outfile);
 void		infile_clear(t_infile *infile);
-void	wild_clear(t_wild *node);
+void		wild_clear(t_wild *node);
 
+// struct_new.c
 t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *table);
 t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);
 t_wild		*wild_new(char *file, char d_type);
 
-void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
+void		create_binary_tree(char **mat, int	shlvl, t_binary *tree);
 t_outfile	*get_outfile(char **mat);
-int	find_pipe(char **mat);
-t_cmds	*get_cmds(char **mat);
-void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
-void	create_binary_lvl(char **mat, int id, t_binary *tree);
-int		open_parethesis(char **mat);
+t_cmds		*get_cmds(char **mat);
+void		create_binary_tree(char **mat, int	shlvl, t_binary *tree);
+int			open_parethesis(char **mat);
+void		*create_binary_lvl(char **mat, int id, t_binary *tree);
+
+int	find_tokens(char *str, t_token tokens);
+
+// wildcards.c
+t_wild	*get_pattern(t_wild *head, char **pattern, char **limit);
+void	remove_null(t_wild **head, t_wild *node, t_wild *next);
+void	remove_non_start(t_wild **head, char *start, int len);
+char	**wildcards(char **mat, int count, int flag);
+void	remove_non_end(t_wild **head, char *end);
+void	add_wild_back(t_wild **lst, t_wild *new);
+int		hidden_files(char *file, char *start);
+void	sort_wild(t_wild *wild1);
+void	quote_matrix(char **mat);
+int		wildsize(t_wild *head);
+
+// expansions.c
+char	*expand(char *str);
+char	*quote(char *str);
+
+// syntax_error_msg.c
+void	syntax_error_msg(char *str);
+
+// get_pattern.c
+t_outfile	*get_outfile(char **mat);
+t_infile	*get_infile(char **mat);
+int			find_pipe(char **mat);
+
+// check_syntax.c
+int	check_syntax(char **mat, t_token tokens);
 
 // future libft.h
-void	ft_matrix_uni(char **dest, char **src);
 char	*ft_matnstr(char **matrix, char *s, int n);
+void	ft_matrix_uni(char **dest, char **src);
 
 void	print_files(t_infile	*file);
 
 void	get_here_doc(char *eof, int fd[2]);
-char	*expand(char *str);
 char	*expand_aux(char *str, int ind, int count, char *temp);
-char	**wildcards(char **mat, int ind, char ch, int count);
 
 #endif

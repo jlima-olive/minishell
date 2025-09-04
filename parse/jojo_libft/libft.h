@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:02:51 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/09/04 12:42:48 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/09/04 14:39:02 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int		ft_strcmp(const char *s1, const char *s2);
 char	**ft_giga_split(char *str, char c);
 void	ft_ult_swap(char **p1, char **p2);
 void	ft_swap(char *p1, char *p2);
+int		ft_abs_strcmp(char *str1, char *str2);
 
 typedef struct s_list
 {

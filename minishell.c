@@ -3,14 +3,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 
-t_binary	*btree(void)
-{
-	static	t_binary	tree;
-
-	return (&tree);
-}
-
-void	print_cmds(t_cmds *cmds)
+/* void	print_cmds(t_cmds *cmds)
 {
 	while (cmds)
 	{
@@ -43,11 +36,16 @@ void	print_tree(t_binary *tree, int sub)
 			print_cmds(tree->cmds);
 	if (sub)
 		printf("\n^exiting shubshell^\n");
+} */
+t_binary	*btree(void)
+{
+	static	t_binary	tree;
+
+	return (&tree);
 }
 
 int main(int ac, char **av, char **envp)
 {
-
 	builtin_env();
 	while(1)
 	{
@@ -71,6 +69,7 @@ int main(int ac, char **av, char **envp)
 		else
 			exec_path(cmd, args, envp);
 		binary_clear(btree());
+		free(btree()->mat);
 	}
 	return(printf("Closing Minishell\n"), 0);
 }
