@@ -1,4 +1,5 @@
 #include "../sigma_minishell.h"
+#include <unistd.h>
 
 char *find_path(char **envp)
 {
@@ -56,6 +57,11 @@ void exec_path(char *cmd, char **args, char **envp)
     while (paths_to_search[i])
         free(paths_to_search[i++]);
     free(paths_to_search);
+    char *executables = cmd;
+    if (access(executables, X_OK) == 0)
+        execv(executables, args);
+    
+    free(executables);
     write(2, "command not found\n", 18);
     exit(1);
 }
