@@ -125,13 +125,16 @@ void		*create_binary_lvl(char **mat, int id, t_binary *tree);
 int	find_tokens(char *str, t_token tokens);
 
 // wildcards.c
+char	**bind_mat_lst(char **mat, int count, t_wild *head, int ind);
 t_wild	*get_pattern(t_wild *head, char **pattern, char **limit);
 void	remove_null(t_wild **head, t_wild *node, t_wild *next);
 void	remove_non_start(t_wild **head, char *start, int len);
+t_wild	*read_dir(char *dir, t_wild *head, char *start);
 char	**wildcards(char **mat, int count, int flag);
 void	remove_non_end(t_wild **head, char *end);
 void	add_wild_back(t_wild **lst, t_wild *new);
 int		hidden_files(char *file, char *start);
+int		simple_syntax(char **mat);
 void	sort_wild(t_wild *wild1);
 void	quote_matrix(char **mat);
 int		wildsize(t_wild *head);
@@ -151,13 +154,14 @@ int			find_pipe(char **mat);
 // check_syntax.c
 int	check_syntax(char **mat, t_token tokens);
 
+// 
+int	parsing_strlen(char *str, t_token tokens, char **sep);
+int	word_count(char *str, t_token tokens, char **sep);
+
 // future libft.h
 char	*ft_matnstr(char **matrix, char *s, int n);
 void	ft_matrix_uni(char **dest, char **src);
 
-void	print_files(t_infile	*file);
-
 void	get_here_doc(char *eof, int fd[2]);
-char	*expand_aux(char *str, int ind, int count, char *temp);
 
 #endif

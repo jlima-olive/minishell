@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:02:51 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/09/04 14:39:02 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:02:07 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ char	**ft_giga_split(char *str, char c);
 void	ft_ult_swap(char **p1, char **p2);
 void	ft_swap(char *p1, char *p2);
 int		ft_abs_strcmp(char *str1, char *str2);
+void	free_matrix_nodes(char **mat);
 
 typedef struct s_list
 {

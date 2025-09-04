@@ -51,7 +51,8 @@ int	check_tokens(char **mat, t_token tokens)
 	if (!ft_strcmp(*mat, "&&") || !ft_strcmp(*mat, "||") || \
 		!ft_strcmp(*mat, "|") || !ft_strcmp(*mat, "&"))
 		if (!ft_strcmp(*(mat + 1), "&&") || !ft_strcmp(*(mat + 1), "||") || \
-			!ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&"))
+			!ft_strcmp(*(mat + 1), "|") || !ft_strcmp(*(mat + 1), "&") || \
+				!ft_strcmp(*(mat + 1), ")"))
 			return (syntax_error_msg(*(mat + 1)), 1);
 	if (!ft_strcmp(*mat, ">") || !ft_strcmp(*mat, ">>") || \
 		!ft_strcmp(*mat, "<") || !ft_strcmp(*mat, "<<"))

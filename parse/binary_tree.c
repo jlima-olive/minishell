@@ -53,7 +53,26 @@ int	separator_comp(char **mat, int flag, int ind, int pcount)
 			if (ft_strncmp(mat[ind], "&", 2) == 0)
 				return (ind);
 	return (0);
-} 
+}
+
+int	simple_syntax(char **mat)
+{
+	if (ft_strcmp(*mat, "(") == 0)
+	{
+		while (ft_strcmp(*mat, ")"))
+			mat++;
+		syntax_error_msg(*(mat + 1));
+		return (1);
+	}
+	while (*mat && ft_strcmp(*mat, "("))
+		mat++;
+	if (*mat)
+	{
+		syntax_error_msg(*(mat + 1));
+		return (1);
+	}
+	return (0);
+}
 
 t_cmds	*get_cmds(char **temp)
 {
@@ -61,7 +80,12 @@ t_cmds	*get_cmds(char **temp)
 	char	**mat;
 	int		sep;
 
-	mat = wildcards(temp, 0, 0, 0);
+	if (simple_syntax(temp))
+	{
+		free_matrix_nodes(temp);
+		return (btree()->type = ERROR, NULL);
+	}
+	mat = wildcards(temp, 0, 0);
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	sep = find_pipe(mat);

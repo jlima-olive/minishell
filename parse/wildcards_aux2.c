@@ -1,14 +1,5 @@
 #include "../sigma_minishell.h"
 
-int	hidden_files(char *file, char *start)
-{
-	if (*file != '.' && *start != '.')
-		return (1);
-	if (*file == '.' && *start == '.')
-		return (1);
-	return (0);
-}
-
 static int	check_end(char *big, char *little)
 {
 	int	big_len;
