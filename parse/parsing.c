@@ -276,7 +276,7 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	str[ind] = '\0';
 	str = ft_strjoin_free(str, temp, 0);
 	if (str == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
+		return (btree()->type = ERROR, NULL);
 	return (expand(str));
 }
 
@@ -338,6 +338,7 @@ char	*quote(char *str)
 	int		ind;
 	char	*ret;
 
+	str = expand(str);
 	ret = str;
 	while (*str)
 	{
@@ -613,6 +614,40 @@ void	free_all(char **mat, int count)
 
 char	**bind_mat_lst_aux(char **mat, char **ret, int count, t_wild *head);
 
+int	ft_abs_strcmp(char *str1, char *str2)
+{
+	char ch1;
+	char ch2;
+
+	while (*str1 && *str2)
+	{
+		ch1 = *str1 + (*str1 > 64 && *str1 < 91) * 32;
+		ch2 = *str2 + (*str2 > 64 && *str2 < 91) * 32;
+		if (ch1 != ch2)
+			return (ch1 - ch2);
+		str1++;
+		str2++;
+	}
+	return (0);
+}
+
+void	sort_wild(t_wild *wild1)
+{
+	t_wild *wild2;
+
+	while (wild1)
+	{
+		wild2 = wild1->next;
+		while (wild2)
+		{
+			if (ft_abs_strcmp(wild1->file, wild2->file) > 0)
+				ft_ult_swap(&wild1->file, &wild2->file);
+			wild2 = wild2->next;
+		}
+		wild1 = wild1->next;
+	}
+}
+
 char	**bind_mat_lst(char **mat, int count, t_wild *head, int ind)
 {
 	char	**ret;
@@ -620,19 +655,18 @@ char	**bind_mat_lst(char **mat, int count, t_wild *head, int ind)
 	if (head == NULL)
 		return (mat);
 	ind = ft_matlen(mat) + wildsize(head) - 1;
-	printf("printing mat\n");
-	ft_print_matrix(mat);
-	printf("printing head\n");
-	print_wild(head);
-	printf("done printing\n\n");
-	printf("safe\n");
+	// printf("printing mat\n");
+	// ft_print_matrix(mat);
+	// printf("printing head\n");
+	// print_wild(head);
+	// printf("done printing\n\n");
+	// printf("safe\n");
 	ret = malloc(sizeof(char *) * (ind + 1));
 	if (ret == NULL)
 		return (btree()->type = ERROR, NULL);
-	printf("safe1\n");
-	printf("%d\n", ind);
+	// printf("%d\n", ind);
 	ret[ind] = NULL;
-	// sort_head(head);
+	sort_wild(head);
 	ret = bind_mat_lst_aux(mat, ret, count, head);
 	wild_clear(head);
 	return (ret);
@@ -670,6 +704,14 @@ char	**bind_mat_lst_aux(char **mat, char **ret, int count, t_wild *head)
 	return (ret);
 }
 
+void	quote_matrix(char **mat)
+{
+	while (mat && *mat)
+	{
+		*mat = quote(*mat);
+		mat++;
+	}
+}
 
 char	**exp_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 {
@@ -677,10 +719,10 @@ char	**exp_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 	char	*limit[2];
 	int		ind[2];
 
-	mat[count] = expand(mat[count]);
 	if (btree()->type == ERROR)
 		return (NULL);
-	pattern = ft_giga_split(mat[count], '*'); // change to a special split
+	pattern = ft_giga_split(mat[count], '*');
+	quote_matrix(pattern);
 	if (pattern == NULL)
 		return (btree()->type = ERROR, NULL);
 	if (mat[count][0] == '*')
@@ -695,6 +737,7 @@ char	**exp_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 		limit[1] = pattern[ind[1] - (ind[1] > 0)];
 	head = read_dir("./", NULL, limit[0]);
 	head = get_pattern(head, pattern + (*pattern == *limit), limit);
+	ft_free_matrix(pattern);
 	return (bind_mat_lst(mat, count, head, 0));
 }
 
