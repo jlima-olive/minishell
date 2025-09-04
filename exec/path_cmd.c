@@ -52,7 +52,6 @@ int exec_system_path(char *cmd, char **args, char **envp)
             execve(full_path, args, envp);
             perror("execve failed");
             free(full_path);
-            // Clean up remaining memory before returning error
             int j = 0;
             while (paths_to_search[j])
                 free(paths_to_search[j++]);
@@ -66,12 +65,11 @@ int exec_system_path(char *cmd, char **args, char **envp)
     while (paths_to_search[i])
         free(paths_to_search[i++]);
     free(paths_to_search);
-    return -1;
+    return (-1);
 }
 
 int exec_path(char *cmd, char **args, char **envp)
 {
-    char *executables;
     if (exec_system_path(cmd, args, envp) == 0)
         return (0);
     if (strchr(cmd, '/'))
@@ -90,7 +88,7 @@ int exec_path(char *cmd, char **args, char **envp)
             return (perror("execve failed"), -1);
         }
     }
-    printf("Command not found 2\n");
+    printf("command not found\n");
     return (-1);
 }
 
