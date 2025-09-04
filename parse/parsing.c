@@ -32,11 +32,11 @@ void	get_here_doc(char *eof, int fd[2])
 	close (fd[1]);
 }
 
-int	single_error_msg(int wc)
+void	single_error_msg(char wc)
 {
-	ft_putstr_fd(2 , "syntax error near unexpected token `");
-	ft_putstr_fd(2 , &wc);
-	ft_putstr_fd(2 , "'");
+	ft_putstr_fd("syntax error near unexpected token `", 2);
+	ft_putstr_fd(&wc, 2);
+	ft_putstr_fd("'", 2);
 }
 
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
