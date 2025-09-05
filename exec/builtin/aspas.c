@@ -73,32 +73,36 @@ char *remove_it(char *str, int c)
     return (removed);
 }
 
-void odd_aspas(char *str, char c)
+char *odd_aspas(char *str, char c)
 {
-	int count;
-	count = count_it(str, c);
-	if (count % 2 == 1)
-	{
-		while (1)
-		{
-			char *input = readline(">");
-			if (!input)
-				continue ;
-			if (input[0] == c)
-			{
-				free(input);
-				break ;
-			}
-			free(input);
-		}
-	}
+    int count = count_it(str, c);
+    char *result = ft_strdup(str);
+    char *input;
+    char *tmp;
+
+    while (count % 2 != 0)
+    {
+        input = readline("> ");
+        if (!input)
+            continue;
+        tmp = result;
+        result = ft_strjoin(result, input);
+        free(tmp);
+        free(input);
+        count = count_it(result, c);
+    }
+    return result;
 }
 
-char *aspas(char *str)
+ 
+char *aspas(char *str, int c)
 {
-	if (!str)
-		return (NULL);
-	char *final_str = remove_it(str, '"');
-	odd_aspas(str, '"');
-	return (final_str);
+    if (!str)
+        return NULL;
+    char *with_closed_quotes = odd_aspas(str, c);
+    char *cleaned = remove_it(with_closed_quotes, c);
+    free(with_closed_quotes);
+    return cleaned;
 }
+
+

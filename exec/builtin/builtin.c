@@ -145,30 +145,29 @@ void builtin_pwd(void)
     }
 }
 
-
-
-
-
 void builtin_echo(char **args)
 {
-    int i;
-    char *cleaned;
+    int i = 1;
+    char *cleaned, *tmp;
 
-    i = 1;
     if (args[1] && ft_strncmp(args[1], "-n", 2) == 0)
         i++;
     while (args[i])
     {
-        cleaned = aspas(args[i]);
+        cleaned = aspas(args[i], '"');
+        tmp = cleaned;
+        cleaned = aspas(cleaned, '\'');
+        free(tmp);
         ft_putstr_fd(cleaned, 1);
         free(cleaned);
-        if (args[i + 1] != NULL)
+        if (args[i + 1])
             write(1, " ", 1);
         i++;
     }
     if (!(args[1] && ft_strncmp(args[1], "-n", 2) == 0))
         write(1, "\n", 1);
 }
+
 
 void    builtin_exit(char **args)
 {

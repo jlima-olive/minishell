@@ -43,7 +43,6 @@ void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_export(char **args);
 void builtin_unset(char **args);
-char *aspas(char *str);
 void    handle_sigint(int sig);
 
 
@@ -75,7 +74,7 @@ t_binary	*btree(void);
 int			parsing(char *str);
 void 		init_tree(char **mat);
 
-char *aspas(char *str);
+char *aspas(char *str, int c);
 int is_builtin(char *cmd);
 void builtin_cd(char **args);
 void builtin_pwd(void);
