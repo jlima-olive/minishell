@@ -121,31 +121,37 @@ t_infile	*get_infile(char **mat)
 	return (infile);
 }
 
-t_outfile	*get_outfile(char **mat)
+t_outfile *get_outfile(char **mat)
 {
-	t_outfile	*outfile;
-	int			ind;
+    t_outfile *outfile;
+    int        ind;
 
-	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
-		return (NULL);
-	ind = 0;
-	// test if we really need ft_strncmp(mat[ind], "|", 2), I dont think we do
-	while (mat[ind] && ft_strncmp(mat[ind], "|", 2) && output_comp(mat[ind]))
-		ind++;
-	if (mat[ind] == NULL || ft_strncmp(mat[ind], "|", 2) == 0)
-		return (NULL);
-	outfile = outfile_new(mat[ind + 1], mat[ind]);
-	if (outfile == NULL)
+    if (btree()->type == ERROR || mat == NULL || *mat == NULL)
+        return (NULL);
+    ind = 0;
+    while (mat[ind] && ft_strncmp(mat[ind], "|", 2) && output_comp(mat[ind]))
+        ind++;
+    if (mat[ind] == NULL || ft_strncmp(mat[ind], "|", 2) == 0){
+        return (NULL);}
+	if (mat[ind + 1] == NULL)
 	{
-		btree()->type = ERROR;
-		return (NULL);
+	    ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+	    // btree()->type = ERROR;
+	    return (NULL);
 	}
-	mat[ind] = NULL;
-	mat[ind + 1] = NULL;
-	ft_matrix_uni(mat + ind, mat + ind + 2);
-	outfile->next = get_outfile (mat + ind);
-	return (outfile);
+    outfile = outfile_new(mat[ind + 1], mat[ind]);
+    if (outfile == NULL)
+    {
+        btree()->type = ERROR;
+        return (NULL);
+    }
+    mat[ind] = NULL;
+    mat[ind + 1] = NULL;
+    ft_matrix_uni(mat + ind, mat + ind + 2);
+    outfile->next = get_outfile(mat + ind);
+    return (outfile);
 }
+
 
 int	find_pipe(char **mat)
 {

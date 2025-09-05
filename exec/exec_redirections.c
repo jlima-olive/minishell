@@ -92,13 +92,13 @@ int exec_redirections(t_cmds *cmd)
     while (out)
     {
         int flags = O_WRONLY | O_CREAT;
-        if (strcmp(out->token, ">>") == 0)
+        if (ft_strcmp(out->token, ">>") == 0)
             flags |= O_APPEND;
         else
             flags |= O_TRUNC;
 
         int fd = open(out->file, flags, 0644);
-        if (fd < 0)
+        if (fd < 0 || out->file == NULL)
             return (perror(out->file), -1);
         if (dup2(fd, STDOUT_FILENO) < 0)
             return (perror("dup2"), close(fd), -1);

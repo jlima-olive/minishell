@@ -105,6 +105,7 @@ int		check_one_cmd(char *str, char **env, char **cmd, int value);
 void	rdwr_frm_int_fd(char *cmd_path_inc, char **env, int rd, int wr);
 char	*ft_wrdchr(const char *s, int c);
 int		ft_emptystr(const char *str);
+int ft_strcmp(char *s1, char *s2);
 
 typedef struct s_list
 {
