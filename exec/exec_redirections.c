@@ -62,7 +62,7 @@ int exec_redirections(t_cmds *cmd)
 {
     t_infile *in = cmd->infiles;
     t_outfile *out;
-    
+
     while (in)
     {
         if (ft_strcmp(in->token, "<") == 0)
@@ -76,29 +76,20 @@ int exec_redirections(t_cmds *cmd)
         }
         else if (ft_strcmp(in->token, "<<") == 0)
         {
-            // printf("=== INSIDE <<\n");
             if (cmd->cmd)
             {
                 int p[2];
                 if (pipe(p) == -1)
                     return (perror("pipe"), -1);
-                get_here_doc(in->file, p);
+                get_here_doc(in->file, p);      // write to pipe
                 if (dup2(p[0], STDIN_FILENO) < 0)
                     return (perror("dup2"), close(p[0]), -1);
                 close(p[0]);
                 close(p[1]);
             }
             else
-            {
-                int dummy[2];
-                if (pipe(dummy) == -1)
-                    return (perror("pipe"), -1);
-                get_here_doc(in->file, dummy);
-                close(dummy[0]);
-                close(dummy[1]);
-            }
+                get_here_doc(in->file, NULL);   // discard input
         }
-
         in = in->next;
     }
     out = cmd->outfiles;
@@ -109,15 +100,16 @@ int exec_redirections(t_cmds *cmd)
             flags |= O_APPEND;
         else
             flags |= O_TRUNC;
-
         int fd = open(out->file, flags, 0644);
-        if (fd < 0 || out->file == NULL)
+        if (fd < 0 || !out->file)
             return (perror(out->file), -1);
         if (dup2(fd, STDOUT_FILENO) < 0)
             return (perror("dup2"), close(fd), -1);
         close(fd);
         out = out->next;
     }
+
     return 0;
 }
+
 

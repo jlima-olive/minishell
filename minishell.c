@@ -71,11 +71,12 @@ int	main(int argc, char *argv[], char **envp)
 		// print_cmds(cmds);
 		if (!cmds || !cmds->cmd || !cmds->cmd[0])
 		{
-			if (cmds && (cmds->infiles || cmds->outfiles))
-        		exec_redirections(cmds);
+			if (cmds && cmds->infiles)
+				discard_heredoc(cmds->infiles); // just read & discard <<
+
 			free(input);
 			binary_clear(btree());
-			continue ;
+			continue;
 		}
 		if (!ft_strchr(input, '|'))
 		{

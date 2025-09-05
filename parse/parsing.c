@@ -312,28 +312,60 @@ char	*expand(char *str)
 	return (str);
 }
 
-void	get_here_doc(char *eof, int fd[2])
+void get_here_doc(char *eof, int fd[2])
 {
-	char	*str;
-	// char	strfinal[1024];
-	int		len;
+    char *str;
+    char *delimiter = remove_aspas(eof);
+    int len = ft_strlen(delimiter);
 
-	len = ft_strlen(eof);
-	str = readline("> ");
-	while (ft_strncmp(str, eof, len + 1))
-	{
-		str = expand(str);
-		write (fd[1], str, ft_strlen(str));
-		write (fd[1], "\n", 1);
-		free (str);
-		str = readline("> ");
-	}
-	free (str);
-	// read(fd[0], strfinal, 1023);
-	// printf("%s", strfinal);
-	// close (fd[0]);
-	close (fd[1]);
+    str = readline("> ");
+    while (str && ft_strncmp(str, delimiter, len + 1))
+    {
+        if (fd)
+        {
+            char *expanded = expand(str);  // expand input
+            write(fd[1], expanded, ft_strlen(expanded));
+            write(fd[1], "\n", 1);
+
+            if (expanded != str)
+                free(expanded);
+        }
+        free(str);
+        str = readline("> ");
+    }
+    free(str);
+    free(delimiter);
+
+    if (fd)
+        close(fd[1]);
 }
+
+void discard_heredoc(t_infile *infiles)
+{
+    while (infiles)
+    {
+        if (ft_strcmp(infiles->token, "<<") == 0)
+        {
+            char *str;
+            char *delimiter = remove_aspas(infiles->file);
+            int len = ft_strlen(delimiter);
+
+            str = readline("> ");
+            while (str && ft_strncmp(str, delimiter, len + 1))
+            {
+                free(str);
+                str = readline("> ");
+            }
+            free(str);
+            free(delimiter);
+        }
+        infiles = infiles->next;
+    }
+}
+
+
+
+
 // "ola meu caro guerreiro $USER" is your true name '$USER' by any chance?
 
 char	*quote(char *str)
