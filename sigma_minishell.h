@@ -38,11 +38,7 @@ typedef struct s_os_envs{
 }   t_os_envs;
 
 int		is_builtin(char *cmd);
-void	builtin_cd(char *path);
-void	builtin_pwd(void);
-void	builtin_env(void);
 void	builtin_exit(char **args);
-int exec_builtin(char *cmd, char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_export(char **args);
@@ -81,23 +77,26 @@ void 		init_tree(char **mat);
 
 char *aspas(char *str);
 int is_builtin(char *cmd);
-void builtin_cd(char *path);
+void builtin_cd(char **args);
 void builtin_pwd(void);
 void builtin_echo(char **args);
 void	builtin_exit(char **args);
 void builtin_unset(char **args);
-int exec_builtin(char *cmd, char **args);
+int exec_builtin(char *cmd, char **args, char **envp);
 void builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
-void builtin_env(void);
+void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
 int    exec_pipes(t_cmds *cmd, char **env);
-void	exec_redirections(t_cmds *cmd);
+int	exec_redirections(t_cmds *cmd);
 int has_redir(t_cmds *cmd);
 void free_matrix(char **table);
 char **array_to_exec(t_cmds *cmd);
+char *find_path(char **envp, char *which_env);
+void initialize_pwd(char **envp);
+char *find_path_in_list(t_os_envs *env_list, const char *key);
 
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);

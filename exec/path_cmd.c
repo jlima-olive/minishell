@@ -1,13 +1,13 @@
 #include "../sigma_minishell.h"
 #include <unistd.h>
 
-char *find_path(char **envp)
+char *find_path(char **envp, char *which_env)
 {
     int i = 0;
     while (envp[i])
     {
-        if (strncmp(envp[i], "PATH=", 5) == 0)
-            return (strdup(envp[i] + 5));
+        if (strncmp(envp[i], which_env, (strlen(which_env))) == 0)
+            return (strdup(envp[i] + strlen(which_env)));
         i++;
     }
     return (NULL);
@@ -15,7 +15,7 @@ char *find_path(char **envp)
 
 char **split_path(char **envp)
 {
-    char *path = find_path(envp);
+    char *path = find_path(envp, "PATH=");
     if (!path)
         return (NULL);
     char **vars = ft_split(path, ':');

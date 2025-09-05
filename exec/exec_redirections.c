@@ -3,7 +3,6 @@
 
 int is_redir_token(const char *s)
 {
-	// printf("=======IS_REDIR_TOKEN SENDO RODADA IGUAL SUA MAE\n");
     return (strcmp(s, ">") == 0 || strcmp(s, ">>") == 0
          || strcmp(s, "<") == 0 || strcmp(s, "<<") == 0);
 }
@@ -26,7 +25,6 @@ int has_redir(t_cmds *cmd)
 
 int count_tokens(t_cmds *cmd)
 {
-	// printf("========COUNTING\n");
     int i = 0, count = 0;
     while (cmd->cmd[i])
     {
@@ -46,7 +44,6 @@ char **array_to_exec(t_cmds *cmd)
 
     if (!cmd || !cmd->cmd)
         return NULL;
-	// printf("=======LANCANDO ARRAY TO EXEC\n");
     char **new_argv = malloc(sizeof(char *) * (count_tokens(cmd) + 1));
     if (!new_argv)
         return NULL;
@@ -61,39 +58,53 @@ char **array_to_exec(t_cmds *cmd)
     return new_argv;
 }
 
-void exec_redirections(t_cmds *cmd)
+int exec_redirections(t_cmds *cmd)
 {
-    // INFILES
-    for (t_infile *in = cmd->infiles; in; in = in->next) {
-        if (strcmp(in->token, "<") == 0) {
-            int fd = open(in->file, O_RDONLY);
-            if (fd < 0) { perror(in->file); exit(1); }
-            if (dup2(fd, STDIN_FILENO) < 0) { perror("dup2"); exit(1); }
-            close(fd);
-        } else if (strcmp(in->token, "<<") == 0) {
-            int p[2];
-            if (pipe(p) == -1) { perror("pipe"); exit(1); }
-            get_here_doc(in->file, p); // already in your code
-            dup2(p[0], STDIN_FILENO);
-            close(p[0]);
-        }
-    }
+    t_infile *in;
+    t_outfile *out;
 
-    // OUTFILES
-    for (t_outfile *out = cmd->outfiles; out; out = out->next) {
-        int flags = O_WRONLY | O_CREAT | (strcmp(out->token, ">>")==0 ? O_APPEND : O_TRUNC);
-        int fd = open(out->file, flags, 0644);
-        if (fd < 0) { perror(out->file); exit(1); }
-        if (dup2(fd, STDOUT_FILENO) < 0) { perror("dup2"); exit(1); }
-        close(fd);
+    in = cmd->infiles;
+    while (in)
+    {
+        if (strcmp(in->token, "<") == 0)
+        {
+            int fd = open(in->file, O_RDONLY);
+            if (fd < 0)
+                return (perror(in->file), -1);
+            if (dup2(fd, STDIN_FILENO) < 0)
+                return (perror("dup2"), close(fd), -1);
+            close(fd);
+        }
+        else if (strcmp(in->token, "<<") == 0)
+        {
+            int p[2];
+            if (pipe(p) == -1)
+                return (perror("pipe"), -1);
+            get_here_doc(in->file, p); //CHECK THIS SHIT
+            if (dup2(p[0], STDIN_FILENO) < 0)
+                return (perror("dup2"), close(p[0]), close(p[1]), -1);
+            close(p[0]);
+            close(p[1]);
+        }
+        in = in->next;
     }
+    out = cmd->outfiles;
+    while (out)
+    {
+        int flags = O_WRONLY | O_CREAT;
+        if (strcmp(out->token, ">>") == 0)
+            flags |= O_APPEND;
+        else
+            flags |= O_TRUNC;
+
+        int fd = open(out->file, flags, 0644);
+        if (fd < 0)
+            return (perror(out->file), -1);
+        if (dup2(fd, STDOUT_FILENO) < 0)
+            return (perror("dup2"), close(fd), -1);
+        close(fd);
+        out = out->next;
+    }
+    return 0;
 }
 
-
-
-
-
-// int single_left(t_cmds *cmd)
-// {
-
-// }

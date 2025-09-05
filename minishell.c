@@ -45,7 +45,7 @@ void	print_tree(t_binary *tree, int sub)
 		printf("\n^exiting shubshell^\n");
 }
 
-int	main(int ac, char **av, char **envp)
+int	main(int argc, char *argv[], char **envp)
 {
 	char	*input;
 	t_cmds	*cmds;
@@ -53,7 +53,7 @@ int	main(int ac, char **av, char **envp)
 
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	builtin_env();
+	builtin_env(envp);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -85,14 +85,14 @@ int	main(int ac, char **av, char **envp)
 					{
 						exec_redirections(cmds);
 						char **cleaned = array_to_exec(cmds);
-						exec_builtin(cleaned[0], cleaned);
+						exec_builtin(cleaned[0], cleaned, envp);
 						free_matrix(cleaned);
 						exit(0);
 					}
 					waitpid(pid, NULL, 0);
 				}
 				else
-					exec_builtin(cmds->cmd[0], cmds->cmd);
+					exec_builtin(cmds->cmd[0], cmds->cmd, envp);
 			}
 			else
 			{

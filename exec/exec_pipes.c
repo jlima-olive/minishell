@@ -45,7 +45,7 @@ int exec_pipes(t_cmds *cmd, char **env)
 				close(first_fd);
 			char **cleaned_cmd = array_to_exec(cmd);
 			if (is_builtin(cleaned_cmd[0]))
-				exec_builtin(cleaned_cmd[0], cleaned_cmd);
+				exec_builtin(cleaned_cmd[0], cleaned_cmd, env);
 			else
 				exec_path(cleaned_cmd[0], cleaned_cmd, env);
 			free_matrix(cleaned_cmd);
