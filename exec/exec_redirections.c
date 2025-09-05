@@ -60,13 +60,12 @@ char **array_to_exec(t_cmds *cmd)
 
 int exec_redirections(t_cmds *cmd)
 {
-    t_infile *in;
+    t_infile *in = cmd->infiles;
     t_outfile *out;
-
-    in = cmd->infiles;
+    
     while (in)
     {
-        if (strcmp(in->token, "<") == 0)
+        if (ft_strcmp(in->token, "<") == 0)
         {
             int fd = open(in->file, O_RDONLY);
             if (fd < 0)
@@ -75,17 +74,31 @@ int exec_redirections(t_cmds *cmd)
                 return (perror("dup2"), close(fd), -1);
             close(fd);
         }
-        else if (strcmp(in->token, "<<") == 0)
+        else if (ft_strcmp(in->token, "<<") == 0)
         {
-            int p[2];
-            if (pipe(p) == -1)
-                return (perror("pipe"), -1);
-            get_here_doc(in->file, p); //CHECK THIS SHIT
-            if (dup2(p[0], STDIN_FILENO) < 0)
-                return (perror("dup2"), close(p[0]), close(p[1]), -1);
-            close(p[0]);
-            close(p[1]);
+            // printf("=== INSIDE <<\n");
+            if (cmd->cmd)
+            {
+                int p[2];
+                if (pipe(p) == -1)
+                    return (perror("pipe"), -1);
+                get_here_doc(in->file, p);
+                if (dup2(p[0], STDIN_FILENO) < 0)
+                    return (perror("dup2"), close(p[0]), -1);
+                close(p[0]);
+                close(p[1]);
+            }
+            else
+            {
+                int dummy[2];
+                if (pipe(dummy) == -1)
+                    return (perror("pipe"), -1);
+                get_here_doc(in->file, dummy);
+                close(dummy[0]);
+                close(dummy[1]);
+            }
         }
+
         in = in->next;
     }
     out = cmd->outfiles;

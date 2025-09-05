@@ -14,7 +14,7 @@ void	print_cmds(t_cmds *cmds)
 	int i = 0;
 	while (cmds)
 	{
-		// printf("===============================================================\n");
+		printf("===============================================================\n");
 		printf("\t\tstarts infile\n");
 		print_files(cmds->infiles);
 		printf("\t\tend infile\n");
@@ -24,7 +24,7 @@ void	print_cmds(t_cmds *cmds)
 		printf("\t\tstarts outfiles\n");
 		print_files((t_infile *)cmds->outfiles);
 		printf("\t\tend outfiles\n");
-		// printf("===============================================================\n");
+		printf("===============================================================\n");
 		cmds = cmds->next;
 	}
 }
@@ -68,8 +68,11 @@ int	main(int argc, char *argv[], char **envp)
 		btree()->env = envp;
 		parsing(input);
 		cmds = btree()->cmds;
+		// print_cmds(cmds);
 		if (!cmds || !cmds->cmd || !cmds->cmd[0])
 		{
+			if (cmds && (cmds->infiles || cmds->outfiles))
+        		exec_redirections(cmds);
 			free(input);
 			binary_clear(btree());
 			continue ;

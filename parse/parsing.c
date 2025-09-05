@@ -331,7 +331,7 @@ void	get_here_doc(char *eof, int fd[2])
 	free (str);
 	// read(fd[0], strfinal, 1023);
 	// printf("%s", strfinal);
-	close (fd[0]);
+	// close (fd[0]);
 	close (fd[1]);
 }
 // "ola meu caro guerreiro $USER" is your true name '$USER' by any chance?
