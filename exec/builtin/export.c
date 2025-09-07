@@ -44,7 +44,6 @@ static int make_update_env(const char *str)
     return (0);
 }
 
-
 void builtin_export(char **args)
 {
     if (!args[1])

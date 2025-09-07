@@ -363,9 +363,6 @@ void discard_heredoc(t_infile *infiles)
     }
 }
 
-
-
-
 // "ola meu caro guerreiro $USER" is your true name '$USER' by any chance?
 
 char	*quote(char *str)

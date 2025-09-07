@@ -13,6 +13,8 @@ void	binary_clear(t_binary *binary)
 	free(binary->mat);
 	if (binary->up)
 		free(binary);
+	// else
+	//  	free_matrix(binary->env); <-- comnetar pq joao quis
 }
 
 void	cmds_clear(t_cmds *cmds)

@@ -20,7 +20,6 @@ void builtin_unset(char **args)
             if (strncmp(cur->linux_envs[0], args[i], name_len) == 0
                 && cur->linux_envs[0][name_len] == '=')
             {
-                // found the node
                 if (prev)
                     prev->next = cur->next;
                 else
