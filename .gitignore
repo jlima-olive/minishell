@@ -1,3 +1,4 @@
 *.a
 *.o
 minishell
+exec/pipex/pipex
