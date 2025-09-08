@@ -171,6 +171,7 @@ char *find_path_in_list(t_os_envs *env_list, const char *key)
     return NULL;
 }
 
+
 int add_temp_var(const char *str)
 {
     t_os_envs **env_list = get_env_list();

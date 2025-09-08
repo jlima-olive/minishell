@@ -158,8 +158,9 @@ void builtin_echo(char **args)
         tmp = cleaned;
         cleaned = aspas(cleaned, '\'');
         free(tmp);
-        ft_putstr_fd(cleaned, 1);
-        free(cleaned);
+        char *expanded = expand(cleaned);
+        ft_putstr_fd(expanded, 1);
+        free(expanded);
         if (args[i + 1])
             write(1, " ", 1);
         i++;
@@ -167,7 +168,6 @@ void builtin_echo(char **args)
     if (!(args[1] && ft_strncmp(args[1], "-n", 2) == 0))
         write(1, "\n", 1);
 }
-
 
 void    builtin_exit(char **args)
 {

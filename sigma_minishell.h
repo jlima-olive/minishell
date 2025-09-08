@@ -101,6 +101,7 @@ void discard_heredoc(t_infile *infiles);
 char *remove_aspas(char *str);
 int add_temp_var(const char *str);
 void print_linux_env_list(void);
+int is_in_path(char *str, char **envp);
 
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);

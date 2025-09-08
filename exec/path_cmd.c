@@ -68,27 +68,49 @@ int exec_system_path(char *cmd, char **args, char **envp)
     return (-1);
 }
 
+
+char *get_env_var(char *name, char **envp)
+{
+    int len = strlen(name);
+    for (int i = 0; envp[i]; i++)
+    {
+        if (strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+            return envp[i] + len + 1; // return value after '='
+    }
+    return NULL;
+}
+
 int exec_path(char *cmd, char **args, char **envp)
 {
-    if (exec_system_path(cmd, args, envp) == 0)
-        return (0);
+    if (cmd[0] == '$')
+    {
+        char *value = get_env_var(cmd + 1, envp);
+        if (value)
+        {
+            printf("%s\n", value);
+            return 0;
+        }
+        else
+        {
+            printf("Variable not found\n");
+            return -1;
+        }
+    }
     if (strchr(cmd, '/'))
     {
         if (access(cmd, X_OK) == 0)
         {
             execve(cmd, args, envp);
-            return (perror("execve failed"), -1);
+            perror("execve failed");
+            return -1;
         }
     }
     else
     {
-        if (access(cmd, X_OK) == 0)
-        {
-            execve(cmd, args, envp);
-            return (perror("execve failed"), -1);
-        }
+        if (exec_system_path(cmd, args, envp) == 0)
+            return 0;
     }
     printf("command not found\n");
-    return (-1);
+    return -1;
 }
 
