@@ -53,14 +53,12 @@ typedef struct s_os_envs{
 int			is_builtin(char *cmd);
 void		builtin_cd(char **args);
 void		builtin_pwd(void);
-void		builtin_exit(char **args);
 int 		exec_builtin(char *cmd, char **args, char **envp);
 void		print_env_list(void);
 t_os_envs	**get_env_list(void);
 void		builtin_export(char **args);
 void		builtin_unset(char **args);
 int				is_builtin(char *cmd);
-void		builtin_exit(char **args);
 void		print_env_list(void);
 t_os_envs	**get_env_list(void);
 void		builtin_export(char **args);
@@ -106,7 +104,7 @@ int is_builtin(char *cmd);
 void builtin_cd(char **args);
 void builtin_pwd(void);
 void builtin_echo(char **args);
-void	builtin_exit(char **args);
+void builtin_exit(char **args, char **envp);
 void builtin_unset(char **args);
 int exec_builtin(char *cmd, char **args, char **envp);
 void builtin_export(char **args);
@@ -130,6 +128,8 @@ int	exec_pipes(t_cmds *cmd, char **env);
 int add_temp_var(const char *str);
 char *remove_aspas(char *str);
 void discard_heredoc(t_infile *infiles);
+void update_env_var(const char *key, const char *value);
+int update_shell_level(int amount, char **envp);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
