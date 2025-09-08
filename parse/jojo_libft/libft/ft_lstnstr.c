@@ -1,6 +1,6 @@
-#include "../libft.h"
+/* #include "../libft.h"
 
 char *ft_lstnstr()
 {
 	
-}
+} */

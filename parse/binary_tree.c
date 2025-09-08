@@ -16,16 +16,7 @@
 		printf("===============================================================\n\n");
 		cmds = cmds->next;
 	}
-}
-void	print_files(t_infile	*file)
-{
-	while (file)
-	{
-		printf("red is | file is\n");
-		printf("%s	   %s\n", file->token, file->file);
-		file = file->next;
-	}
-} */
+}*/
 
 int	separator_comp(char **mat, int flag, int ind, int pcount)
 {
@@ -80,11 +71,10 @@ t_cmds	*get_cmds(char **temp)
 	char	**mat;
 	int		sep;
 
+	if (*temp == NULL)
+		return (NULL);
 	if (simple_syntax(temp))
-	{
-		free_matrix_nodes(temp);
-		return (btree()->type = ERROR, NULL);
-	}
+		return (free_matrix_nodes(temp), btree()->type = ERROR, NULL);
 	mat = wildcards(temp, 0, 0);
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);

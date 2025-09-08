@@ -44,7 +44,6 @@ static int make_update_env(const char *str)
     return (0);
 }
 
-
 void builtin_export(char **args)
 {
     if (!args[1])
@@ -52,11 +51,11 @@ void builtin_export(char **args)
         print_env_list();
         return;
     }
-
     for (int i = 1; args[i]; i++)
     {
-        if (!strchr(args[i], '=')) {
-            fprintf(stderr, "minishell: export: `%s': not a valid identifier\n", args[i]);
+        if (!strchr(args[i], '=')) 
+        {
+            add_temp_var(args[i]);
             continue;
         }
         if (make_update_env(args[i]) < 0)

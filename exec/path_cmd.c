@@ -1,12 +1,13 @@
 #include "../sigma_minishell.h"
+#include <unistd.h>
 
-char *find_path(char **envp)
+char *find_path(char **envp, char *which_env)
 {
     int i = 0;
     while (envp[i])
     {
-        if (strncmp(envp[i], "PATH=", 5) == 0)
-            return (strdup(envp[i] + 5));
+        if (strncmp(envp[i], which_env, (strlen(which_env))) == 0)
+            return (strdup(envp[i] + strlen(which_env)));
         i++;
     }
     return (NULL);
@@ -14,7 +15,7 @@ char *find_path(char **envp)
 
 char **split_path(char **envp)
 {
-    char *path = find_path(envp);
+    char *path = find_path(envp, "PATH=");
     if (!path)
         return (NULL);
     char **vars = ft_split(path, ':');
@@ -22,45 +23,93 @@ char **split_path(char **envp)
     return (vars);
 }
 
-void exec_path(char *cmd, char **args, char **envp)
+int exec_system_path(char *cmd, char **args, char **envp)
 {
-    pid_t pid = fork();
-    if (pid <= -1)
-        return (perror("fork failed"));
-    else if (pid == 0)
+    char **paths_to_search = split_path(envp);
+    if (!paths_to_search)
     {
-        char **paths_to_search = split_path(envp);
-        if (!paths_to_search)
+        write(2, "PATH not found\n", 15);
+        return -1;
+    }
+    int i = 0;
+    while (paths_to_search[i])
+    {
+        char *full_path = malloc(strlen(paths_to_search[i]) + strlen(cmd) + 2);
+        if (!full_path)
         {
-            write(2, "PATH not found\n", 15);
-            exit(1);
+            perror("malloc failed");
+            int j = 0;
+            while (paths_to_search[j])
+                free(paths_to_search[j++]);
+            free(paths_to_search);
+            return -1;
         }
-        int i = 0;
-        while (paths_to_search[i])
+        strcpy(full_path, paths_to_search[i]);
+        strcat(full_path, "/");
+        strcat(full_path, cmd);
+        if (access(full_path, X_OK) == 0)
         {
-            char *full_path = malloc(strlen(paths_to_search[i]) + strlen(cmd) + 2);
-            if (!full_path)
-				perror("malloc failed"), exit(1);
-			strcpy(full_path, paths_to_search[i]);
-			strcat(full_path, "/");  
-			strcat(full_path, cmd); 
-            if (access(full_path, X_OK) == 0)
-            {
-                execve(full_path, args, envp);
-                perror("execve failed");
-                free(full_path);
-                exit(1);
-            }
+            execve(full_path, args, envp);
+            perror("execve failed");
             free(full_path);
-            i++;
+            int j = 0;
+            while (paths_to_search[j])
+                free(paths_to_search[j++]);
+            free(paths_to_search);
+            return -1;
         }
-        i = 0;
-        while (paths_to_search[i])
-            free(paths_to_search[i++]);
-        free(paths_to_search);
-        write(2, "command not found\n", 18);
-        exit(1);
+        free(full_path);
+        i++;
+    }
+    i = 0;
+    while (paths_to_search[i])
+        free(paths_to_search[i++]);
+    free(paths_to_search);
+    return (-1);
+}
+
+
+char *get_env_var(char *name, char **envp)
+{
+    int len = strlen(name);
+    for (int i = 0; envp[i]; i++)
+    {
+        if (strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+            return envp[i] + len + 1; // return value after '='
+    }
+    return NULL;
+}
+
+int exec_path(char *cmd, char **args, char **envp)
+{
+    if (cmd[0] == '$')
+    {
+        char *value = get_env_var(cmd + 1, envp);
+        if (value)
+        {
+            printf("%s\n", value);
+            return 0;
+        }
+        else
+        {
+            printf("Variable not found\n");
+            return -1;
+        }
+    }
+    if (strchr(cmd, '/'))
+    {
+        if (access(cmd, X_OK) == 0)
+        {
+            execve(cmd, args, envp);
+            perror("execve failed");
+            return -1;
+        }
     }
     else
-        waitpid(pid, NULL, 0);
+    {
+        if (exec_system_path(cmd, args, envp) == 0)
+            return 0;
+    }
+    printf("command not found\n");
+    return -1;
 }
