@@ -13,20 +13,26 @@ static t_os_envs *create_env_node(char *path)
     t_os_envs *new_node = malloc(sizeof(t_os_envs));
     if (!new_node)
         return NULL;
-    
     new_node->linux_envs = malloc(sizeof(char *) * 2);
     if (!new_node->linux_envs)
         return (free(new_node), NULL);
-    
     new_node->linux_envs[0] = ft_strdup(path);
     new_node->linux_envs[1] = NULL;
     new_node->next = NULL;
-    
+    new_node->temp_vars = malloc(sizeof(char *));
+    if (!new_node->temp_vars)
+    {
+        free(new_node->linux_envs[0]);
+        free(new_node->linux_envs);
+        free(new_node);
+        return NULL;
+    }
+    new_node->temp_vars[0] = NULL;
     if (!new_node->linux_envs[0])
-        return (free(new_node->linux_envs), free(new_node), NULL);
-    
+        return (free(new_node->linux_envs), free(new_node->temp_vars), free(new_node), NULL);
     return new_node;
 }
+
 
 void clear_env_list(void)
 {
@@ -36,19 +42,52 @@ void clear_env_list(void)
 
     while (current) {
         next = current->next;
-        free(current->linux_envs[0]);
-        free(current->linux_envs);
+        if (current->linux_envs) {
+            free(current->linux_envs[0]);
+            free(current->linux_envs);
+        }
+        if (current->temp_vars) {
+            for (int i = 0; current->temp_vars[i]; i++)
+                free(current->temp_vars[i]);
+            free(current->temp_vars);
+        }
         free(current);
         current = next;
     }
     *env_list = NULL;
 }
 
+
 void print_env_list(void)
 {
     t_os_envs *current = *get_env_list();
-    while (current) {
-        printf("%s\n", current->linux_envs[0]);
+
+    while (current)
+    {
+        if (current->linux_envs)
+        {
+            for (int i = 0; current->linux_envs[i]; i++)
+                printf("declare -x %s\n", current->linux_envs[i]);
+        }
+        if (current->temp_vars)
+        {
+            for (int i = 0; current->temp_vars[i]; i++)
+                printf("declare -x %s\n", current->temp_vars[i]);
+        }
+        current = current->next;
+    }
+}
+void print_linux_env_list(void)
+{
+    t_os_envs *current = *get_env_list();
+
+    while (current)
+    {
+        if (current->linux_envs)
+        {
+            for (int i = 0; current->linux_envs[i]; i++)
+                printf("%s\n", current->linux_envs[i]);
+        }
         current = current->next;
     }
 }
@@ -59,7 +98,6 @@ void builtin_env(char **env)
     t_os_envs **env_list = get_env_list();
     t_os_envs *new_node;
     char **env_var = environ;
-
     clear_env_list();
     while (*env_var)
     {
@@ -69,7 +107,15 @@ void builtin_env(char **env)
             perror("minishell: env");
             return;
         }
-        
+        new_node->temp_vars = malloc(sizeof(char *));
+        if (!new_node->temp_vars)
+        {
+            perror("minishell: env (temp_vars)");
+            free(new_node);
+            return;
+        }
+        new_node->temp_vars[0] = NULL;
+
         if (*env_list == NULL)
             *env_list = new_node;
         else
@@ -83,6 +129,7 @@ void builtin_env(char **env)
     }
     initialize_pwd(env);
 }
+
 void initialize_pwd(char **envp)
 {
     char buf[1024];
@@ -120,6 +167,57 @@ char *find_path_in_list(t_os_envs *env_list, const char *key)
         if (strncmp(env_list->linux_envs[0], key, key_len) == 0)
             return env_list->linux_envs[0] + key_len;
         env_list = env_list->next;
+    }
+    return NULL;
+}
+
+int add_temp_var(const char *str)
+{
+    t_os_envs **env_list = get_env_list();
+    t_os_envs *envs = *env_list;
+
+    if (!envs)
+    {
+        envs = malloc(sizeof(t_os_envs));
+        if (!envs)
+            return -1;
+        envs->linux_envs = NULL;
+        envs->temp_vars = malloc(sizeof(char *));
+        if (!envs->temp_vars)
+            return (free(envs), -1);
+        envs->temp_vars[0] = NULL;
+        envs->next = NULL;
+        *env_list = envs;
+    }
+    int count = 0;
+    while (envs->temp_vars && envs->temp_vars[count])
+        count++;
+    for (int i = 0; i < count; i++)
+    {
+        if (strcmp(envs->temp_vars[i], str) == 0)
+            return 0;
+    }
+    char **new_array = realloc(envs->temp_vars, sizeof(char *) * (count + 2));
+    if (!new_array)
+        return -1;
+    envs->temp_vars = new_array;
+    envs->temp_vars[count] = strdup(str);
+    if (!envs->temp_vars[count])
+        return -1;
+    envs->temp_vars[count + 1] = NULL;
+    return 0;
+}
+
+char *find_temp_var(const char *key)
+{
+    t_os_envs *envs = *get_env_list();
+    if (!envs || !envs->temp_vars)
+        return NULL;
+
+    for (int i = 0; envs->temp_vars[i]; i++)
+    {
+        if (strcmp(envs->temp_vars[i], key) == 0)
+            return envs->temp_vars[i];
     }
     return NULL;
 }

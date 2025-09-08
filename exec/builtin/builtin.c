@@ -186,7 +186,7 @@ int exec_builtin(char *cmd, char **args, char **envp)
     else if (ft_strncmp(cmd, "pwd", 3) == 0)
         builtin_pwd();
     else if (ft_strncmp(cmd, "env", 3) == 0)
-        print_env_list();
+        print_linux_env_list();
     else if (ft_strncmp(cmd, "echo", 4) == 0)
         builtin_echo(args);
     else if (ft_strncmp(cmd, "exit", 4) == 0)

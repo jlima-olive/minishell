@@ -34,6 +34,7 @@ typedef struct s_infile
 
 typedef struct s_os_envs{
 	char **linux_envs;
+	char **temp_vars;
 	struct s_os_envs *next;
 }   t_os_envs;
 
@@ -98,6 +99,8 @@ void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
 void discard_heredoc(t_infile *infiles);
 char *remove_aspas(char *str);
+int add_temp_var(const char *str);
+void print_linux_env_list(void);
 
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);
