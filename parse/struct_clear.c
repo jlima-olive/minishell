@@ -21,16 +21,16 @@ void	cmds_clear(t_cmds *cmds)
 	if (cmds == NULL)
 		return ;
 	cmds_clear(cmds->next);
+	cmds->next = NULL;
 	outfile_clear(cmds->outfiles);
 	infile_clear(cmds->infiles);
-	ind = 0;
-	while (cmds->cmd && cmds->cmd[ind])
-	{
-		free(cmds->cmd[ind]);
-		ind++;
-	}
+	ind = -1;
 	if (cmds->expanded)
-		free (cmds->cmd);
+		free_matrix (cmds->cmd);
+	else
+		while (cmds->cmd && cmds->cmd[++ind])
+			free(cmds->cmd[ind]);
+	ft_putstr_fd("going to free this now\n", 1);
 	free(cmds);
 }
 

@@ -63,6 +63,7 @@ int	main(int argc, char *argv[], char **envp)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	builtin_env(envp);
+	btree()->env = envp;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -74,11 +75,10 @@ int	main(int argc, char *argv[], char **envp)
 			free(input);
 			continue ;
 		}
-		btree()->env = envp;
-		if (!parsing(input))
+		// print_cmds(cmds);
+		if (parsing(input) == 0)
 		{
 			cmds = btree()->cmds;
-			// print_cmds(cmds);
 			if (!btree()->cmds || !btree()->cmds->cmd || !btree()->cmds->cmd[0])
 			{
 				if (btree()->cmds && btree()->cmds->infiles)
@@ -126,8 +126,8 @@ int	main(int argc, char *argv[], char **envp)
 			else
 				exec_tree(btree());
 			free(input);
+			binary_clear(btree());
 		}
-		binary_clear(btree());
 	}
 	return (printf("Closing Minishell\n"), 0);
 }

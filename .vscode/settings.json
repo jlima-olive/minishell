@@ -1,10 +1,10 @@
 {
+  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",
   "C_Cpp_Runner.cStandard": "",
   "C_Cpp_Runner.cppStandard": "",
-  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.useMsvc": false,
   "C_Cpp_Runner.warnings": [
     "-Wall",
@@ -55,28 +55,5 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "files.associations": {
-<<<<<<< HEAD
-	"libft.h": "c",
-	"all": "c",
-	"sigma_minishell.h": "c"
-}
-=======
-    "libft.h": "c",
-    "sigma_minishell.h": "c",
-    "minishell.h": "c",
-    "readline.h": "c",
-    "history.h": "c",
-    "dirent.h": "c",
-    "array": "c",
-    "deque": "c",
-    "string": "c",
-    "unordered_map": "c",
-    "vector": "c",
-    "string_view": "c",
-    "initializer_list": "c",
-    "algorithm": "c"
-  }
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }

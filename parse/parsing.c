@@ -62,8 +62,8 @@ void discard_heredoc(t_infile *infiles)
 void	single_error_msg(char wc)
 {
 	ft_putstr_fd("syntax error near unexpected token `", 2);
-	ft_putstr_fd(&wc, 2);
-	ft_putstr_fd("'", 2);
+	ft_putstr_fd(&wc, 1);
+	ft_putstr_fd("'\n", 2);
 }
 
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
@@ -73,11 +73,11 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	char	**ret;
 
 	if (wc < 0)
-		return (printf("\nUnclosed |%c|\n", -wc), NULL);
+		return (single_error_msg(-wc), NULL);
+		// return (printf("\nUnclosed |%c|\n", -wc), NULL);
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 
 
-		// return (single_error_msg(wc), NULL);
 	// printf("\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)

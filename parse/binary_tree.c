@@ -71,11 +71,10 @@ t_cmds	*get_cmds(char **temp)
 	char	**mat;
 	int		sep;
 
+	if (*temp == NULL)
+		return (NULL);
 	if (simple_syntax(temp))
-	{
-		free_matrix_nodes(temp);
-		return (btree()->type = ERROR, NULL);
-	}
+		return (free_matrix_nodes(temp), btree()->type = ERROR, NULL);
 	mat = wildcards(temp, 0, 0);
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);

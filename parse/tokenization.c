@@ -54,6 +54,8 @@ int	word_count(char *str, t_token tokens, char **sep)
 		else if (find_tokens(str + ind, tokens) == 0 && str[ind] && \
 			(str[ind] != ' ' && str[ind] != '\t' && str[ind] != '\n') && ++count)
 			ind = word_count_aux( ind, str, tokens, sep);
+		if (ind < 0)
+			return (ind);
 	}
 	return (count);
 }
