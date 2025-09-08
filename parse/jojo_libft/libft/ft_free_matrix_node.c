@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_emptystr.c                                      :+:      :+:    :+:   */
+/*   ft_free_matrix_node.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 11:40:58 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/09/04 18:03:52 by jlima-so         ###   ########.fr       */
+/*   Created: 2025/09/04 18:00:36 by jlima-so          #+#    #+#             */
+/*   Updated: 2025/09/04 18:04:11 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-int	ft_emptystr(const char *str)
+void	free_matrix_nodes(char **mat)
 {
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	return (*str == '\0');
+	while (*mat)
+	{
+		free(*mat);
+		mat++;	
+	}
 }

@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_emptystr.c                                      :+:      :+:    :+:   */
+/*   ft_swap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 11:40:58 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/09/04 18:03:52 by jlima-so         ###   ########.fr       */
+/*   Created: 2025/09/04 12:42:26 by jlima-so          #+#    #+#             */
+/*   Updated: 2025/09/04 12:42:30 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
-
-int	ft_emptystr(const char *str)
+void	ft_ult_swap(char **p1, char **p2)
 {
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	return (*str == '\0');
+	void	*temp;
+
+	temp = *p1;
+	*p1 = *p2;
+	*p2 = temp;
+}
+
+void	ft_swap(char *p1, char *p2)
+{
+	int	temp;
+
+	temp = *p1;
+	*p1 = *p2;
+	*p2 = temp;
 }

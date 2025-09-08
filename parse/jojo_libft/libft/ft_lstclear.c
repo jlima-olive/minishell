@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:21:27 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/06/11 09:05:56 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/08/27 15:04:42 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,11 @@
 
 void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	t_list		*temp;
-	int			count;
-	int			sub_count;
-
-	if (lst == NULL || *lst == NULL || del == NULL)
+	if (lst == NULL || *lst == NULL)
 		return ;
-	count = ft_lstsize (*lst);
-	while (count-- > 0)
-	{
-		temp = *lst;
-		sub_count = count;
-		while (sub_count-- > 0)
-			temp = temp->next;
-		ft_lstdelone(temp, del);
-	}
+	if (del != NULL)
+		ft_lstdelone(*lst, del);
+	ft_lstclear (&((*lst)->next), NULL);
+	free (*lst);
 	*lst = NULL;
 }

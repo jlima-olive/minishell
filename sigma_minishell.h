@@ -7,10 +7,15 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdbool.h>
+#include <dirent.h>
 
-
-// << = 256
-// >> = 255
+typedef struct s_wild
+{
+	char			*file;
+	char			*search;
+	char			d_type;
+	struct	s_wild	*next;
+}	t_wild;
 
 typedef struct s_token
 {
@@ -37,6 +42,19 @@ typedef struct s_os_envs{
 	struct s_os_envs *next;
 }   t_os_envs;
 
+<<<<<<< HEAD
+int			is_builtin(char *cmd);
+void		builtin_cd(char *path);
+void		builtin_pwd(void);
+void		builtin_env(void);
+void		builtin_exit(char **args);
+int			exec_builtin(char *cmd, char **args);
+void		print_env_list(void);
+t_os_envs	**get_env_list(void);
+void		builtin_export(char **args);
+void		builtin_unset(char **args);
+char		*aspas(char *str);
+=======
 int		is_builtin(char *cmd);
 void	builtin_exit(char **args);
 void print_env_list(void);
@@ -45,10 +63,15 @@ void builtin_export(char **args);
 void builtin_unset(char **args);
 char *aspas(char *str);
 void    handle_sigint(int sig);
+<<<<<<< HEAD
+=======
+>>>>>>> 6c0dac5 (handle signals complete)
+>>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
 
 
 typedef struct s_cmds
 {
+	int				expanded;
 	char			**cmd;
 	t_infile		*infiles;
 	t_outfile		*outfiles;
@@ -86,6 +109,7 @@ int exec_builtin(char *cmd, char **args, char **envp);
 void builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
+<<<<<<< HEAD
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
@@ -97,32 +121,74 @@ char **array_to_exec(t_cmds *cmd);
 char *find_path(char **envp, char *which_env);
 void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
+=======
+void builtin_env(void);
+void exec_path(char *cmd, char **args, char **envp);
+int exec_tree(t_binary *tree);
+int    exec_pipes(t_cmds *cmd, char **env);
+>>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
 
+// struct_clear.c
 void		binary_clear(t_binary *binary);
 void		cmds_clear(t_cmds *cmds);
 void		outfile_clear(t_outfile *outfile);
 void		infile_clear(t_infile *infile);
+void		wild_clear(t_wild *node);
 
+// struct_new.c
 t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *table);
 t_cmds		*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd);
 t_outfile	*outfile_new(char *file, char *token);
 t_infile	*infile_new(char *file, char *token);
+t_wild		*wild_new(char *file, char d_type);
 
-void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
+void		create_binary_tree(char **mat, int	shlvl, t_binary *tree);
 t_outfile	*get_outfile(char **mat);
-int	find_pipe(char **mat);
-t_cmds	*get_cmds(char **mat);
-void	create_binary_tree(char **mat, int	shlvl, t_binary *tree);
-void	create_binary_lvl(char **mat, int id, t_binary *tree);
+t_cmds		*get_cmds(char **mat);
+void		create_binary_tree(char **mat, int	shlvl, t_binary *tree);
+int			open_parethesis(char **mat);
+void		*create_binary_lvl(char **mat, int id, t_binary *tree);
+
+int	find_tokens(char *str, t_token tokens);
+
+// wildcards.c
+char	**bind_mat_lst(char **mat, int count, t_wild *head, int ind);
+t_wild	*get_pattern(t_wild *head, char **pattern, char **limit);
+void	remove_null(t_wild **head, t_wild *node, t_wild *next);
+void	remove_non_start(t_wild **head, char *start, int len);
+t_wild	*read_dir(char *dir, t_wild *head, char *start);
+char	**wildcards(char **mat, int count, int flag);
+void	remove_non_end(t_wild **head, char *end);
+void	add_wild_back(t_wild **lst, t_wild *new);
+int		hidden_files(char *file, char *start);
+int		simple_syntax(char **mat);
+void	sort_wild(t_wild *wild1);
+void	quote_matrix(char **mat);
+int		wildsize(t_wild *head);
+
+// expansions.c
+char	*expand(char *str);
+char	*quote(char *str);
+
+// syntax_error_msg.c
+void	syntax_error_msg(char *str);
+
+// get_pattern.c
+t_outfile	*get_outfile(char **mat);
+t_infile	*get_infile(char **mat);
+int			find_pipe(char **mat);
+
+// check_syntax.c
+int	check_syntax(char **mat, t_token tokens);
+
+// 
+int	parsing_strlen(char *str, t_token tokens, char **sep);
+int	word_count(char *str, t_token tokens, char **sep);
 
 // future libft.h
-void	ft_matrix_uni(char **dest, char **src);
 char	*ft_matnstr(char **matrix, char *s, int n);
-
-void	print_files(t_infile	*file);
+void	ft_matrix_uni(char **dest, char **src);
 
 void	get_here_doc(char *eof, int fd[2]);
-char	*expand(char *str);
-char	*expand_aux(char *str, int ind, int count);
 
 #endif

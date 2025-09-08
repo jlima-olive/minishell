@@ -180,7 +180,11 @@ void    builtin_exit(char **args)
     exit (status);
 }
 
+<<<<<<< HEAD
 int exec_builtin(char *cmd, char **args, char **envp)
+=======
+int exec_builtin(char *cmd, char **args)
+>>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
 {
     if (ft_strncmp(cmd, "cd", 2) == 0)
             builtin_cd(args);

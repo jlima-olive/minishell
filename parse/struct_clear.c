@@ -10,22 +10,27 @@ void	binary_clear(t_binary *binary)
 	binary_clear(binary->right);
 	binary_clear(binary->subshell);
 	cmds_clear(binary->cmds);
-	free(binary->mat);
 	if (binary->up)
 		free(binary);
 }
 
 void	cmds_clear(t_cmds *cmds)
 {
+	int	ind;
+
 	if (cmds == NULL)
 		return ;
 	cmds_clear(cmds->next);
-	while (*(cmds->cmd))
-	{
-		free(*(cmds->cmd));
-		cmds->cmd++;
-	}
 	outfile_clear(cmds->outfiles);
+	infile_clear(cmds->infiles);
+	ind = 0;
+	while (cmds->cmd && cmds->cmd[ind])
+	{
+		free(cmds->cmd[ind]);
+		ind++;
+	}
+	if (cmds->expanded)
+		free (cmds->cmd);
 	free(cmds);
 }
 
@@ -47,4 +52,13 @@ void	outfile_clear(t_outfile *outfile)
 	free(outfile->file);
 	free(outfile->token);
 	free(outfile);
+}
+
+void	wild_clear(t_wild *node)
+{
+	if (node == NULL)
+		return ;
+	wild_clear(node->next);
+	free(node->file);
+	free(node);
 }

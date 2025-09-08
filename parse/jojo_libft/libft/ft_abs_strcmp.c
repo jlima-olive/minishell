@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_emptystr.c                                      :+:      :+:    :+:   */
+/*   ft_abs_strcmp.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 11:40:58 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/09/04 18:03:52 by jlima-so         ###   ########.fr       */
+/*   Created: 2025/09/04 14:38:38 by jlima-so          #+#    #+#             */
+/*   Updated: 2025/09/04 14:38:39 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
-
-int	ft_emptystr(const char *str)
+int	ft_abs_strcmp(char *str1, char *str2)
 {
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	return (*str == '\0');
+	char ch1;
+	char ch2;
+
+	while (*str1 && *str2)
+	{
+		ch1 = *str1 + (*str1 > 64 && *str1 < 91) * 32;
+		ch2 = *str2 + (*str2 > 64 && *str2 < 91) * 32;
+		if (ch1 != ch2)
+			return (ch1 - ch2);
+		str1++;
+		str2++;
+	}
+	return (0);
 }
