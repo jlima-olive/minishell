@@ -16,16 +16,7 @@
 		printf("===============================================================\n\n");
 		cmds = cmds->next;
 	}
-}
-void	print_files(t_infile	*file)
-{
-	while (file)
-	{
-		printf("red is | file is\n");
-		printf("%s	   %s\n", file->token, file->file);
-		file = file->next;
-	}
-} */
+}*/
 
 int	separator_comp(char **mat, int flag, int ind, int pcount)
 {

@@ -3,7 +3,17 @@
 #include <readline/history.h>
 #include <stdlib.h>
 
-/* void	print_cmds(t_cmds *cmds)
+void	print_files(t_infile	*file)
+{
+	while (file)
+	{
+		printf("red is | file is\n");
+		printf("%s	   %s\n", file->token, file->file);
+		file = file->next;
+	}
+} 
+
+void	print_cmds(t_cmds *cmds)
 {
 	while (cmds)
 	{
@@ -24,8 +34,8 @@
 
 void	print_tree(t_binary *tree, int sub)
 {
-	if (sub)
-		printf("\nentering subshell\n");
+	// if (sub)
+		// printf("\nentering subshell\n");
 	if (tree == NULL)
 		return ;
 	print_tree(tree->subshell, 1);
@@ -36,7 +46,7 @@ void	print_tree(t_binary *tree, int sub)
 			print_cmds(tree->cmds);
 	if (sub)
 		printf("\n^exiting shubshell^\n");
-} */
+} 
 t_binary	*btree(void)
 {
 	static	t_binary	tree;
@@ -63,6 +73,7 @@ int main(int ac, char **av, char **envp)
 		btree()->env = envp;
 		parsing(input);
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
+		print_tree(btree(), 0);
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  
 			exec_builtin(cmd, args);
