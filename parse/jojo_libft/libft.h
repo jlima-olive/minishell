@@ -6,7 +6,7 @@
 /*   By: jlima-so <jlima-so@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:02:51 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/08/11 20:11:05 by jlima-so         ###   ########.fr       */
+/*   Updated: 2025/09/04 18:02:07 by jlima-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,17 @@ int		check_one_cmd(char *str, char **env, char **cmd, int value);
 void	rdwr_frm_int_fd(char *cmd_path_inc, char **env, int rd, int wr);
 char	*ft_wrdchr(const char *s, int c);
 int		ft_emptystr(const char *str);
+<<<<<<< HEAD
 int ft_strcmp(char *s1, char *s2);
+=======
+int		ft_str_count(char *str, char c);
+int		ft_strcmp(const char *s1, const char *s2);
+char	**ft_giga_split(char *str, char c);
+void	ft_ult_swap(char **p1, char **p2);
+void	ft_swap(char *p1, char *p2);
+int		ft_abs_strcmp(char *str1, char *str2);
+void	free_matrix_nodes(char **mat);
+>>>>>>> main
 
 typedef struct s_list
 {

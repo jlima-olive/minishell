@@ -113,4 +113,3 @@ int exec_path(char *cmd, char **args, char **envp)
     printf("command not found\n");
     return -1;
 }
-
