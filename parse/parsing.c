@@ -381,14 +381,13 @@ void get_here_doc(char *eof, int fd[2])
 
 void discard_heredoc(t_infile *infiles)
 {
+	char *str;
     while (infiles)
     {
         if (ft_strcmp(infiles->token, "<<") == 0)
         {
-            char *str;
             char *delimiter = remove_aspas(infiles->file);
             int len = ft_strlen(delimiter);
-
             str = readline("> ");
             while (str && ft_strncmp(str, delimiter, len + 1))
             {
