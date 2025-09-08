@@ -42,6 +42,7 @@ typedef struct s_os_envs{
 	struct s_os_envs *next;
 }   t_os_envs;
 
+<<<<<<< HEAD
 int			is_builtin(char *cmd);
 void		builtin_cd(char *path);
 void		builtin_pwd(void);
@@ -53,6 +54,20 @@ t_os_envs	**get_env_list(void);
 void		builtin_export(char **args);
 void		builtin_unset(char **args);
 char		*aspas(char *str);
+=======
+int		is_builtin(char *cmd);
+void	builtin_cd(char *path);
+void	builtin_pwd(void);
+void	builtin_env(void);
+void	builtin_exit(char **args);
+int exec_builtin(char *cmd, char **args);
+void print_env_list(void);
+t_os_envs **get_env_list(void);
+void builtin_export(char **args);
+void builtin_unset(char **args);
+char *aspas(char *str);
+void    handle_sigint(int sig);
+>>>>>>> 6c0dac5 (handle signals complete)
 
 typedef struct s_cmds
 {

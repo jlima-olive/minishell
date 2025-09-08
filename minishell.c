@@ -56,6 +56,11 @@ t_binary	*btree(void)
 
 int main(int ac, char **av, char **envp)
 {
+<<<<<<< HEAD
+=======
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+>>>>>>> 6c0dac5 (handle signals complete)
 	builtin_env();
 	while(1)
 	{
@@ -72,8 +77,11 @@ int main(int ac, char **av, char **envp)
 		}
 		btree()->env = envp;
 		parsing(input);
+<<<<<<< HEAD
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		print_tree(btree(), 0);
+=======
+>>>>>>> 6c0dac5 (handle signals complete)
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  
 			exec_builtin(cmd, args);
