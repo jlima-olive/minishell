@@ -284,33 +284,72 @@ char	*expand_aux(char *str, int ind, int count)
 	return (expand(str));
 }
 
-char	*expand(char *str)
-{
-	int		ind;
-	int		count;
+// char	*expand(char *str)
+// {
+// 	int		ind;
+// 	int		count;
 
-	if (str == NULL)
-		return (NULL);
-	ind = 0;
-	count = 0;
-	while (str[ind])
-	{
-		if (str[ind] == '\'' && ++ind)
-			while (str[ind] != '\'')
-				ind++;
-		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
-		{
-			count++;
-			if (str[ind + 1] == '?')
-				return (expand_aux(str, ind, 2));
-			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
-				count++;
-			return (expand_aux(str, ind, count));
-		}
-		ind++;
-	}
-	return (str);
+// 	if (str == NULL)
+// 		return (NULL);
+// 	ind = 0;
+// 	count = 0;
+// 	while (str[ind])
+// 	{
+// 		if (str[ind] == '\'' && ++ind)
+// 			while (str[ind] != '\'')
+// 				ind++;
+// 		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
+// 		{
+// 			count++;
+// 			if (str[ind + 1] == '?')
+// 				return (expand_aux(str, ind, 2));
+// 			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
+// 				count++;
+// 			return (expand_aux(str, ind, count));
+// 		}
+// 		ind++;
+// 	}
+// 	return (str);
+// }
+
+//TIVE QUE FAZER UMA MUDANCA PRA NAO DAR PROBLEMA QUANDO FAZES --> echo $USER '$USER' "$USER"
+
+char *expand(char *str) 
+{
+    int i = 0;
+	int start;
+	int count;
+    if (!str)
+        return NULL;
+    while (str[i])
+    {
+        if (str[i] == '\'')
+        {
+            i++;
+            while (str[i] && str[i] != '\'')
+                i++;
+            if (str[i])
+                i++;
+        }
+        else if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+        {
+            start = i;
+            count = 1;
+            if (str[i + 1] == '?')
+                count = 2;
+            else
+            {
+                while (ft_isalnum(str[i + count]) || str[i + count] == '_')
+                    count++;
+            }
+            return expand_aux(str, start, count);
+        }
+        else
+            i++;
+    }
+    return str;
 }
+
 
 void get_here_doc(char *eof, int fd[2])
 {

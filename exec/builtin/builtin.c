@@ -148,26 +148,43 @@ void builtin_pwd(void)
 void builtin_echo(char **args)
 {
     int i = 1;
-    char *cleaned, *tmp;
+    int suppress_newline = 0;
 
     if (args[1] && ft_strncmp(args[1], "-n", 2) == 0)
+    {
+        suppress_newline = 1;
         i++;
+    }
     while (args[i])
     {
-        cleaned = aspas(args[i], '"');
-        tmp = cleaned;
-        cleaned = aspas(cleaned, '\'');
-        free(tmp);
-        char *expanded = expand(cleaned);
-        ft_putstr_fd(expanded, 1);
-        free(expanded);
+        char *arg = args[i];
+        int single_quoted = 0;
+        int double_quoted = 0;
+        if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+        {
+            single_quoted = 1;
+            arg = remove_it(arg, '\'');
+        }
+        else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
+        {
+            double_quoted = 1;
+            arg = remove_it(arg, '"');
+        }
+        char *output;
+        if (single_quoted)
+            output = ft_strdup(arg);
+        else
+            output = expand(arg);
+        ft_putstr_fd(output, 1);
+        // free(output);
         if (args[i + 1])
             write(1, " ", 1);
         i++;
     }
-    if (!(args[1] && ft_strncmp(args[1], "-n", 2) == 0))
+    if (!suppress_newline)
         write(1, "\n", 1);
 }
+// echo $USER '$USER' "$USER"
 
 void    builtin_exit(char **args)
 {
