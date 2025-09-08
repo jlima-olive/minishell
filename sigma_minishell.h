@@ -37,6 +37,12 @@ typedef struct s_infile
 	struct s_infile	*next;
 }	t_infile;
 
+typedef struct s_os_envs_list{
+	char				*linux_envs;
+	char				*temp_vars;
+	struct s_os_envs_list	*next;
+}   t_os_envs_list;
+
 typedef struct s_os_envs{
 	char **linux_envs;
 	char **temp_vars;
@@ -45,24 +51,24 @@ typedef struct s_os_envs{
 
 
 int			is_builtin(char *cmd);
-void builtin_cd(char **args);
+void		builtin_cd(char **args);
 void		builtin_pwd(void);
 void		builtin_exit(char **args);
-int exec_builtin(char *cmd, char **args, char **envp);
+int 		exec_builtin(char *cmd, char **args, char **envp);
 void		print_env_list(void);
 t_os_envs	**get_env_list(void);
 void		builtin_export(char **args);
 void		builtin_unset(char **args);
-int		is_builtin(char *cmd);
-void	builtin_exit(char **args);
-void print_env_list(void);
-t_os_envs **get_env_list(void);
-void builtin_export(char **args);
-void builtin_unset(char **args);
-char *aspas(char *str, int c);
-void    handle_sigint(int sig);
-void print_linux_env_list(void);
-char *remove_it(char *str, int c);
+int				is_builtin(char *cmd);
+void		builtin_exit(char **args);
+void		print_env_list(void);
+t_os_envs	**get_env_list(void);
+void		builtin_export(char **args);
+void		builtin_unset(char **args);
+char		*aspas(char *str, int c);
+void		handle_sigint(int sig);
+void		print_linux_env_list(void);
+char		*remove_it(char *str, int c);
 
 
 
@@ -109,7 +115,7 @@ t_os_envs **get_env_list(void);
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
-int    exec_pipes(t_cmds *cmd, char **env);
+int	exec_pipes(t_cmds *cmd, char **env);
 int	exec_redirections(t_cmds *cmd);
 int has_redir(t_cmds *cmd);
 void free_matrix(char **table);
@@ -120,7 +126,7 @@ char *find_path_in_list(t_os_envs *env_list, const char *key);
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
-int    exec_pipes(t_cmds *cmd, char **env);
+int	exec_pipes(t_cmds *cmd, char **env);
 int add_temp_var(const char *str);
 char *remove_aspas(char *str);
 void discard_heredoc(t_infile *infiles);
@@ -186,6 +192,11 @@ int	word_count(char *str, t_token tokens, char **sep);
 char	*ft_matnstr(char **matrix, char *s, int n);
 void	ft_matrix_uni(char **dest, char **src);
 
-void	get_here_doc(char *eof, int fd[2]);
+void			get_here_doc(char *eof, int fd[2]);
+
+/*	this function receives char **environment and returns a t_os_envs_list *
+	where every node in the list has as its content one string from
+	environment the list itself contains every string from environment*/
+t_os_envs_list	*get_env(char **environ);
 
 #endif

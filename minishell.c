@@ -2,7 +2,7 @@
 #include "sigma_minishell.h"
 #include <readline/history.h>
 #include <stdlib.h>
-
+/* 
 void	print_files(t_infile	*file)
 {
 	while (file)
@@ -46,7 +46,8 @@ void	print_tree(t_binary *tree, int sub)
 			print_cmds(tree->cmds);
 	if (sub)
 		printf("\n^exiting shubshell^\n");
-} 
+}  */
+
 t_binary	*btree(void)
 {
 	static	t_binary	tree;
