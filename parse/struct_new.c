@@ -7,6 +7,8 @@ t_outfile	*outfile_new(char *file, char *token)
 	t_outfile	*new;
 
 	new = malloc(sizeof(t_outfile));
+	if (new == NULL)
+		return (NULL);
 	new->file = file;
 	new->token = token;
 	new->next = NULL;
@@ -18,6 +20,8 @@ t_infile	*infile_new(char *file, char *token)
 	t_infile	*new;
 
 	new = malloc(sizeof(t_infile));
+	if (new == NULL)
+		return (NULL);
 	new->file = file;
 	new->token = token;
 	new->next = NULL;
@@ -29,6 +33,8 @@ t_cmds	*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd)
 	t_cmds	*new;
 
 	new = malloc(sizeof(t_cmds));
+	if (new == NULL)
+		return (NULL);
 	new->cmd = cmd;
 	new->outfiles = outfile;
 	new->infiles = infile;

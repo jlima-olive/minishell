@@ -12,6 +12,8 @@ void	binary_clear(t_binary *binary)
 	cmds_clear(binary->cmds);
 	if (binary->up)
 		free(binary);
+	// else
+		// env_clear(binary->nv)
 }
 
 void	cmds_clear(t_cmds *cmds)
@@ -30,7 +32,6 @@ void	cmds_clear(t_cmds *cmds)
 	else
 		while (cmds->cmd && cmds->cmd[++ind])
 			free(cmds->cmd[ind]);
-	ft_putstr_fd("going to free this now\n", 1);
 	free(cmds);
 }
 
