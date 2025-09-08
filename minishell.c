@@ -5,6 +5,7 @@
 
 void	print_files(t_infile	*file)
 {
+<<<<<<< HEAD
 	while (file)
 	{
 		printf("red is | file is\n");
@@ -12,6 +13,12 @@ void	print_files(t_infile	*file)
 		file = file->next;
 	}
 } 
+=======
+	static t_binary	tree;
+
+	return (&tree);
+}
+>>>>>>> cfee328 (pipes working, gotta fix bugs)
 
 void	print_cmds(t_cmds *cmds)
 {
@@ -54,29 +61,41 @@ t_binary	*btree(void)
 	return (&tree);
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+	char	*input;
+	char	**args;
+	char	*cmd;
+
+>>>>>>> cfee328 (pipes working, gotta fix bugs)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 >>>>>>> 6c0dac5 (handle signals complete)
 	builtin_env();
-	while(1)
+	while (1)
 	{
-		char *input = readline("minishell$ ");
+		input = readline("minishell$ ");
 		if (!input)
-			break;
+			break ;
 		add_history(input);
+<<<<<<< HEAD
 		char **args = ft_split(input, ' ');
+=======
+		args = ft_split(input, ' ');
+>>>>>>> cfee328 (pipes working, gotta fix bugs)
 		if (!args || !args[0])
 		{
-			free (input);
-			free (args);
-			continue;
+			free(input);
+			free(args);
+			continue ;
 		}
 		btree()->env = envp;
 		parsing(input);
+<<<<<<< HEAD
 <<<<<<< HEAD
 			// printf("PODES SO POR TIPO PRINT ERROR POR AGORA\n");
 		print_tree(btree(), 0);
@@ -85,10 +104,20 @@ int main(int ac, char **av, char **envp)
 		char *cmd = args[0];  
 		if (is_builtin(cmd))  
 			exec_builtin(cmd, args);
+=======
+		cmd = args[0];
+		if (ft_strchr(input, '|') == NULL) // <-- DEIXAR ESSE IF PQ SE NAO DA MERDA QUANDO NAO EXISTEM PIPES E TENTA EXEC_BUILTIN
+		{
+		    if (is_builtin(cmd))
+		        exec_builtin(cmd, args);
+		    else
+        		exec_path(cmd, args, envp);
+		}
+>>>>>>> cfee328 (pipes working, gotta fix bugs)
 		else
-			exec_path(cmd, args, envp);
+			exec_tree(btree());
 		binary_clear(btree());
 		free(btree()->mat);
 	}
-	return(printf("Closing Minishell\n"), 0);
+	return (printf("Closing Minishell\n"), 0);
 }

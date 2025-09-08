@@ -46,7 +46,12 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	char	**ret;
 
 	if (wc < 0)
+<<<<<<< HEAD
 		return (single_error_msg(wc), NULL);
+=======
+		return (printf("\nUnclosed |%c|\n", -wc), NULL); //ISSO TA A DAR SEGFAULT QUANDO FAZES ECHO "SALV <-- POR EXEMPLO | VINI
+	// printf("\nwords in the input ->|%d|\n", wc);
+>>>>>>> cfee328 (pipes working, gotta fix bugs)
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?

@@ -71,11 +71,6 @@ void    builtin_exit(char **args)
     exit (status);
 }
 
-// void builtin_unset(char *name)
-// {
-
-// }
-
 int exec_builtin(char *cmd, char **args)
 {
     if (ft_strncmp(cmd, "cd", 2) == 0)

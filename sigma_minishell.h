@@ -113,6 +113,7 @@ t_os_envs **get_env_list(void);
 void builtin_env(void);
 void exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
+int    exec_pipes(t_cmds *cmd, char **env);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
