@@ -8,27 +8,27 @@ char	**bind_mat_lst_aux(char **mat, char **ret, int count, t_wild *head)
 	while (ind < count)
 	{
 		ret[ind] = mat[ind];
-		printf("ret[%d] = %s\n", ind, mat[ind]);
-		fflush(stdout);
+		// printf("ret[%d] = %s\n", ind, mat[ind]);
+		// fflush(stdout);
 		ind++;
 	}
 	while (head)
 	{
 		ret[ind] = ft_strdup(head->file);
-		printf("ret[%d] = %s\n", ind, head->file);
-		fflush(stdout);
+		// printf("ret[%d] = %s\n", ind, head->file);
+		// fflush(stdout);
 		head = head->next;
 		ind++;
 	}
 	while (mat[++count])
 	{
 		ret[ind] = mat[count];
-		printf("ret[%d] = %s\n", ind, mat[count]);
-		fflush(stdout);
+		// printf("ret[%d] = %s\n", ind, mat[count]);
+		// fflush(stdout);
 		ind++;
 	}
-	printf("ret[%d] = %s\n", ind, ret[ind]);
-	fflush(stdout);
+	// printf("ret[%d] = %s\n", ind, ret[ind]);
+	// fflush(stdout);
 	return (ret);
 }
 

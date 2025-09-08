@@ -1,34 +1,5 @@
 #include "../sigma_minishell.h"
 
-char	*expand_wildcards_aux(char *str, int ind, int count, char *temp)
-{
-	char	*env_var;
-
-	temp = ft_strndup(str + ind + 1, count - 1);
-	if (temp == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
-	temp = ft_strjoin_free(temp, "=", 1);
-	if (temp == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
-	env_var = ft_matnstr(btree()->env, temp, count);
-	free(temp);
-	if (env_var == NULL)
-		env_var = ft_calloc(1, 1);
-	if (env_var == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
-	temp = ft_strdup(str + ind + count);
-	if (temp == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
-	temp = ft_strjoin_free(env_var + count * (*env_var != '\0'), temp, 2);
-	if (temp == NULL)
-		return (btree()->type = ERROR, free (str), NULL);
-	str[ind] = '\0';
-	str = ft_strjoin_free(str, temp, 0);
-	if (str == NULL)
-		return (btree()->type = ERROR, NULL);
-	return (expand(str));
-}
-
 char	**expand_wildcards(char **mat, int count, char *empty_str, t_wild *head)
 {
 	char	**pattern;
