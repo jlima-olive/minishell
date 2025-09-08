@@ -145,30 +145,46 @@ void builtin_pwd(void)
     }
 }
 
-
-
-
-
 void builtin_echo(char **args)
 {
-    int i;
-    char *cleaned;
+    int i = 1;
+    int suppress_newline = 0;
 
-    i = 1;
     if (args[1] && ft_strncmp(args[1], "-n", 2) == 0)
+    {
+        suppress_newline = 1;
         i++;
+    }
     while (args[i])
     {
-        cleaned = aspas(args[i]);
-        ft_putstr_fd(cleaned, 1);
-        free(cleaned);
-        if (args[i + 1] != NULL)
+        char *arg = args[i];
+        int single_quoted = 0;
+        int double_quoted = 0;
+        if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+        {
+            single_quoted = 1;
+            arg = remove_it(arg, '\'');
+        }
+        else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
+        {
+            double_quoted = 1;
+            arg = remove_it(arg, '"');
+        }
+        char *output;
+        if (single_quoted)
+            output = ft_strdup(arg);
+        else
+            output = expand(arg);
+        ft_putstr_fd(output, 1);
+        // free(output);
+        if (args[i + 1])
             write(1, " ", 1);
         i++;
     }
-    if (!(args[1] && ft_strncmp(args[1], "-n", 2) == 0))
+    if (!suppress_newline)
         write(1, "\n", 1);
 }
+// echo $USER '$USER' "$USER"
 
 void    builtin_exit(char **args)
 {
@@ -180,18 +196,14 @@ void    builtin_exit(char **args)
     exit (status);
 }
 
-<<<<<<< HEAD
 int exec_builtin(char *cmd, char **args, char **envp)
-=======
-int exec_builtin(char *cmd, char **args)
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
 {
     if (ft_strncmp(cmd, "cd", 2) == 0)
             builtin_cd(args);
     else if (ft_strncmp(cmd, "pwd", 3) == 0)
         builtin_pwd();
     else if (ft_strncmp(cmd, "env", 3) == 0)
-        print_env_list();
+        print_linux_env_list();
     else if (ft_strncmp(cmd, "echo", 4) == 0)
         builtin_echo(args);
     else if (ft_strncmp(cmd, "exit", 4) == 0)
@@ -204,4 +216,3 @@ int exec_builtin(char *cmd, char **args)
         return (0);
     return (0);
 }
-

@@ -39,34 +39,31 @@ typedef struct s_infile
 
 typedef struct s_os_envs{
 	char **linux_envs;
+	char **temp_vars;
 	struct s_os_envs *next;
 }   t_os_envs;
 
-<<<<<<< HEAD
+
 int			is_builtin(char *cmd);
-void		builtin_cd(char *path);
+void builtin_cd(char **args);
 void		builtin_pwd(void);
-void		builtin_env(void);
 void		builtin_exit(char **args);
-int			exec_builtin(char *cmd, char **args);
+int exec_builtin(char *cmd, char **args, char **envp);
 void		print_env_list(void);
 t_os_envs	**get_env_list(void);
 void		builtin_export(char **args);
 void		builtin_unset(char **args);
-char		*aspas(char *str);
-=======
 int		is_builtin(char *cmd);
 void	builtin_exit(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_export(char **args);
 void builtin_unset(char **args);
-char *aspas(char *str);
+char *aspas(char *str, int c);
 void    handle_sigint(int sig);
-<<<<<<< HEAD
-=======
->>>>>>> 6c0dac5 (handle signals complete)
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
+void print_linux_env_list(void);
+char *remove_it(char *str, int c);
+
 
 
 typedef struct s_cmds
@@ -98,7 +95,7 @@ t_binary	*btree(void);
 int			parsing(char *str);
 void 		init_tree(char **mat);
 
-char *aspas(char *str);
+char *aspas(char *str, int c);
 int is_builtin(char *cmd);
 void builtin_cd(char **args);
 void builtin_pwd(void);
@@ -109,7 +106,6 @@ int exec_builtin(char *cmd, char **args, char **envp);
 void builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
-<<<<<<< HEAD
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
@@ -121,12 +117,13 @@ char **array_to_exec(t_cmds *cmd);
 char *find_path(char **envp, char *which_env);
 void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
-=======
-void builtin_env(void);
-void exec_path(char *cmd, char **args, char **envp);
+void builtin_env(char **env);
+int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
 int    exec_pipes(t_cmds *cmd, char **env);
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
+int add_temp_var(const char *str);
+char *remove_aspas(char *str);
+void discard_heredoc(t_infile *infiles);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

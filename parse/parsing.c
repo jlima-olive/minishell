@@ -9,27 +9,54 @@
 	}
 } */
 
-void	get_here_doc(char *eof, int fd[2])
+void get_here_doc(char *eof, int fd[2])
 {
-	char	*str;
-	// char	strfinal[1024];
-	int		len;
+    char *str;
+    char *delimiter = remove_aspas(eof);
+    int len = ft_strlen(delimiter);
 
-	len = ft_strlen(eof);
-	str = readline("> ");
-	while (ft_strncmp(str, eof, len + 1))
-	{
-		str = expand(str);
-		write (fd[1], str, ft_strlen(str));
-		write (fd[1], "\n", 1); // idk if this is necessary perhaps it isnt
-		free (str);
-		str = readline("> ");
-	}
-	free (str);
-	// read(fd[0], strfinal, 1023);	// this is just to test if its working
-	// printf("%s", strfinal);		// this is just to test if its working
-	close (fd[0]);
-	close (fd[1]);
+    str = readline("> ");
+    while (str && ft_strncmp(str, delimiter, len + 1))
+    {
+        if (fd)
+        {
+            char *expanded = expand(str);  // expand input
+            write(fd[1], expanded, ft_strlen(expanded));
+            write(fd[1], "\n", 1);
+
+            if (expanded != str)
+                free(expanded);
+        }
+        free(str);
+        str = readline("> ");
+    }
+    free(str);
+    free(delimiter);
+
+    if (fd)
+        close(fd[1]);
+}
+
+void discard_heredoc(t_infile *infiles)
+{
+	char *str;
+    while (infiles)
+    {
+        if (ft_strcmp(infiles->token, "<<") == 0)
+        {
+            char *delimiter = remove_aspas(infiles->file);
+            int len = ft_strlen(delimiter);
+            str = readline("> ");
+            while (str && ft_strncmp(str, delimiter, len + 1))
+            {
+                free(str);
+                str = readline("> ");
+            }
+            free(str);
+            free(delimiter);
+        }
+        infiles = infiles->next;
+    }
 }
 
 void	single_error_msg(char wc)
@@ -46,19 +73,12 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	char	**ret;
 
 	if (wc < 0)
-<<<<<<< HEAD
 		return (printf("\nUnclosed |%c|\n", -wc), NULL);
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 
 
-=======
-<<<<<<< HEAD
-		return (single_error_msg(wc), NULL);
-=======
-		return (printf("\nUnclosed |%c|\n", -wc), NULL); //ISSO TA A DAR SEGFAULT QUANDO FAZES ECHO "SALV <-- POR EXEMPLO | VINI
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
+		// return (single_error_msg(wc), NULL);
 	// printf("\nwords in the input ->|%d|\n", wc);
->>>>>>> cfee328 (pipes working, gotta fix bugs)
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
@@ -120,18 +140,9 @@ int	parsing(char *str)
 		return (1);
 	tokens.stokens = stokens;
 	tokens.dtokens = dtokens;
-<<<<<<< HEAD
-	mat = tokenization(str, tokens, sep);
-	// for (int i = 0; mat[i]; i++)
-	// 	printf("====PARSING TESTING: Token[%d]: |%s|\n", i, mat[i]);
-	/*if (check_syntax(mat))
-		return (1);
-		btree()->type = ERROR;*/
-=======
 	mat = NULL;
 	if (str != NULL && *str != '\0')
 		mat = tokenization(str, tokens, sep, word_count(str, tokens, sep));
->>>>>>> 33b2c0a7851e0ab3b6b56f7a580ef6116ed92002
 	if (mat == NULL)
 		return (1);
 	// printf("printing matrix\n");
