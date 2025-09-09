@@ -114,7 +114,8 @@ int add_temp_var(const char *str);
 char *remove_aspas(char *str);
 void discard_heredoc(t_infile *infiles);
 void update_env_var(const char *key, const char *value);
-int update_shell_level(int amount, char **envp);
+int update_shell_level(int amount);
+int make_update_env(const char *str);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

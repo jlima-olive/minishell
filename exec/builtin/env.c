@@ -1,11 +1,4 @@
 #include "../../sigma_minishell.h"
-#include <unistd.h>
-
-// typedef struct s_os_envs{
-// 	char *linux_envs;
-// 	char **temp_vars;
-// 	struct s_os_envs *next;
-// }   t_os_envs;
 
 t_os_envs **get_env_list(void)
 {
@@ -190,3 +183,36 @@ char *find_temp_var(const char *key)
     }
     return (NULL);
 }
+
+int update_shell_level(int amount)
+{
+    t_os_envs *current = *get_env_list();
+    int level = 0;
+
+    printf("Updating shell leveln\n"); 
+    while (current)
+    {
+        if (current->linux_envs && strncmp(current->linux_envs, "SHLVL=", 6) == 0)
+        {
+            level = ft_atoi(current->linux_envs + 6);
+            break ;
+        }
+        current = current->next;
+    }
+    level += amount;
+    if (level < 0)
+        level = 0;
+    char *num = ft_itoa(level);
+    if (!num)
+        return (-1);
+    char *final_str = malloc(strlen("SHLVL=") + strlen(num) + 1);
+    if (!final_str)
+        return (free(num), -1);
+    strcpy(final_str, "SHLVL=");
+    strcat(final_str, num);
+    free(num);
+    int result = make_update_env(final_str);
+    free(final_str);
+    return (result);
+}
+

@@ -1,10 +1,11 @@
 #include "../../sigma_minishell.h"
 
-static int make_update_env(const char *str)
+int make_update_env(const char *str)
 {
     t_os_envs **env_list = get_env_list();
     t_os_envs *current = *env_list;
     size_t len = ft_strchr(str, '=') ? (size_t)(ft_strchr(str, '=') - str) : strlen(str);
+    // existing variable with the same name
     while (current)
     {
         if (current->linux_envs && ft_strncmp(current->linux_envs, str, len) == 0 && current->linux_envs[len] == '=')
@@ -18,6 +19,7 @@ static int make_update_env(const char *str)
         }
         current = current->next;
     }
+    // Not found
     t_os_envs *new_node = malloc(sizeof(t_os_envs));
     if (!new_node)
         return (-1);

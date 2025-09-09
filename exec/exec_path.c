@@ -81,43 +81,11 @@ char *get_env_var(char *name, char **envp)
     return NULL;
 }
 
-int update_shell_level(int amount, char **envp)
-{
-    char *current = get_env_var("SHLVL", envp);
-    int level = 0;
-    char *level_str;
-    char *arg;
-    char *args[3];
-
-    if (current)
-        level = ft_atoi(current);
-    level += amount;
-    if (level < 0)
-        level = 0;
-    level_str = ft_itoa(level);
-    if (!level_str)
-        return (-1);
-
-    arg = malloc(strlen("SHLVL=") + strlen(level_str) + 1);
-    if (!arg)
-        return (-1);
-
-    strcpy(arg, "SHLVL=");
-    strcat(arg, level_str);
-
-    args[0] = "export";
-    args[1] = arg;
-    args[2] = NULL;
-    builtin_export(args);
-
-    free(level_str);
-    free(arg);
-    return (0);
-}
-
 
 int exec_path(char *cmd, char **args, char **envp)
 {
+    if (strcmp(cmd, "./minishell") == 0)
+        update_shell_level(1);
     if (cmd[0] == '$')
     {
         char *value = get_env_var(cmd + 1, envp);
@@ -143,8 +111,6 @@ int exec_path(char *cmd, char **args, char **envp)
     }
     else
     {
-        if (strcmp(cmd, "./minishell") == 0)
-            update_shell_level(1, envp);
         if (exec_system_path(cmd, args, envp) == 0)
             return 0;
     }
