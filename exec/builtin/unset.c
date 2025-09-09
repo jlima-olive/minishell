@@ -18,47 +18,30 @@ void builtin_unset(char **args)
 
         while (cur)
         {
-            if (cur->linux_envs && cur->linux_envs[0] &&
-                strncmp(cur->linux_envs[0], args[i], name_len) == 0 &&
-                cur->linux_envs[0][name_len] == '=')
+            int match = 0;
+
+            // check linux_envs
+            if (cur->linux_envs &&
+                strncmp(cur->linux_envs, args[i], name_len) == 0 &&
+                cur->linux_envs[name_len] == '=')
+                    match = 1;
+            if (cur->temp_vars &&
+                strncmp(cur->temp_vars, args[i], name_len) == 0)
+                    match = 1;
+            if (match)
             {
                 if (prev)
                     prev->next = cur->next;
                 else
                     *env_list = cur->next;
-
-                free(cur->linux_envs[0]);
                 free(cur->linux_envs);
+                free(cur->temp_vars);
                 free(cur);
                 break;
             }
-            if (cur->temp_vars)
-            {
-                for (int j = 0; cur->temp_vars[j]; j++)
-                {
-                    if (strcmp(cur->temp_vars[j], args[i]) == 0)
-                    {
-                        free(cur->temp_vars[j]);
 
-                        // shift
-                        int k = j;
-                        while (cur->temp_vars[k]) {
-                            cur->temp_vars[k] = cur->temp_vars[k + 1];
-                            k++;
-                        }
-
-                        // shrink allocation
-                        char **shrunk = realloc(cur->temp_vars, sizeof(char *) * k);
-                        if (shrunk)
-                            cur->temp_vars = shrunk;
-
-                        break;
-                    }
-                }
-            }
             prev = cur;
             cur = cur->next;
         }
     }
 }
-

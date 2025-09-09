@@ -44,29 +44,11 @@ typedef struct s_os_envs_list{
 }   t_os_envs_list;
 
 typedef struct s_os_envs{
-	char **linux_envs;
-	char **temp_vars;
+	char *linux_envs;
+	char *temp_vars;
 	struct s_os_envs *next;
 }   t_os_envs;
 
-
-int			is_builtin(char *cmd);
-void		builtin_cd(char **args);
-void		builtin_pwd(void);
-int 		exec_builtin(char *cmd, char **args, char **envp);
-void		print_env_list(void);
-t_os_envs	**get_env_list(void);
-void		builtin_export(char **args);
-void		builtin_unset(char **args);
-int				is_builtin(char *cmd);
-void		print_env_list(void);
-t_os_envs	**get_env_list(void);
-void		builtin_export(char **args);
-void		builtin_unset(char **args);
-char		*aspas(char *str, int c);
-void		handle_sigint(int sig);
-void		print_linux_env_list(void);
-char		*remove_it(char *str, int c);
 
 
 
@@ -121,6 +103,9 @@ char **array_to_exec(t_cmds *cmd);
 char *find_path(char **envp, char *which_env);
 void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
+void		handle_sigint(int sig);
+void		print_linux_env_list(void);
+char		*remove_it(char *str, int c);
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
