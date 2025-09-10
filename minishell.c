@@ -2,6 +2,8 @@
 #include "sigma_minishell.h"
 #include <readline/history.h>
 #include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
 /* 
 void	print_files(t_infile	*file)
 {
@@ -54,81 +56,90 @@ t_binary	*btree(void)
 
 	return (&tree);
 }
-
-int	main(int argc, char *argv[], char **envp)
+int main(int argc, char *argv[], char **envp)
 {
-	char	*input;
-	t_cmds	*cmds;
-	pid_t	pid;
+    char    *input;
+    t_cmds  *cmds;
+    pid_t   pid;
 
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	builtin_env(envp);
-	btree()->env = envp;
-	while (1)
-	{
-		input = readline("minishell$ ");
-		if (!input)
-			break ;
-		add_history(input);
-		if (*input == '\0')
-		{
-			free(input);
-			continue ;
-		}
-		// print_cmds(cmds);
-		if (parsing(input) == 0)
-		{
-			cmds = btree()->cmds;
-			if (!btree()->cmds || !btree()->cmds->cmd || !btree()->cmds->cmd[0])
-			{
-				if (btree()->cmds && btree()->cmds->infiles)
-					discard_heredoc(btree()->cmds->infiles); // just read & discard <<
-
-				free(input);
-				binary_clear(btree());
-				continue;
-			}
-			if (!ft_strchr(input, '|'))
-			{
-				if (is_builtin(btree()->cmds->cmd[0]))
-				{
-					if (has_redir(btree()->cmds))
-					{
-						pid = fork();
-						if (pid == 0)
-						{
-							exec_redirections(btree()->cmds);
-							char **cleaned = array_to_exec(btree()->cmds);
-							exec_builtin(cleaned[0], cleaned, envp);
-							free_matrix(cleaned);
-							exit(0);
-						}
-						waitpid(pid, NULL, 0);
-					}
-					else
-						exec_builtin(btree()->cmds->cmd[0], btree()->cmds->cmd, envp);
-				}
-				else
-				{
-					pid = fork();
-					if (pid == 0)
-					{
-						if (has_redir(btree()->cmds))
-							exec_redirections(btree()->cmds);
-						char **cleaned = array_to_exec(btree()->cmds);
-						exec_path(cleaned[0], cleaned, envp);
-						free_matrix(cleaned);
-						exit(1);
-					}
-					waitpid(pid, NULL, 0);
-				}
-			}
-			else
-				exec_tree(btree());
-			free(input);
-			binary_clear(btree());
-		}
-	}
-	return (printf("Closing Minishell\n"), 0);
+    tcgetattr(STDIN_FILENO, &btree()->orig_termios);
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, SIG_IGN);
+    builtin_env(envp);
+    btree()->env = envp;
+    while (1)
+    {
+        input = readline("minishell$ ");
+        if (!input)
+            break ;
+        add_history(input);
+        if (*input == '\0')
+        {
+            free(input);
+            continue ;
+        }
+        if (parsing(input) == 0)
+        {
+            cmds = btree()->cmds;
+            if (!btree()->cmds || !btree()->cmds->cmd || !btree()->cmds->cmd[0])
+            {
+                if (btree()->cmds && btree()->cmds->infiles)
+                    discard_heredoc(btree()->cmds->infiles);
+                free(input);
+                binary_clear(btree());
+                continue;
+            }
+            if (!ft_strchr(input, '|'))
+            {
+                if (is_builtin(btree()->cmds->cmd[0]))
+                {
+                    if (has_redir(btree()->cmds))
+                    {
+                        pid = fork();
+                        if (pid == 0)
+                        {
+                            exec_redirections(btree()->cmds);
+                            char **cleaned = array_to_exec(btree()->cmds);
+                            exec_builtin(cleaned[0], cleaned, envp);
+                            free_matrix(cleaned);
+                            exit(0);
+                        }
+                        else
+                        {
+                            signal(SIGINT, SIG_IGN);          // parent ignores SIGINT
+                            waitpid(pid, NULL, 0);
+                            signal(SIGINT, handle_sigint);    // restore handler
+                        }
+                    }
+                    else
+                        exec_builtin(btree()->cmds->cmd[0], btree()->cmds->cmd, envp);
+                }
+                else
+                {
+                    pid = fork();
+                    if (pid == 0)
+                    {
+                        if (has_redir(btree()->cmds))
+                            exec_redirections(btree()->cmds);
+                        char **cleaned = array_to_exec(btree()->cmds);
+                        exec_path(cleaned[0], cleaned, envp);
+                        free_matrix(cleaned);
+                        exit(1);
+                    }
+                    else
+                    {
+                        signal(SIGINT, SIG_IGN);          // parent ignores SIGINT
+                        waitpid(pid, NULL, 0);
+                        signal(SIGINT, handle_sigint);    // restore handler
+                    }
+                }
+            }
+            else
+                exec_tree(btree());
+            free(input);
+            binary_clear(btree());
+        }
+    }
+    return (printf("Closing Minishell\n"), 0);
 }
+

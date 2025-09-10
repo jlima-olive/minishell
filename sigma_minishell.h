@@ -8,6 +8,7 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include <dirent.h>
+#include <termios.h>
 
 typedef struct s_wild
 {
@@ -75,6 +76,7 @@ typedef struct s_binary
 	struct s_binary	*left;
 	struct s_binary	*right;
 	struct s_binary	*subshell;
+	struct termios orig_termios; //<-- VINI TESTEANDO UMA CRAZY THING
 }	t_binary;
 
 t_binary	*btree(void);

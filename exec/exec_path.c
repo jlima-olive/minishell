@@ -66,6 +66,15 @@ int is_system_path_command(char *cmd, char **envp)
     return 0; // not found in PATH
 }
 
+void prepare_for_exec(void)
+{
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &btree()->orig_termios) == -1)
+        perror("tcsetattr");
+
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+}
+
 int exec_system_path(char *cmd, char **args, char **envp)
 {
     char **paths_to_search = split_path(envp);
@@ -94,6 +103,7 @@ int exec_system_path(char *cmd, char **args, char **envp)
         {
             if (access(full_path, X_OK) == 0)
             {
+                prepare_for_exec();
                 execve(full_path, args, envp);
                 perror("execve failed 1");
                 free(full_path);
@@ -147,6 +157,7 @@ int exec_path(char *cmd, char **args, char **envp)
         {
             if (access(cmd, X_OK) == 0)
             {
+                prepare_for_exec();
                 execve(cmd, args, envp);
                 perror("execve failed 2");
                 return -1;
@@ -164,6 +175,7 @@ int exec_path(char *cmd, char **args, char **envp)
         {
             if (access(cmd, X_OK) == 0)
             {
+                prepare_for_exec();
                 execve(cmd, args, envp);
                 if (errno == ENOEXEC)
                 {
@@ -171,6 +183,7 @@ int exec_path(char *cmd, char **args, char **envp)
                     new_args[0] = "/bin/bash";
                     new_args[1] = cmd;
                     new_args[2] = NULL;
+                    prepare_for_exec();
                     execve(new_args[0], new_args, envp);
                 }
                 perror("execve failed 3\n");
