@@ -58,15 +58,19 @@ t_binary	*btree(void)
 }
 int main(int argc, char *argv[], char **envp)
 {
+	// struct termios old_term;
     char    *input;
     t_cmds  *cmds;
     pid_t   pid;
-
-    tcgetattr(STDIN_FILENO, &btree()->orig_termios);
+	if (isatty(STDIN_FILENO))
+		tcgetattr(STDIN_FILENO, &btree()->orig_termios);
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, SIG_IGN);
     builtin_env(envp);
-    btree()->env = envp;
+	if (am_i_truly_myself(argv[0]))
+        update_shell_level(1);
+    // now regenerate envp for child processes
+    btree()->env = list_to_char(*get_env_list());
     while (1)
     {
         input = readline("minishell$ ");
@@ -122,8 +126,10 @@ int main(int argc, char *argv[], char **envp)
                         if (has_redir(btree()->cmds))
                             exec_redirections(btree()->cmds);
                         char **cleaned = array_to_exec(btree()->cmds);
-                        exec_path(cleaned[0], cleaned, envp);
+						char **updated_envs = list_to_char(*get_env_list());
+                        exec_path(cleaned[0], cleaned, updated_envs);
                         free_matrix(cleaned);
+						free_matrix(updated_envs);
                         exit(1);
                     }
                     else

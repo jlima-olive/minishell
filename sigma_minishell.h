@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <dirent.h>
 #include <termios.h>
+#include <sys/stat.h>
 
 typedef struct s_wild
 {
@@ -118,6 +119,8 @@ void discard_heredoc(t_infile *infiles);
 void update_env_var(const char *key, const char *value);
 int update_shell_level(int amount);
 int make_update_env(const char *str);
+char **list_to_char(t_os_envs *envs);
+int am_i_truly_myself(const char *cmd);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

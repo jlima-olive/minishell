@@ -19,6 +19,40 @@ static t_os_envs *create_env_node(char *path)
     return (new_node);
 }
 
+char **list_to_char(t_os_envs *envs)
+{
+    size_t count = 0;
+    t_os_envs *temp = envs;
+    char **final_char;
+    size_t i = 0;
+    while (temp)
+    {
+        if (temp->linux_envs)
+            count++;
+        temp = temp->next;
+    }
+    final_char = malloc(sizeof(char *) * (count + 1));
+    if (!final_char)
+        return (NULL);
+    temp = envs;
+    while (temp)
+    {
+        if (temp->linux_envs)
+        {
+            final_char[i] = ft_strdup(temp->linux_envs);
+            if (!final_char[i])
+            {
+                free_matrix(final_char);
+                free(final_char);
+                return (NULL);
+            }
+            i++;
+        }
+        temp = temp->next;
+    }
+    final_char[i] = NULL;
+    return (final_char);
+}
 
 void clear_env_list(void)
 {
@@ -189,7 +223,7 @@ int update_shell_level(int amount)
     t_os_envs *current = *get_env_list();
     int level = 0;
 
-    printf("Updating shell leveln\n"); 
+    // printf("Updating shell leveln\n"); 
     while (current)
     {
         if (current->linux_envs && strncmp(current->linux_envs, "SHLVL=", 6) == 0)

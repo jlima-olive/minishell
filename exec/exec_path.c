@@ -68,9 +68,11 @@ int is_system_path_command(char *cmd, char **envp)
 
 void prepare_for_exec(void)
 {
-    if (tcsetattr(STDIN_FILENO, TCSANOW, &btree()->orig_termios) == -1)
-        perror("tcsetattr");
-
+    if (isatty(STDIN_FILENO))
+    {
+        if (tcsetattr(STDIN_FILENO, TCSANOW, &btree()->orig_termios) == -1)
+            perror("tcsetattr");
+    }
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
 }
@@ -138,10 +140,20 @@ char *get_env_var(char *name, char **envp)
     return NULL;
 }
 
+int am_i_truly_myself(const char *cmd)
+{
+    char *real = realpath(cmd, NULL);
+    char *self = realpath("/proc/self/exe", NULL);
+    int result = real && self && strcmp(real, self) == 0;
+    free(real);
+    free(self);
+    return result;
+}
+
 
 int exec_path(char *cmd, char **args, char **envp)
-{
-    if (strcmp(cmd, "./minishell") == 0 && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+{    
+    if (am_i_truly_myself(args[0]) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
         update_shell_level(1);
     if (cmd[0] == '$')
     {
