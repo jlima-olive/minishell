@@ -13,6 +13,7 @@ int exec_tree(t_binary *tree)
 	if (tree->cmds != NULL) // why tf are all thing comming to here when piping?
 		return (printf("==executing pipes on exec_tree 1\n"), exec_pipes(tree->cmds, tree->env));
 	if (tree->logic && strcmp(tree->logic, "&&") == 0)
+	// if (tree->type && tree->type == AND)
 	{
 		printf("tree logic 1\n");
 		ret_left = exec_tree(tree->left);
@@ -21,6 +22,7 @@ int exec_tree(t_binary *tree)
 		return (ret_left);
 	}
 	if (tree->logic && strcmp(tree->logic, "||") == 0)
+	// if (tree->type && tree->type == OR)
 	{
 		printf("tree logic 2\n");
 		ret_left = exec_tree(tree->left);
