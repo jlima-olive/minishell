@@ -91,6 +91,7 @@ int main(int argc, char *argv[], char **envp)
                     discard_heredoc(btree()->cmds->infiles);
                 // printf("getting rid of tree\n"); // found you bitch
                 if (exec_tree(btree()) == 0){
+                    printf("===========SO TAVA TESTANDO ELE\n");
                     free(input);
                     binary_clear(btree());
                     continue;
