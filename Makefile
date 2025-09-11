@@ -1,27 +1,16 @@
 PROJ=		minishell
-
 NAME=		${PROJ}.a
-
 PARSER_DIR=	parse
-
 PARSER=		$(PARSER_DIR)/$(PARSER_DIR).a
-
 EXEC_DIR=	exec
-
 BIN_DIR=	$(EXEC_DIR)/builtin
-
 EXEC=		$(wildcard ${EXEC_DIR}/*.c) \
 			$(wildcard ${BIN_DIR}/*.c)
-
 CC=			cc
-
 AR=			ar rcs
-
 CFLAGS=		-Wall -Wextra -Werror
-
 PIPEX       = pipex
 PIPEX_BONUS = pipex_bonus
-
 PIPEX_DIR   = pipex
 LIBFT_DIR   = my_libft
 BULTIN_DIR  = builtin
@@ -57,6 +46,11 @@ r: fclean all
 	$(MAKE) -C $(EXEC_DIR)
 	make clean
 	clear && ./minishell
+
+norm:
+	@norminette $(shell find . -type f \( -name "*.c" -o -name "*.h" \)) \
+	| awk '/c: Error/ { c++; if (c % 2 == 1) printf "\033[1;35m%s\033[0m\n", $$0; else printf "\033[1;36m%s\033[0m\n", $$0 }'
+	@echo "Amount of errors: " && norminette $(shell find . -type f \( -name "*.c" -o -name "*.h" \)) | grep "Error" | wc -l
 
 .PHONY: re fclean clean all exec_rule parse_rule
 

@@ -1,6 +1,4 @@
 #include "../../sigma_minishell.h"
-#include <unistd.h>
-
 
 t_os_envs **get_env_list(void)
 {
@@ -13,44 +11,59 @@ static t_os_envs *create_env_node(char *path)
     t_os_envs *new_node = malloc(sizeof(t_os_envs));
     if (!new_node)
         return NULL;
-    new_node->linux_envs = malloc(sizeof(char *) * 2);
+    new_node->linux_envs = ft_strdup(path);
     if (!new_node->linux_envs)
         return (free(new_node), NULL);
-    new_node->linux_envs[0] = ft_strdup(path);
-    new_node->linux_envs[1] = NULL;
     new_node->next = NULL;
-    new_node->temp_vars = malloc(sizeof(char *));
-    if (!new_node->temp_vars)
-    {
-        free(new_node->linux_envs[0]);
-        free(new_node->linux_envs);
-        free(new_node);
-        return NULL;
-    }
-    new_node->temp_vars[0] = NULL;
-    if (!new_node->linux_envs[0])
-        return (free(new_node->linux_envs), free(new_node->temp_vars), free(new_node), NULL);
-    return new_node;
+    new_node->temp_vars = NULL;
+    return (new_node);
 }
 
+char **list_to_char(t_os_envs *envs)
+{
+    size_t count = 0;
+    t_os_envs *temp = envs;
+    char **final_char;
+    size_t i = 0;
+    while (temp)
+    {
+        if (temp->linux_envs)
+            count++;
+        temp = temp->next;
+    }
+    final_char = malloc(sizeof(char *) * (count + 1));
+    if (!final_char)
+        return (NULL);
+    temp = envs;
+    while (temp)
+    {
+        if (temp->linux_envs)
+        {
+            final_char[i] = ft_strdup(temp->linux_envs);
+            if (!final_char[i])
+            {
+                free_matrix(final_char);
+                free(final_char);
+                return (NULL);
+            }
+            i++;
+        }
+        temp = temp->next;
+    }
+    final_char[i] = NULL;
+    return (final_char);
+}
 
 void clear_env_list(void)
 {
     t_os_envs **env_list = get_env_list();
     t_os_envs *current = *env_list;
     t_os_envs *next;
-
-    while (current) {
+    while (current)
+    {
         next = current->next;
-        if (current->linux_envs) {
-            free(current->linux_envs[0]);
-            free(current->linux_envs);
-        }
-        if (current->temp_vars) {
-            for (int i = 0; current->temp_vars[i]; i++)
-                free(current->temp_vars[i]);
-            free(current->temp_vars);
-        }
+        free(current->linux_envs);
+        free(current->temp_vars);
         free(current);
         current = next;
     }
@@ -65,15 +78,9 @@ void print_env_list(void)
     while (current)
     {
         if (current->linux_envs)
-        {
-            for (int i = 0; current->linux_envs[i]; i++)
-                printf("declare -x %s\n", current->linux_envs[i]);
-        }
+            printf("declare -x %s\n", current->linux_envs);
         if (current->temp_vars)
-        {
-            for (int i = 0; current->temp_vars[i]; i++)
-                printf("declare -x %s\n", current->temp_vars[i]);
-        }
+            printf("declare -x %s\n", current->temp_vars);
         current = current->next;
     }
 }
@@ -84,10 +91,7 @@ void print_linux_env_list(void)
     while (current)
     {
         if (current->linux_envs)
-        {
-            for (int i = 0; current->linux_envs[i]; i++)
-                printf("%s\n", current->linux_envs[i]);
-        }
+                printf("%s\n", current->linux_envs);
         current = current->next;
     }
 }
@@ -107,14 +111,6 @@ void builtin_env(char **env)
             perror("minishell: env");
             return;
         }
-        new_node->temp_vars = malloc(sizeof(char *));
-        if (!new_node->temp_vars)
-        {
-            perror("minishell: env (temp_vars)");
-            free(new_node);
-            return;
-        }
-        new_node->temp_vars[0] = NULL;
 
         if (*env_list == NULL)
             *env_list = new_node;
@@ -164,8 +160,8 @@ char *find_path_in_list(t_os_envs *env_list, const char *key)
 
     while (env_list)
     {
-        if (strncmp(env_list->linux_envs[0], key, key_len) == 0)
-            return env_list->linux_envs[0] + key_len;
+        if (strncmp(env_list->linux_envs, key, key_len) == 0)
+            return (env_list->linux_envs + key_len);
         env_list = env_list->next;
     }
     return NULL;
@@ -175,50 +171,82 @@ char *find_path_in_list(t_os_envs *env_list, const char *key)
 int add_temp_var(const char *str)
 {
     t_os_envs **env_list = get_env_list();
-    t_os_envs *envs = *env_list;
+    t_os_envs *current = *env_list;
+    t_os_envs *new_node;
+    
+    while (current)
+    {
+        if (current->temp_vars && strcmp(current->temp_vars, str) == 0)
+            return (0);
+        current = current->next;
+    }
+    new_node = malloc(sizeof(t_os_envs));
+    if (!new_node)
+        return (0);
+    new_node->linux_envs = NULL;
+    new_node->temp_vars = ft_strdup(str);
+    if (!new_node->temp_vars)
+    {
+        free(new_node);
+        return (-1);
+    }
+    new_node->next = NULL;
 
-    if (!envs)
+    if (*env_list == NULL)
+        *env_list = new_node;
+    else
     {
-        envs = malloc(sizeof(t_os_envs));
-        if (!envs)
-            return -1;
-        envs->linux_envs = NULL;
-        envs->temp_vars = malloc(sizeof(char *));
-        if (!envs->temp_vars)
-            return (free(envs), -1);
-        envs->temp_vars[0] = NULL;
-        envs->next = NULL;
-        *env_list = envs;
+        current = *env_list;
+        while (current->next)
+            current = current->next;
+        current->next = new_node;
     }
-    int count = 0;
-    while (envs->temp_vars && envs->temp_vars[count])
-        count++;
-    for (int i = 0; i < count; i++)
-    {
-        if (strcmp(envs->temp_vars[i], str) == 0)
-            return 0;
-    }
-    char **new_array = realloc(envs->temp_vars, sizeof(char *) * (count + 2));
-    if (!new_array)
-        return -1;
-    envs->temp_vars = new_array;
-    envs->temp_vars[count] = strdup(str);
-    if (!envs->temp_vars[count])
-        return -1;
-    envs->temp_vars[count + 1] = NULL;
-    return 0;
+    return (0);
 }
+
 
 char *find_temp_var(const char *key)
 {
-    t_os_envs *envs = *get_env_list();
-    if (!envs || !envs->temp_vars)
-        return NULL;
-
-    for (int i = 0; envs->temp_vars[i]; i++)
+    t_os_envs *env = *get_env_list();
+    size_t len = strlen(key);
+    while (env)
     {
-        if (strcmp(envs->temp_vars[i], key) == 0)
-            return envs->temp_vars[i];
+        if (env->temp_vars && ft_strncmp(env->temp_vars, key, len) == 0 && env->temp_vars[len] == '=')
+            return (env->temp_vars + len + 1);
+        env = env->next;
     }
-    return NULL;
+    return (NULL);
 }
+
+int update_shell_level(int amount)
+{
+    t_os_envs *current = *get_env_list();
+    int level = 0;
+
+    // printf("Updating shell leveln\n"); 
+    while (current)
+    {
+        if (current->linux_envs && strncmp(current->linux_envs, "SHLVL=", 6) == 0)
+        {
+            level = ft_atoi(current->linux_envs + 6);
+            break ;
+        }
+        current = current->next;
+    }
+    level += amount;
+    if (level < 0)
+        level = 0;
+    char *num = ft_itoa(level);
+    if (!num)
+        return (-1);
+    char *final_str = malloc(strlen("SHLVL=") + strlen(num) + 1);
+    if (!final_str)
+        return (free(num), -1);
+    strcpy(final_str, "SHLVL=");
+    strcat(final_str, num);
+    free(num);
+    int result = make_update_env(final_str);
+    free(final_str);
+    return (result);
+}
+
