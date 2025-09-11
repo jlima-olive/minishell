@@ -10,6 +10,7 @@ void	binary_clear(t_binary *binary)
 	binary_clear(binary->right);
 	binary_clear(binary->subshell);
 	cmds_clear(binary->cmds);
+	free (binary->logic);
 	if (binary->up)
 		free(binary);
 	// else

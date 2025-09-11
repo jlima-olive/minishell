@@ -167,11 +167,7 @@ void	*create_binary_lvl(char **mat, int id, t_binary *tree)
 	tree->right = binary_new(id ,EMPTY, tree, NULL);
 	if (tree->right == NULL)
 		return (btree()->type = ERROR, NULL);
-	if (ft_strncmp(mat[sep], "&&", 3) == 0)
-		tree->type = AND;
-	else
-		tree->type = OR;
-	free (mat[sep]);
+	tree->logic = mat[sep];
 	mat[sep] = NULL;
 	create_binary_lvl (mat, 1, tree->left);
 	return (create_binary_lvl (mat + sep + 1, 1, tree->right), NULL);

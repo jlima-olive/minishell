@@ -83,6 +83,7 @@ typedef struct s_cmds
 
 typedef struct s_binary
 {
+	char			*logic;
 	t_type			type;
 	int				sublvl;
 	int				left_ret;
