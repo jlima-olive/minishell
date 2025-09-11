@@ -22,7 +22,7 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-static void update_env_var(const char *key, const char *value)
+void update_env_var(const char *key, const char *value)
 {
     char *arg;
     char *args[3];
@@ -184,17 +184,18 @@ void builtin_echo(char **args)
     if (!suppress_newline)
         write(1, "\n", 1);
 }
-// echo $USER '$USER' "$USER"
 
-void    builtin_exit(char **args)
+void builtin_exit(char **args, char **envp)
 {
-    int status;
+    int status = 0;
 
-    status = 0;
     if (args[1])
         status = ft_atoi(args[1]);
-    exit (status);
+
+    update_shell_level(-1);
+    exit(status);
 }
+
 
 int exec_builtin(char *cmd, char **args, char **envp)
 {
@@ -207,7 +208,7 @@ int exec_builtin(char *cmd, char **args, char **envp)
     else if (ft_strncmp(cmd, "echo", 4) == 0)
         builtin_echo(args);
     else if (ft_strncmp(cmd, "exit", 4) == 0)
-        builtin_exit(args);
+        builtin_exit(args, envp);
     else if (ft_strncmp(cmd, "unset", 5) == 0)
         builtin_unset(args);
     else if (ft_strncmp(cmd, "export", 6) == 0)

@@ -94,7 +94,6 @@ char *odd_aspas(char *str, char c)
     return result;
 }
 
- 
 char *aspas(char *str, int c)
 {
     if (!str)
@@ -104,4 +103,5 @@ char *aspas(char *str, int c)
     free(with_closed_quotes);
     return cleaned;
 }
+
 

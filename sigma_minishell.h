@@ -8,6 +8,8 @@
 #include <readline/history.h>
 #include <stdbool.h>
 #include <dirent.h>
+#include <termios.h>
+#include <sys/stat.h>
 
 typedef struct s_wild
 {
@@ -44,31 +46,11 @@ typedef struct s_os_envs_list{
 }   t_os_envs_list;
 
 typedef struct s_os_envs{
-	char **linux_envs;
-	char **temp_vars;
+	char *linux_envs;
+	char *temp_vars;
 	struct s_os_envs *next;
 }   t_os_envs;
 
-
-int			is_builtin(char *cmd);
-void		builtin_cd(char **args);
-void		builtin_pwd(void);
-void		builtin_exit(char **args);
-int 		exec_builtin(char *cmd, char **args, char **envp);
-void		print_env_list(void);
-t_os_envs	**get_env_list(void);
-void		builtin_export(char **args);
-void		builtin_unset(char **args);
-int				is_builtin(char *cmd);
-void		builtin_exit(char **args);
-void		print_env_list(void);
-t_os_envs	**get_env_list(void);
-void		builtin_export(char **args);
-void		builtin_unset(char **args);
-char		*aspas(char *str, int c);
-void		handle_sigint(int sig);
-void		print_linux_env_list(void);
-char		*remove_it(char *str, int c);
 
 
 
@@ -95,6 +77,7 @@ typedef struct s_binary
 	struct s_binary	*left;
 	struct s_binary	*right;
 	struct s_binary	*subshell;
+	struct termios orig_termios; //<-- VINI TESTEANDO UMA CRAZY THING
 }	t_binary;
 
 t_binary	*btree(void);
@@ -106,7 +89,7 @@ int is_builtin(char *cmd);
 void builtin_cd(char **args);
 void builtin_pwd(void);
 void builtin_echo(char **args);
-void	builtin_exit(char **args);
+void builtin_exit(char **args, char **envp);
 void builtin_unset(char **args);
 int exec_builtin(char *cmd, char **args, char **envp);
 void builtin_export(char **args);
@@ -123,6 +106,9 @@ char **array_to_exec(t_cmds *cmd);
 char *find_path(char **envp, char *which_env);
 void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
+void		handle_sigint(int sig);
+void		print_linux_env_list(void);
+char		*remove_it(char *str, int c);
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
@@ -130,6 +116,11 @@ int	exec_pipes(t_cmds *cmd, char **env);
 int add_temp_var(const char *str);
 char *remove_aspas(char *str);
 void discard_heredoc(t_infile *infiles);
+void update_env_var(const char *key, const char *value);
+int update_shell_level(int amount);
+int make_update_env(const char *str);
+char **list_to_char(t_os_envs *envs);
+int am_i_truly_myself(const char *cmd);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

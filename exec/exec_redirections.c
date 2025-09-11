@@ -112,3 +112,4 @@ int exec_redirections(t_cmds *cmd)
     return 0;
 }
 
+
