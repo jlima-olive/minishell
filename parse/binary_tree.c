@@ -160,6 +160,10 @@ void	*create_binary_lvl(char **mat, int id, t_binary *tree)
 		return (NULL);
 	sep = separator_comp(mat, 1, ft_matlen(mat) - 1, 0);
 	if (sep == 0)
+		tree->print_cmd = ft_join_matrix(mat, 0, 0, 0);
+	if (tree->print_cmd == NULL)
+		return (btree()->type = ERROR, free_matrix_nodes(mat), NULL);
+	if (sep == 0)
 		return (tree->cmds = get_cmds(mat), NULL);
 	tree->left = binary_new(id ,EMPTY, tree, NULL);
 	if (tree->left == NULL)
