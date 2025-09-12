@@ -5,25 +5,30 @@
 
 int exec_tree(t_binary *tree)
 {
+	printf("==executing tree\n");
 	int ret_left;
 	
 	if (!tree)
-		return (0);
-	if (tree->cmds != NULL)
-		return (exec_pipes(tree->cmds, tree->env));
-	if (tree->type == AND)
+		return (printf("===tree is empty\n"), 0);
+	if (tree->cmds != NULL) // why tf are all thing comming to here when piping?
+		return (printf("==executing pipes on exec_tree 1\n"), exec_pipes(tree->cmds, tree->env));
+	if (tree->logic && strcmp(tree->logic, "&&") == 0)
+	// if (tree->type && tree->type == AND)
 	{
+		printf("tree logic 1\n");
 		ret_left = exec_tree(tree->left);
 		if (ret_left == 0)
-			return (exec_tree(tree->right));
+			return (printf("==executing pipes on exec_tree 2\n"), exec_tree(tree->right));
 		return (ret_left);
 	}
-	if (tree->type == OR)
+	if (tree->logic && strcmp(tree->logic, "||") == 0)
+	// if (tree->type && tree->type == OR)
 	{
+		printf("tree logic 2\n");
 		ret_left = exec_tree(tree->left);
 		if (ret_left != 0)
-			return (exec_tree(tree->right));
-		return (exec_tree(tree->left));
+			return (printf("==executing pipes on exec_tree 3\n"), exec_tree(tree->right));
+		return (ret_left);
 	}
 	if (tree->subshell != NULL)
 	{
