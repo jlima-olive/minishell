@@ -63,6 +63,7 @@ int exec_redirections(t_cmds *cmd)
     t_infile *in = cmd->infiles;
     t_outfile *out;
 
+    printf("==EXECUTING REDIRECTIONS ON exec_redirecions\n");
     while (in)
     {
         if (ft_strcmp(in->token, "<") == 0)

@@ -91,9 +91,13 @@ int main(int argc, char *argv[], char **envp)
             {
                 if (btree()->cmds && btree()->cmds->infiles)
                     discard_heredoc(btree()->cmds->infiles);
-                free(input);
-                binary_clear(btree());
-                continue;
+                // printf("getting rid of tree\n"); // found you bitch
+                if (exec_tree(btree()) == 0){
+                    printf("===========SO TAVA TESTANDO ELE\n");
+                    free(input);
+                    binary_clear(btree());
+                    continue;
+                }
             }
             if (!ft_strchr(input, '|'))
             {

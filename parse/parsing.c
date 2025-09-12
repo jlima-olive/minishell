@@ -111,6 +111,7 @@ void init_tree(char	**mat)
 	btree()->left = NULL;
 	btree()->right = NULL;
 	btree()->subshell = NULL;
+	btree()->logic = NULL;
 	btree()->mat = mat;
 }
 

@@ -60,6 +60,7 @@ t_binary	*binary_new(int shlvl, t_type type, t_binary *up, t_cmds *cmds)
 	new->right = NULL;
 	new->subshell = NULL;
 	new->mat = NULL;
+	new->logic = NULL;
 	return (new);
 }
 
