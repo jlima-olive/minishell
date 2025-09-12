@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
-/* 
+
 void	print_files(t_infile	*file)
 {
 	while (file)
@@ -48,7 +48,7 @@ void	print_tree(t_binary *tree, int sub)
 			print_cmds(tree->cmds);
 	if (sub)
 		printf("\n^exiting shubshell^\n");
-}  */
+}  
 
 t_binary	*btree(void)
 {
@@ -85,6 +85,8 @@ int main(int argc, char *argv[], char **envp)
         if (parsing(input) == 0)
         {
             cmds = btree()->cmds;
+            // print_cmds(cmds);
+            print_tree(btree(), 0);
             if (!btree()->cmds || !btree()->cmds->cmd || !btree()->cmds->cmd[0])
             {
                 if (btree()->cmds && btree()->cmds->infiles)
