@@ -71,6 +71,7 @@ typedef struct s_binary
 	int				left_ret;
 	int				right_ret;
 	int				subshell_ret;
+	char			*print_cmd;
 	char			**mat;
 	char			**env;
 	t_cmds			*cmds;
