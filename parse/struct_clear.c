@@ -11,6 +11,7 @@ void	binary_clear(t_binary *binary)
 	binary_clear(binary->subshell);
 	cmds_clear(binary->cmds);
 	free (binary->logic);
+	free (binary->print_cmd);
 	if (binary->up)
 		free(binary);
 	// else
