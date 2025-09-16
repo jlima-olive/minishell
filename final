@@ -1,0 +1,6 @@
+minishell$ ls && ls -l
+==executing tree
+==executing pipes on exec_tree 1
+==executing pipes on exec_pipes 3
+===========SO TAVA TESTANDO ELE
+

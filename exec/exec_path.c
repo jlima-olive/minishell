@@ -5,12 +5,12 @@
 char *find_path(char **envp, char *which_env)
 {
     int i = 0;
-    while (envp[i])
-    {
-        if (strncmp(envp[i], which_env, (strlen(which_env))) == 0)
-            return (strdup(envp[i] + strlen(which_env)));
-        i++;
-    }
+		while (envp[i])
+		{
+			if (ft_strncmp(envp[i], which_env, (ft_strlen(which_env))) == 0)
+				return (ft_strdup(envp[i] + ft_strlen(which_env)));
+			i++;
+   		}
     return (NULL);
 }
 
@@ -21,14 +21,16 @@ char **split_path(char **envp)
         return (NULL);
     char **vars = ft_split(path, ':');
     free(path);
+
     return (vars);
 }
 
 int is_system_path_command(char *cmd, char **envp)
 {
+
     char **paths_to_search = split_path(envp);
     if (!paths_to_search)
-        return (write(2, "PATH not found\n", 15), -1);
+        return (-1);
     int i = 0;
     while (paths_to_search[i])
     {
@@ -152,9 +154,11 @@ int am_i_truly_myself(const char *cmd)
 
 
 int exec_path(char *cmd, char **args, char **envp)
-{    
+{
+	
     if (am_i_truly_myself(args[0]) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
         update_shell_level(1);
+
     if (cmd[0] == '$')
     {
         char *value = get_env_var(cmd + 1, envp);
@@ -163,6 +167,7 @@ int exec_path(char *cmd, char **args, char **envp)
         else
             return (printf("Variable not found\n"), -1);
     }
+
     if (strchr(cmd, '/'))
     {
         if (access(cmd, F_OK) == 0)
@@ -176,19 +181,25 @@ int exec_path(char *cmd, char **args, char **envp)
             }
         }
     }
+	int debug = is_system_path_command(cmd, envp);
+	fprintf(stderr, "%d", debug);
+	fflush(stderr);
     if (is_system_path_command(cmd, envp))
     {
+
         if (exec_system_path(cmd, args, envp) == 0)
             return 0;
     }
     else
     {
+
         if (access(cmd, F_OK) == 0)
         {
             if (access(cmd, X_OK) == 0)
             {
                 prepare_for_exec();
                 execve(cmd, args, envp);
+
                 if (errno == ENOEXEC)
                 {
                     char *new_args[3];
@@ -201,6 +212,7 @@ int exec_path(char *cmd, char **args, char **envp)
                 perror("execve failed 3\n");
                 return (-1);
             }
+
             else
                 return (perror("minishell"), -1);
         }

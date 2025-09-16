@@ -20,7 +20,6 @@ int exec_pipes(t_cmds *cmd, char **env)
     int first_fd = -1;
     pid_t pid;
 
-	printf("==executing pipes on exec_pipes 3\n");
     if (!cmd || cmd->cmd[0] == NULL)
         return (0);
 	while (cmd)
