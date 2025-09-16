@@ -86,14 +86,13 @@ int main(int argc, char *argv[], char **envp)
         {
             cmds = btree()->cmds;
             // print_cmds(cmds);
-            print_tree(btree(), 0);
+            // print_tree(btree(), 0);
             if (!btree()->cmds || !btree()->cmds->cmd || !btree()->cmds->cmd[0])
             {
                 if (btree()->cmds && btree()->cmds->infiles)
                     discard_heredoc(btree()->cmds->infiles);
                 // printf("getting rid of tree\n"); // found you bitch
                 if (exec_tree(btree()) == 0){
-                    printf("===========SO TAVA TESTANDO ELE\n");
                     free(input);
                     binary_clear(btree());
                     continue;

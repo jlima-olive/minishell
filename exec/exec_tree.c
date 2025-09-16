@@ -5,7 +5,7 @@
 
 int exec_tree(t_binary *tree)
 {
-	printf("==executing tree\n");
+	// printf("==executing tree\n");
 	int ret_left;
 	
 	if (!tree)
@@ -14,7 +14,6 @@ int exec_tree(t_binary *tree)
 		return (exec_pipes(tree->cmds, btree()->env));
 	if (tree->logic && strcmp(tree->logic, "&&") == 0)
 	{
-		printf("tree logic 1\n");
 		ret_left = exec_tree(tree->left);
 		if (ret_left == 0)
 			return (exec_tree(tree->right));
@@ -22,7 +21,6 @@ int exec_tree(t_binary *tree)
 	}
 	if (tree->logic && strcmp(tree->logic, "||") == 0)
 	{
-		printf("tree logic 2\n");
 		ret_left = exec_tree(tree->left);
 		if (ret_left != 0)
 			return (exec_tree(tree->right));

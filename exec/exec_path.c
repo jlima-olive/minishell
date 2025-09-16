@@ -181,9 +181,6 @@ int exec_path(char *cmd, char **args, char **envp)
             }
         }
     }
-	int debug = is_system_path_command(cmd, envp);
-	fprintf(stderr, "%d", debug);
-	fflush(stderr);
     if (is_system_path_command(cmd, envp))
     {
 
