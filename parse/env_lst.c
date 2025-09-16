@@ -1,4 +1,4 @@
-#include "../sigma_minishell.h"
+/* #include "../sigma_minishell.h"
 
 int	add_env_back(t_os_envs_list **lst, t_os_envs_list *new)
 {
@@ -52,3 +52,4 @@ t_os_envs_list	*get_env(char **environ)
 			return (env_clear(ret), NULL);
 	return (ret);
 }
+ */

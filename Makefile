@@ -8,7 +8,7 @@ EXEC=		$(wildcard ${EXEC_DIR}/*.c) \
 			$(wildcard ${BIN_DIR}/*.c)
 CC=			cc
 AR=			ar rcs
-CFLAGS=		-Wall -Wextra -Werror
+CFLAGS=		-Wall -Wextra -Werror -g -finstrument-functions
 PIPEX       = pipex
 PIPEX_BONUS = pipex_bonus
 PIPEX_DIR   = pipex

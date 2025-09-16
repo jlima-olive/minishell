@@ -27,6 +27,17 @@ char	*quote(char *str)
 	return (ret);
 }
 
+char	*find_os_env(t_os_envs *env, char *str, int count)
+{
+	while (env)
+	{
+		if (env->linux_envs && ft_strncmp(env->linux_envs, str, count) == 0)
+			return (env->linux_envs);
+		env = env->next;
+	}
+	return (NULL);
+}
+
 char	*expand_aux(char *str, int ind, int count, char *temp)
 {
 	char	*env_var;
@@ -37,7 +48,8 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	temp = ft_strjoin_free(temp, "=", 1);
 	if (temp == NULL)
 		return (btree()->type = ERROR, free (str), NULL);
-	env_var = ft_matnstr(btree()->env, temp, count);
+	env_var = find_os_env(btree()->os_env, temp, count);
+	// printf("we found %s\n", env_var);
 	free(temp);
 	if (env_var == NULL)
 		env_var = ft_calloc(1, 1);

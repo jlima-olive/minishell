@@ -4,7 +4,7 @@
 
 int is_builtin(char *cmd)
 {
-	// printf("")
+	// printf("testing if its bultin\n");
 	if (!cmd)
 		return (write(2, "cmd is empty\n", 14), 0);
     if (ft_strncmp(cmd, "cd", 2) == 0)
@@ -23,6 +23,22 @@ int is_builtin(char *cmd)
         return (1);
 	else
     	return (0);
+}
+
+int has_builtin(t_cmds *cmd)
+{
+    if (!cmd)
+        return 0;
+    if (cmd->infiles != NULL || cmd->outfiles != NULL)
+        return 1;
+    int i = 0;
+    while (cmd->cmd && cmd->cmd[i])
+    {
+        if (is_builtin(cmd->cmd[i]))
+            return 1;
+        i++;
+    }
+    return 0;
 }
 
 void update_env_var(const char *key, const char *value)
@@ -76,7 +92,7 @@ static char *logical_pwd_update(const char *oldpwd, const char *target)
     }
 }
 
-void builtin_cd(char **args)
+int builtin_cd(char **args)
 {
     char *oldpwd = find_path_in_list(*get_env_list(), "PWD=");
     char buf[1024];
@@ -89,7 +105,7 @@ void builtin_cd(char **args)
         if (!target)
         {
             fprintf(stderr, "cd: HOME not set\n");
-            return;
+            return (1);
         }
     }
     else if (strcmp(args[1], "-") == 0)
@@ -98,7 +114,7 @@ void builtin_cd(char **args)
         if (!target)
         {
             fprintf(stderr, "cd: OLDPWD not set\n");
-            return;
+            return (1);
         }
         printf("%s\n", target); // bash prints path when using "cd -"
     }
@@ -108,7 +124,7 @@ void builtin_cd(char **args)
     if (chdir(target) != 0)
     {
         perror("cd");
-        return;
+        return (1);
     }
 
     // update OLDPWD
@@ -130,10 +146,11 @@ void builtin_cd(char **args)
         else
             fprintf(stderr, "cd: failed to update PWD\n");
     }
+	return (0);
 }
 
 
-void builtin_pwd(void)
+int builtin_pwd(void)
 {
     char *pwd = find_path_in_list(*get_env_list(), "PWD=");
     if (pwd)
@@ -144,11 +161,12 @@ void builtin_pwd(void)
         if (getcwd(buf, sizeof(buf)) != NULL)
             printf("%s\n", buf);
         else
-            perror("pwd");
+            return (perror("pwd"), 0);
     }
+	return (0);
 }
 
-void builtin_echo(char **args)
+int builtin_echo(char **args)
 {
     int i = 1;
     int suppress_newline = 0;
@@ -186,9 +204,10 @@ void builtin_echo(char **args)
     }
     if (!suppress_newline)
         write(1, "\n", 1);
+	return (0);
 }
 
-void builtin_exit(char **args, char **envp)
+int builtin_exit(char **args, char **envp)
 {
     int status = 0;
 
@@ -196,27 +215,25 @@ void builtin_exit(char **args, char **envp)
         status = ft_atoi(args[1]);
 
     update_shell_level(-1);
-    exit(status);
+    return(status);
 }
 
 
 int exec_builtin(char *cmd, char **args, char **envp)
 {
     if (ft_strncmp(cmd, "cd", 2) == 0)
-            builtin_cd(args);
+            return builtin_cd(args);
     else if (ft_strncmp(cmd, "pwd", 3) == 0)
-        builtin_pwd();
+        return builtin_pwd();
     else if (ft_strncmp(cmd, "env", 3) == 0)
-        print_linux_env_list();
+        return print_linux_env_list();
     else if (ft_strncmp(cmd, "echo", 4) == 0)
-        builtin_echo(args);
+        return builtin_echo(args);
     else if (ft_strncmp(cmd, "exit", 4) == 0)
-        builtin_exit(args, envp);
+        return builtin_exit(args, envp);
     else if (ft_strncmp(cmd, "unset", 5) == 0)
-        builtin_unset(args);
+        return builtin_unset(args);
     else if (ft_strncmp(cmd, "export", 6) == 0)
-        builtin_export(args);
-    else
-        return (0);
-    return (0);
+        return (builtin_export(args));
+    return (1);
 }

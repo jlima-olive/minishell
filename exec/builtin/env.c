@@ -84,7 +84,7 @@ void print_env_list(void)
         current = current->next;
     }
 }
-void print_linux_env_list(void)
+int print_linux_env_list(void)
 {
     t_os_envs *current = *get_env_list();
 
@@ -94,6 +94,7 @@ void print_linux_env_list(void)
                 printf("%s\n", current->linux_envs);
         current = current->next;
     }
+	return (1);
 }
 
 void builtin_env(char **env)

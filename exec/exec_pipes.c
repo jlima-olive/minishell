@@ -19,6 +19,7 @@ int exec_pipes(t_cmds *cmd, char **env)
     int fd[2];
     int first_fd = -1;
     pid_t pid;
+	// printf("executing pipes\n");
     if (!cmd || cmd->cmd[0] == NULL)
         return (0);
 	while (cmd)
@@ -43,14 +44,18 @@ int exec_pipes(t_cmds *cmd, char **env)
 			if (first_fd != -1)
 				close(first_fd);
 			char **cleaned_cmd = array_to_exec(cmd);
-			// printf("==============\n");
-			// int ret = is_builtin(cleaned_cmd[0]);
-			// printf("%d\n", ret);
-			// printf("==============\n");
-			if (is_builtin(cleaned_cmd[0]))
-				exec_builtin(cleaned_cmd[0], cleaned_cmd, env);
-			else
-				exec_path(cleaned_cmd[0], cleaned_cmd, env);
+		if (is_builtin(cleaned_cmd[0]))
+		{
+			int status = exec_builtin(cleaned_cmd[0], cleaned_cmd, env);
+			free_matrix(cleaned_cmd);
+			exit(status);
+		}
+		else
+		{
+			exec_path(cleaned_cmd[0], cleaned_cmd, env);
+			free_matrix(cleaned_cmd);
+			exit(1);
+		}
 			free_matrix(cleaned_cmd);
 			exit(1);
 		}

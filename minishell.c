@@ -71,6 +71,12 @@ int main(int argc, char *argv[], char **envp)
         update_shell_level(1);
     // now regenerate envp for child processes
     btree()->env = list_to_char(*get_env_list());
+    btree()->os_env = *get_env_list();
+	// while (btree()->os_env)
+	// {
+		// printf("%s\n", btree()->os_env->linux_envs);
+		// btree()->os_env = btree()->os_env->next;
+	// }
     while (1)
     {
         input = readline("minishell$ ");
@@ -97,9 +103,9 @@ int main(int argc, char *argv[], char **envp)
                     continue;
                 }
             }
-            if (!ft_strchr(input, '|'))
+           if (!ft_strchr(input, '|'))
             {
-                if (is_builtin(btree()->cmds->cmd[0]))
+                if (has_builtin(cmds))
                 {
                     if (has_redir(btree()->cmds))
                     {
