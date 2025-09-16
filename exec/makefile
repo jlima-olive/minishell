@@ -8,7 +8,7 @@ BULTIN_DIR  = builtin
 BULTIN_SRCS = $(wildcard $(BULTIN_DIR)/*.c)
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g
+CFLAGS      = -Wall -Wextra -Werror -g -fsanitize=address
 LDFLAGS     = -L/usr/local/opt/readline/lib -lreadline -g
 RM          = rm -f
 

@@ -2,24 +2,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-
 int is_builtin(char *cmd)
 {
+	// printf("")
+	if (!cmd)
+		return (write(2, "cmd is empty\n", 14), 0);
     if (ft_strncmp(cmd, "cd", 2) == 0)
         return (1);
-    if (ft_strncmp(cmd, "pwd", 3) == 0)
+    else if (ft_strncmp(cmd, "pwd", 3) == 0)
         return (1);
-    if (ft_strncmp(cmd, "env", 3) == 0)
+    else if (ft_strncmp(cmd, "env", 3) == 0)
         return (1);
-    if (ft_strncmp(cmd, "echo", 4) == 0)
+    else if (ft_strncmp(cmd, "echo", 4) == 0)
         return (1);
-    if (ft_strncmp(cmd, "exit", 4) == 0)
+    else if (ft_strncmp(cmd, "exit", 4) == 0)
         return (1);
-    if (ft_strncmp(cmd, "unset", 5) == 0)
+    else if (ft_strncmp(cmd, "unset", 5) == 0)
         return (1);
-    if (ft_strncmp(cmd, "export", 6) == 0)
+    else if (ft_strncmp(cmd, "export", 6) == 0)
         return (1);
-    return (0);
+	else
+    	return (0);
 }
 
 void update_env_var(const char *key, const char *value)
