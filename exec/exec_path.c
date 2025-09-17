@@ -151,7 +151,16 @@ int am_i_truly_myself(const char *cmd)
     free(self);
     return result;
 }
-
+void my_fprintf(char *cmd, char *which_message)
+{
+    char *expanded = expand(cmd);
+    write(2, "bash: ", 7);
+    write(2, expanded, ft_strlen(expanded));
+    write(2, ": ", 2);
+    // write(2, strerror(errno), ft_strlen(strerror(errno)));
+    // write(2, "\n", 1);
+    write(2, which_message, ft_strlen(which_message));
+}
 
 int exec_path(char *cmd, char **args, char **envp)
 {
@@ -162,12 +171,23 @@ int exec_path(char *cmd, char **args, char **envp)
     if (cmd[0] == '$')
     {
         char *value = get_env_var(cmd + 1, envp);
-        if (value)
-            return (printf("%s\n", value), 0);
+        if (strchr(value, '/'))
+        {
+            printf("reconhece 1\n");
+            prepare_for_exec();
+            execve(value, args, envp);
+            my_fprintf(cmd, "No such file or directory\n");
+            return (-1);
+        }
         else
-            return (printf("Variable not found\n"), -1);
+        {
+            printf("reconhece 2\n");
+            prepare_for_exec();
+            execve(value, args, envp);
+            my_fprintf(cmd, "command not found\n");
+            return (-1);
+        }
     }
-
     if (strchr(cmd, '/'))
     {
         if (access(cmd, F_OK) == 0)
@@ -181,6 +201,7 @@ int exec_path(char *cmd, char **args, char **envp)
             }
         }
     }
+
     if (is_system_path_command(cmd, envp))
     {
 

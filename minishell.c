@@ -103,7 +103,7 @@ int main(int argc, char *argv[], char **envp)
                     continue;
                 }
             }
-           if (!ft_strchr(input, '|'))
+            if (!ft_strchr(input, '|'))
             {
                 if (has_builtin(cmds))
                 {
