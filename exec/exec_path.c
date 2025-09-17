@@ -2,6 +2,9 @@
 #include <string.h>
 #include <unistd.h>
 
+struct shell_meta bash_meta;
+struct shell_meta zsh_meta;
+
 char *find_path(char **envp, char *which_env)
 {
     int i = 0;
@@ -151,6 +154,8 @@ int am_i_truly_myself(const char *cmd)
     free(self);
     return result;
 }
+
+
 void my_fprintf(char *cmd, char *which_message)
 {
     char *expanded = expand(cmd);
@@ -162,10 +167,51 @@ void my_fprintf(char *cmd, char *which_message)
     write(2, which_message, ft_strlen(which_message));
 }
 
+void init_shell_meta(void) {
+    struct stat st;
+
+    // Try Bash
+    if (stat("/bin/bash", &st) == 0) {
+        bash_meta.st_dev = st.st_dev;
+        bash_meta.st_ino = st.st_ino;
+    } else {
+        bash_meta.st_dev = 0;
+        bash_meta.st_ino = 0;
+    }
+
+    // Try Zsh
+    if (stat("/usr/bin/zsh", &st) == 0) {
+        zsh_meta.st_dev = st.st_dev;
+        zsh_meta.st_ino = st.st_ino;
+    } else {
+        zsh_meta.st_dev = 0;
+        zsh_meta.st_ino = 0;
+    }
+}
+// env | grep SHLVL
+
+int is_tracked_shell(const char *cmd) {
+    if (!cmd) return 0;
+
+    char resolved[PATH_MAX];
+    if (!realpath(cmd, resolved)) return 0;
+
+    struct stat st;
+    if (stat(resolved, &st) != 0) return 0;
+
+    if ((st.st_dev == bash_meta.st_dev && st.st_ino == bash_meta.st_ino) ||
+        (st.st_dev == zsh_meta.st_dev && st.st_ino == zsh_meta.st_ino)) {
+        return 1;
+    }
+    return 0;
+}
+
 int exec_path(char *cmd, char **args, char **envp)
 {
 	
     if (am_i_truly_myself(args[0]) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+        update_shell_level(1);
+    if (is_tracked_shell(cmd))
         update_shell_level(1);
 
     if (cmd[0] == '$')
@@ -173,7 +219,6 @@ int exec_path(char *cmd, char **args, char **envp)
         char *value = get_env_var(cmd + 1, envp);
         if (strchr(value, '/'))
         {
-            printf("reconhece 1\n");
             prepare_for_exec();
             execve(value, args, envp);
             my_fprintf(cmd, "No such file or directory\n");
@@ -181,7 +226,6 @@ int exec_path(char *cmd, char **args, char **envp)
         }
         else
         {
-            printf("reconhece 2\n");
             prepare_for_exec();
             execve(value, args, envp);
             my_fprintf(cmd, "command not found\n");

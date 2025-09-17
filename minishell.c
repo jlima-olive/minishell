@@ -64,6 +64,7 @@ int main(int argc, char *argv[], char **envp)
     pid_t   pid;
 	if (isatty(STDIN_FILENO))
 		tcgetattr(STDIN_FILENO, &btree()->orig_termios);
+    init_shell_meta();
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, SIG_IGN);
     builtin_env(envp);

@@ -54,6 +54,16 @@ typedef struct s_cmds
 	struct s_cmds	*next;
 }	t_cmds;
 
+struct shell_meta {
+    dev_t st_dev;
+    ino_t st_ino;
+};
+
+extern struct shell_meta bash_meta;
+extern struct shell_meta zsh_meta;
+
+
+
 typedef struct s_binary
 {
 	char			*logic;
@@ -115,6 +125,7 @@ int make_update_env(const char *str);
 char **list_to_char(t_os_envs *envs);
 int am_i_truly_myself(const char *cmd);
 int has_builtin(t_cmds *cmd);
+void init_shell_meta(void);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
