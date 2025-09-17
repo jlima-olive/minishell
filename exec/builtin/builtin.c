@@ -215,7 +215,7 @@ int builtin_exit(char **args, char **envp)
         status = ft_atoi(args[1]);
 
     update_shell_level(-1);
-    return(status);
+    exit(status);
 }
 
 
