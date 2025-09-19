@@ -271,3 +271,28 @@ int update_shell_level(int amount)
     return (result);
 }
 
+void	expand_agrs(t_cmds *cmd)
+{
+	char	**mat;
+	char	**temp;
+	int		ind;
+
+	if (!cmd)
+		return ;
+	temp = cmd->cmd;
+	mat = wildcards(temp, 0, 0);
+	cmd->expanded = 0;
+	if (temp != mat)
+	{
+		free_matrix_nodes(temp);
+		cmd->expanded = 1;
+	}
+	else
+	{
+		ind = -1;
+		while (mat[++ind])
+			mat[ind] = quote(mat[ind]);
+	}
+	cmd->cmd = mat;
+	expand_agrs(cmd->next);
+}
