@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 15:51:39 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 15:51:40 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/19 16:12:03 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define MINISHELL_H
 
 # include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>

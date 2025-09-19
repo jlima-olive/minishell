@@ -10,6 +10,8 @@
 #include <dirent.h>
 #include <termios.h>
 #include <sys/stat.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 typedef struct s_wild
 {
@@ -128,6 +130,10 @@ int has_builtin(t_cmds *cmd);
 void init_shell_meta(void);
 void	enhanced_sort_wild_vini_goat(t_os_envs *envs);
 void my_ffprintf(char *cmd, char *which_message);
+void	expand_agrs(t_cmds *cmd);
+int	is_redir_token(const char *s);
+int	has_redir(t_cmds *cmd);
+int	count_tokens(t_cmds *cmd);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

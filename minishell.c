@@ -64,7 +64,6 @@ int main(int argc, char *argv[], char **envp)
 	if (isatty(STDIN_FILENO))
 		tcgetattr(STDIN_FILENO, &btree()->orig_termios);
 	
-	init_shell_meta();
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	builtin_env(envp);
@@ -72,7 +71,6 @@ int main(int argc, char *argv[], char **envp)
 	if (am_i_truly_myself(argv[0]))
 		update_shell_level(1);
 	
-	// Regenerate envp for child processes
 	btree()->env = list_to_char(*get_env_list());
 	btree()->os_env = *get_env_list();
 	enhanced_sort_wild_vini_goat(btree()->os_env);
