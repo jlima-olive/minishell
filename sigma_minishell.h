@@ -134,6 +134,13 @@ void	expand_agrs(t_cmds *cmd);
 int	is_redir_token(const char *s);
 int	has_redir(t_cmds *cmd);
 int	count_tokens(t_cmds *cmd);
+char	**get_paths_to_search(char **envp);
+int	check_path_access(char *path, char *cmd);
+char	**split_path(char **envp);
+int	is_system_path_command(char *cmd, char **envp);
+void	prepare_for_exec(void);
+char	*get_env_var(char *name, char **envp);
+int	exec_system_path(char *cmd, char **args, char **envp);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
