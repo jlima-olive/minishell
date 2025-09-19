@@ -4,7 +4,6 @@
 
 int is_builtin(char *cmd)
 {
-	// printf( "testing if its bultin\n");
 	if (!cmd)
 		return (write(2, "cmd is empty\n", 14), 0);
     if (ft_strncmp(cmd, "cd", 2) == 0)
@@ -158,7 +157,6 @@ int builtin_cd(char **args)
 
 int builtin_echo(char **args)
 {
-    printf( "ECHOING\n");
     int i = 1;
     int suppress_newline = 0;
 

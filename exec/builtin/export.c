@@ -42,7 +42,6 @@ int make_update_env(const char *str)
 
 int builtin_export(char **args)
 {
-    printf( "==CALLING EXPORT STUFF\n");
     if (!args[1])
     {
         print_env_list();
@@ -58,6 +57,6 @@ int builtin_export(char **args)
         if (make_update_env(args[i]) < 0)
             return (perror("minishell: export"), 0);
     }
-	return (1);
+	return (0);
 }
 

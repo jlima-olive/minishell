@@ -3,7 +3,6 @@
 	#include <sys/wait.h>
 	#include <unistd.h>
 
-	// export ARG=le && echo $ARG
 void	expand_agrs(t_cmds *cmd)
 {
 	if (!cmd)
@@ -80,7 +79,7 @@ int	exec_tree(t_binary *tree)
 		expand_agrs(tree->cmds);
 		if (tree->cmds->next) 
 			return (exec_pipes(tree->cmds, btree()->env));
-		else // Single command
+		else 
 			return (exec_single_cmd(tree->cmds));
 	}
 	if (tree->logic && strcmp(tree->logic, "&&") == 0)
