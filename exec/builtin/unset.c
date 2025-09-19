@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:47:26 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 22:48:30 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/19 23:52:34 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static int	unset_env_var(t_os_envs **env_list, char *var_name, size_t name_len)
 
 int	builtin_unset(char **args)
 {
-	int i;
-	size_t name_len;
-	t_os_envs **env_list;
+	int			i;
+	size_t		name_len;
+	t_os_envs	**env_list;
 
 	if (!args[1])
 		return (-1);
@@ -72,4 +72,3 @@ int	builtin_unset(char **args)
 	}
 	return (0);
 }
-

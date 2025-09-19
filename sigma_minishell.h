@@ -141,6 +141,9 @@ int	is_system_path_command(char *cmd, char **envp);
 void	prepare_for_exec(void);
 char	*get_env_var(char *name, char **envp);
 int	exec_system_path(char *cmd, char **args, char **envp);
+t_os_envs	*create_env_node(char *path);
+void	clear_env_list(void);
+void	rebuild_env_list(t_os_envs **env_list, char **env_vars);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

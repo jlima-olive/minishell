@@ -30,24 +30,8 @@ int has_builtin(t_cmds *cmd)
         return (0);
     return (is_builtin(cmd->cmd[0]));
 }
-// void update_env_var(const char *key, const char *value)
-// {
-//     char *arg;
-//     char *args[3];
 
-//     arg = malloc(strlen(key) + strlen(value) + 1);
-//     if (!arg)
-//         return;
-//     strcpy(arg, key);
-//     strcat(arg, value);
-//     args[0] = "export";
-//     args[1] = arg;
-//     args[2] = NULL;
-//     builtin_export(args);
-//     free(arg);
-// }
-
-static char *logical_pwd_update(const char *oldpwd, const char *target)
+char *logical_pwd_update(const char *oldpwd, const char *target)
 {
     char *newpwd;
     char *slash;
@@ -64,7 +48,7 @@ static char *logical_pwd_update(const char *oldpwd, const char *target)
         if (slash && slash != newpwd)
             *slash = '\0';
         else
-            *(slash + 1) = '\0'; // keep "/" root intact
+            *(slash + 1) = '\0';
         return newpwd;
     }
     else if (strcmp(target, ".") == 0)
@@ -92,40 +76,25 @@ int builtin_cd(char **args)
     {
         target = find_path_in_list(*get_env_list(), "HOME=");
         if (!target)
-        {
-            my_ffprintf(target, "cd: HOME not set\n");
-            return (1);
-        }
+            return ( my_ffprintf(target, "cd: HOME not set\n"), 1);
     }
     else if (strcmp(args[1], "-") == 0)
     {
         target = find_path_in_list(*get_env_list(), "OLDPWD=");
         if (!target)
-        {
-            my_ffprintf(target, "cd: OLDPWD not set\n");
-            return (1);
-        }
-        printf( "%s\n", target); // bash prints path when using "cd -"
+            return (my_ffprintf(target, "cd: OLDPWD not set\n"), 1);
+        printf( "%s\n", target);
     }
     else
         target = args[1];
-
     if (chdir(target) != 0)
-    {
-        perror("cd");
-        return (1);
-    }
-
-    // update OLDPWD
+        return (perror("cd"), 1);
     if (oldpwd)
         update_env_var("OLDPWD=", oldpwd);
-
-    // try to get absolute path
     if (getcwd(buf, sizeof(buf)) != NULL)
         update_env_var("PWD=", buf);
     else
     {
-        // fallback: logical pwd update
         newpwd = logical_pwd_update(oldpwd, target);
         if (newpwd)
         {
@@ -137,23 +106,6 @@ int builtin_cd(char **args)
     }
 	return (0);
 }
-
-
-// int builtin_pwd(void)
-// {
-//     char *pwd = find_path_in_list(*get_env_list(), "PWD=");
-//     if (pwd)
-//         printf( "%s\n", pwd);
-//     else
-//     {
-//         char buf[1024];
-//         if (getcwd(buf, sizeof(buf)) != NULL)
-//             printf( "%s\n", buf);
-//         else
-//             return (perror("pwd"), 0);
-//     }
-// 	return (0);
-// }
 
 int builtin_echo(char **args)
 {
@@ -168,27 +120,9 @@ int builtin_echo(char **args)
     while (args[i])
     {
         char *arg = args[i];
-        // int single_quoted = 0;
-        // int double_quoted = 0;
-        // if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
-        // {
-        //     single_quoted = 1;
-        //     arg = remove_it(arg, '\'');
-        // }
-        // else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
-        // {
-        //     double_quoted = 1;
-        //     arg = remove_it(arg, '"');
-        // }
         char *output;
-        // if (single_quoted)
         output = ft_strdup(arg);
-        // else
-
-        //echo $USER "$USER" '$USER' "'$USER'" '"$USER"'
-        //     output = expand(arg);
         ft_putstr_fd(output, 1);
-        // free(output);
         if (args[i + 1])
             write(1, " ", 1);
         i++;

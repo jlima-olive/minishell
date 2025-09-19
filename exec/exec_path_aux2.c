@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:39:31 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 22:40:21 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/19 23:51:26 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,15 @@ void	prepare_for_exec(void)
 char	*get_env_var(char *name, char **envp)
 {
 	int	len;
+	int	i;
 
+	i = 0;
 	len = strlen(name);
-	for (int i = 0; envp[i]; i++)
+	while (envp[i])
 	{
 		if (strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
 			return (envp[i] + len + 1);
+		i++;
 	}
 	return (NULL);
 }
