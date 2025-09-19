@@ -169,23 +169,25 @@ int builtin_echo(char **args)
     while (args[i])
     {
         char *arg = args[i];
-        int single_quoted = 0;
-        int double_quoted = 0;
-        if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
-        {
-            single_quoted = 1;
-            arg = remove_it(arg, '\'');
-        }
-        else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
-        {
-            double_quoted = 1;
-            arg = remove_it(arg, '"');
-        }
+        // int single_quoted = 0;
+        // int double_quoted = 0;
+        // if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+        // {
+        //     single_quoted = 1;
+        //     arg = remove_it(arg, '\'');
+        // }
+        // else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
+        // {
+        //     double_quoted = 1;
+        //     arg = remove_it(arg, '"');
+        // }
         char *output;
-        if (single_quoted)
-            output = ft_strdup(arg);
-        else
-            output = expand(arg);
+        // if (single_quoted)
+        output = ft_strdup(arg);
+        // else
+
+        //echo $USER "$USER" '$USER' "'$USER'" '"$USER"'
+        //     output = expand(arg);
         ft_putstr_fd(output, 1);
         // free(output);
         if (args[i + 1])
