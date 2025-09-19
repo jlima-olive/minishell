@@ -92,7 +92,7 @@ void	print_env_list(void)
 	t_os_envs	*current;
 
 	current = *get_env_list();
-	enhanced_sort_wild_vini_goat(current);
+
 	while (current)
 	{
 		if (current->linux_envs)

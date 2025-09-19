@@ -3,8 +3,11 @@
 	#include <sys/wait.h>
 	#include <unistd.h>
 
+	// export ARG=le && echo $ARG
 void	expand_agrs(t_cmds *cmd)
 {
+	if (!cmd)
+		return ;
 	char	**mat;
 	char	**temp;
 	int		ind;
@@ -34,13 +37,9 @@ static int	exec_single_cmd(t_cmds *cmd)
 	char	**updated_envs;
 
 	if (has_builtin(cmd) && !has_redir(cmd))
-	{
-		// Builtin without redirections - execute directly
 		return (exec_builtin(cmd->cmd[0], cmd->cmd, list_to_char(*get_env_list())));
-	}
 	else
 	{
-		// Fork for builtins with redirections or external commands
 		pid = fork();
 		if (pid == 0)
 		{
@@ -71,11 +70,11 @@ static int	exec_single_cmd(t_cmds *cmd)
 
 int	exec_tree(t_binary *tree)
 {
-	printf("EXECUTING TREE\n");
 	int	ret_left;
 
 	if (!tree)
 		return (0);
+	printf("qualquer antes expand args ====\n");
 	expand_agrs(tree->cmds);
 	// Handle command execution
 	if (tree->cmds != NULL)
@@ -94,7 +93,6 @@ int	exec_tree(t_binary *tree)
 			return (exec_tree(tree->right));
 		return (ret_left);
 	}
-	
 	if (tree->logic && strcmp(tree->logic, "||") == 0)
 	{
 		ret_left = exec_tree(tree->left);
@@ -102,8 +100,6 @@ int	exec_tree(t_binary *tree)
 			return (exec_tree(tree->right));
 		return (ret_left);
 	}
-	
-	// Handle subshell
 	if (tree->subshell != NULL)
 	{
 		pid_t pid = fork();

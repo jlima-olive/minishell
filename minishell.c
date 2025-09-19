@@ -75,7 +75,7 @@ int main(int argc, char *argv[], char **envp)
 	// Regenerate envp for child processes
 	btree()->env = list_to_char(*get_env_list());
 	btree()->os_env = *get_env_list();
-	
+	enhanced_sort_wild_vini_goat(btree()->os_env);
 	while (1)
 	{
 		input = readline("minishell$ ");

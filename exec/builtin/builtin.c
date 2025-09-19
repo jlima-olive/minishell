@@ -158,6 +158,7 @@ int builtin_cd(char **args)
 
 int builtin_echo(char **args)
 {
+    printf("ECHOING\n");
     int i = 1;
     int suppress_newline = 0;
 

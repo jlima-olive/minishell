@@ -6,7 +6,7 @@ char	*quote(char *str)
 	int		ind;
 	char	*ret;
 
-	str = expand(str);
+	str = expand(str, 0, 0, 1);
 	ret = str;
 	while (*str)
 	{
@@ -66,33 +66,31 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	str = ft_strjoin(str, temp);
 	if (str == NULL)
 		return (btree()->type = ERROR, NULL);
-	return (expand(str));
+	return (expand(str, 0, 0, 1));
 }
 
-char	*expand(char *str)
+char    *expand(char *str, int ind, int count, int flag)
 {
-	int		ind;
-	int		count;
-
-	if (str == NULL)
-		return (btree()->type = ERROR, NULL);
-	ind = 0;
-	count = 0;
-	while (str[ind])
-	{
-		if (str[ind] == '\'' && ++ind)
-			while (str[ind] != '\'')
-				ind++;
-		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
-		{
-			count++;
-			if (str[ind + 1] == '?')
-				return (expand_aux(str, ind, 2, NULL));
-			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
-				count++;
-			return (expand_aux(str, ind, count, NULL));
-		}
-		ind++;
-	}
-	return (str);
+    if (str == NULL)
+        return (btree()->type = ERROR, NULL);
+    ind = 0;
+    while (str[ind])
+    {
+        if (flag == 1 && str[ind] == '\'' && ++ind)
+            while (str[ind] != '\'')
+                ind++;
+        if (str[ind] == '\"')
+            flag = -flag;
+        if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
+        {
+            count++;
+            if (str[ind + 1] == '?')
+                return (expand_aux(str, ind, 2, NULL));
+            while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
+                count++;
+            return (expand_aux(str, ind, count, NULL));
+        }
+        ind++;
+    }
+    return (str);
 }

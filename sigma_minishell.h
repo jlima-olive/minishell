@@ -126,6 +126,7 @@ char **list_to_char(t_os_envs *envs);
 int am_i_truly_myself(const char *cmd);
 int has_builtin(t_cmds *cmd);
 void init_shell_meta(void);
+void	enhanced_sort_wild_vini_goat(t_os_envs *envs);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
@@ -166,7 +167,7 @@ void	quote_matrix(char **mat);
 int		wildsize(t_wild *head);
 
 // expansions.c
-char	*expand(char *str);
+char    *expand(char *str, int ind, int count, int flag);
 char	*quote(char *str);
 
 // syntax_error_msg.c

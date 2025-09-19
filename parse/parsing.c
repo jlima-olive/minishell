@@ -20,7 +20,7 @@ void get_here_doc(char *eof, int fd[2])
     {
         if (fd)
         {
-            char *expanded = expand(str);  // expand input
+            char *expanded = expand(str, 0, 0, 1);  // expand input
             write(fd[1], expanded, ft_strlen(expanded));
             write(fd[1], "\n", 1);
 

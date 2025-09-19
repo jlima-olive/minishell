@@ -158,7 +158,7 @@ int am_i_truly_myself(const char *cmd)
 
 void my_fprintf(char *cmd, char *which_message)
 {
-    char *expanded = expand(cmd);
+    char *expanded = expand(cmd, 0, 0, 1);
     write(2, "bash: ", 7);
     write(2, expanded, ft_strlen(expanded));
     write(2, ": ", 2);

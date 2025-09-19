@@ -42,6 +42,7 @@ int make_update_env(const char *str)
 
 int builtin_export(char **args)
 {
+    printf("==CALLING EXPORT STUFF\n");
     if (!args[1])
     {
         print_env_list();
