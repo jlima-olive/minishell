@@ -144,6 +144,8 @@ int	exec_system_path(char *cmd, char **args, char **envp);
 t_os_envs	*create_env_node(char *path);
 void	clear_env_list(void);
 void	rebuild_env_list(t_os_envs **env_list, char **env_vars);
+char *logical_pwd_update(const char *oldpwd, const char *target);
+int	count_it(char *str, int c);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

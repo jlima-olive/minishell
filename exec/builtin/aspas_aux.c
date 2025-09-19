@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   aspas_aux.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/20 00:25:13 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:25:28 by vvazzs           ###   ########.fr       */
+/*   Created: 2025/09/20 00:24:11 by vvazzs            #+#    #+#             */
+/*   Updated: 2025/09/20 00:24:13 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "../../sigma_minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+int	count_it(char *str, int c)
 {
 	int	i;
+	int	count;
 
 	i = 0;
-	if (!s1 || !s2)
+	count = 0;
+	if (!str)
 		return (0);
-	while (s1[i])
+	while (str[i])
 	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
+		if (str[i] == c)
+			count++;
 		i++;
 	}
-	return (0);
+	return (count);
 }

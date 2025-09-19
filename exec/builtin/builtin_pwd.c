@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/20 00:22:16 by vvazzs            #+#    #+#             */
+/*   Updated: 2025/09/20 00:22:53 by vvazzs           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../sigma_minishell.h"
 
 int	builtin_pwd(void)
@@ -7,11 +19,11 @@ int	builtin_pwd(void)
 
 	pwd = find_path_in_list(*get_env_list(), "PWD=");
 	if (pwd)
-		printf( "%s\n", pwd);
+		printf("%s\n", pwd);
 	else
 	{
 		if (getcwd(buf, sizeof(buf)) != NULL)
-			printf( "%s\n", buf);
+			printf("%s\n", buf);
 		else
 			return (perror("pwd"), 0);
 	}
