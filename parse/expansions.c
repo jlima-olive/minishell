@@ -49,7 +49,7 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	if (temp == NULL)
 		return (btree()->type = ERROR, free (str), NULL);
 	env_var = find_os_env(btree()->os_env, temp, count);
-	// printf("we found %s\n", env_var);
+	// printf( "we found %s\n", env_var);
 	free(temp);
 	if (env_var == NULL)
 		env_var = ft_calloc(1, 1);

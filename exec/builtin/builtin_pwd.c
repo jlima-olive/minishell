@@ -7,11 +7,11 @@ int	builtin_pwd(void)
 
 	pwd = find_path_in_list(*get_env_list(), "PWD=");
 	if (pwd)
-		printf("%s\n", pwd);
+		printf( "%s\n", pwd);
 	else
 	{
 		if (getcwd(buf, sizeof(buf)) != NULL)
-			printf("%s\n", buf);
+			printf( "%s\n", buf);
 		else
 			return (perror("pwd"), 0);
 	}

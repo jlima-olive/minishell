@@ -38,7 +38,7 @@ int	ft_atoi(const char *str)
 // int main()
 // {
 // 	char * str = "  \n\t\v\r2147483648";
-// 	printf("Og return %d\n", atoi(str));
-// 	printf("My return %d", ft_atoi(str));		
+// 	printf( "Og return %d\n", atoi(str));
+// 	printf( "My return %d", ft_atoi(str));		
 
 // }

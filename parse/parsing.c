@@ -4,7 +4,7 @@
 {
 	while (head)
 	{
-		printf("%s\n", head->file);
+		printf( "%s\n", head->file);
 		head = head->next;
 	}
 } */
@@ -74,11 +74,11 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 
 	if (wc < 0)
 		return (single_error_msg(-wc), NULL);
-		// return (printf("\nUnclosed |%c|\n", -wc), NULL);
+		// return (printf( "\nUnclosed |%c|\n", -wc), NULL);
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 
 
-	// printf("\nwords in the input ->|%d|\n", wc);
+	// printf( "\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
@@ -146,9 +146,9 @@ int	parsing(char *str)
 		mat = tokenization(str, tokens, sep, word_count(str, tokens, sep));
 	if (mat == NULL)
 		return (1);
-	// printf("printing matrix\n");
+	// printf( "printing matrix\n");
 	// ft_print_matrix(mat);
-	// printf("done printing matrix\n");
+	// printf( "done printing matrix\n");
 	if (check_syntax(mat, tokens))
 		return (1);
 	init_tree(mat);

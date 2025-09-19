@@ -127,6 +127,7 @@ int am_i_truly_myself(const char *cmd);
 int has_builtin(t_cmds *cmd);
 void init_shell_meta(void);
 void	enhanced_sort_wild_vini_goat(t_os_envs *envs);
+void my_ffprintf(char *cmd, char *which_message);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

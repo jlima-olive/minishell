@@ -27,6 +27,7 @@ void	expand_agrs(t_cmds *cmd)
 			mat[ind] = quote(mat[ind]);
 	}
 	cmd->cmd = mat;
+	expand_agrs(cmd->next);
 }
 
 static int	exec_single_cmd(t_cmds *cmd)
@@ -74,18 +75,14 @@ int	exec_tree(t_binary *tree)
 
 	if (!tree)
 		return (0);
-	printf("qualquer antes expand args ====\n");
-	expand_agrs(tree->cmds);
-	// Handle command execution
 	if (tree->cmds != NULL)
 	{
-		if (tree->cmds->next) // Multiple commands means piping
+		expand_agrs(tree->cmds);
+		if (tree->cmds->next) 
 			return (exec_pipes(tree->cmds, btree()->env));
 		else // Single command
 			return (exec_single_cmd(tree->cmds));
 	}
-	
-	// Handle logical operators
 	if (tree->logic && strcmp(tree->logic, "&&") == 0)
 	{
 		ret_left = exec_tree(tree->left);
@@ -109,6 +106,5 @@ int	exec_tree(t_binary *tree)
 		waitpid(pid, &status, 0);
 		return (WEXITSTATUS(status));
 	}
-	
 	return (0);
 }

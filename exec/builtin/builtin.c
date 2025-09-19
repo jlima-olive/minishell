@@ -4,7 +4,7 @@
 
 int is_builtin(char *cmd)
 {
-	// printf("testing if its bultin\n");
+	// printf( "testing if its bultin\n");
 	if (!cmd)
 		return (write(2, "cmd is empty\n", 14), 0);
     if (ft_strncmp(cmd, "cd", 2) == 0)
@@ -77,7 +77,7 @@ static char *logical_pwd_update(const char *oldpwd, const char *target)
         newpwd = malloc(strlen(oldpwd) + 1 + strlen(target) + 1);
         if (!newpwd)
             return NULL;
-        sprintf(newpwd, "%s/%s", oldpwd, target);
+        sprintf( newpwd, "%s/%s", oldpwd, target);
         return newpwd;
     }
 }
@@ -94,7 +94,7 @@ int builtin_cd(char **args)
         target = find_path_in_list(*get_env_list(), "HOME=");
         if (!target)
         {
-            fprintf(stderr, "cd: HOME not set\n");
+            my_ffprintf(target, "cd: HOME not set\n");
             return (1);
         }
     }
@@ -103,10 +103,10 @@ int builtin_cd(char **args)
         target = find_path_in_list(*get_env_list(), "OLDPWD=");
         if (!target)
         {
-            fprintf(stderr, "cd: OLDPWD not set\n");
+            my_ffprintf(target, "cd: OLDPWD not set\n");
             return (1);
         }
-        printf("%s\n", target); // bash prints path when using "cd -"
+        printf( "%s\n", target); // bash prints path when using "cd -"
     }
     else
         target = args[1];
@@ -134,7 +134,7 @@ int builtin_cd(char **args)
             free(newpwd);
         }
         else
-            fprintf(stderr, "cd: failed to update PWD\n");
+            fprintf( stderr, "cd: failed to update PWD\n");
     }
 	return (0);
 }
@@ -144,12 +144,12 @@ int builtin_cd(char **args)
 // {
 //     char *pwd = find_path_in_list(*get_env_list(), "PWD=");
 //     if (pwd)
-//         printf("%s\n", pwd);
+//         printf( "%s\n", pwd);
 //     else
 //     {
 //         char buf[1024];
 //         if (getcwd(buf, sizeof(buf)) != NULL)
-//             printf("%s\n", buf);
+//             printf( "%s\n", buf);
 //         else
 //             return (perror("pwd"), 0);
 //     }
@@ -158,7 +158,7 @@ int builtin_cd(char **args)
 
 int builtin_echo(char **args)
 {
-    printf("ECHOING\n");
+    printf( "ECHOING\n");
     int i = 1;
     int suppress_newline = 0;
 

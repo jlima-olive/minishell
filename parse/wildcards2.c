@@ -8,14 +8,14 @@ char	**bind_mat_lst_aux(char **mat, char **ret, int count, t_wild *head)
 	while (ind < count)
 	{
 		ret[ind] = mat[ind];
-		// printf("ret[%d] = %s\n", ind, mat[ind]);
+		// printf( "ret[%d] = %s\n", ind, mat[ind]);
 		// fflush(stdout);
 		ind++;
 	}
 	while (head)
 	{
 		ret[ind] = ft_strdup(head->file);
-		// printf("ret[%d] = %s\n", ind, head->file);
+		// printf( "ret[%d] = %s\n", ind, head->file);
 		// fflush(stdout);
 		head = head->next;
 		ind++;
@@ -23,11 +23,11 @@ char	**bind_mat_lst_aux(char **mat, char **ret, int count, t_wild *head)
 	while (mat[++count])
 	{
 		ret[ind] = mat[count];
-		// printf("ret[%d] = %s\n", ind, mat[count]);
+		// printf( "ret[%d] = %s\n", ind, mat[count]);
 		// fflush(stdout);
 		ind++;
 	}
-	// printf("ret[%d] = %s\n", ind, ret[ind]);
+	// printf( "ret[%d] = %s\n", ind, ret[ind]);
 	// fflush(stdout);
 	return (ret);
 }
@@ -39,16 +39,16 @@ char	**bind_mat_lst(char **mat, int count, t_wild *head, int ind)
 	if (head == NULL)
 		return (mat);
 	ind = ft_matlen(mat) + wildsize(head) - 1;
-	// printf("printing mat\n");
+	// printf( "printing mat\n");
 	// ft_print_matrix(mat);
-	// printf("printing head\n");
+	// printf( "printing head\n");
 	// print_wild(head);
-	// printf("done printing\n\n");
-	// printf("safe\n");
+	// printf( "done printing\n\n");
+	// printf( "safe\n");
 	ret = malloc(sizeof(char *) * (ind + 1));
 	if (ret == NULL)
 		return (btree()->type = ERROR, NULL);
-	// printf("%d\n", ind);
+	// printf( "%d\n", ind);
 	ret[ind] = NULL;
 	sort_wild(head);
 	ret = bind_mat_lst_aux(mat, ret, count, head);

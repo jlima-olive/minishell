@@ -156,12 +156,10 @@ int am_i_truly_myself(const char *cmd)
 }
 
 
-void my_fprintf(char *cmd, char *which_message)
+void my_ffprintf(char *cmd, char *which_message)
 {
-    char *expanded = expand(cmd, 0, 0, 1);
     write(2, "bash: ", 7);
-    write(2, expanded, ft_strlen(expanded));
-    write(2, ": ", 2);
+    // write(2, ": ", 2);
     // write(2, strerror(errno), ft_strlen(strerror(errno)));
     // write(2, "\n", 1);
     write(2, which_message, ft_strlen(which_message));
@@ -221,14 +219,14 @@ int exec_path(char *cmd, char **args, char **envp)
         {
             prepare_for_exec();
             execve(value, args, envp);
-            my_fprintf(cmd, "No such file or directory\n");
+            my_ffprintf( cmd, "No such file or directory\n");
             return (-1);
         }
         else
         {
             prepare_for_exec();
             execve(value, args, envp);
-            my_fprintf(cmd, "command not found\n");
+            my_ffprintf( cmd, "command not found\n");
             return (-1);
         }
     }
@@ -271,7 +269,7 @@ int exec_path(char *cmd, char **args, char **envp)
                     prepare_for_exec();
                     execve(new_args[0], new_args, envp);
                 }
-                perror("execve failed 3\n");
+                perror(cmd);
                 return (-1);
             }
 
@@ -279,6 +277,6 @@ int exec_path(char *cmd, char **args, char **envp)
                 return (perror("minishell"), -1);
         }
     }
-    printf("command not found\n");
+    printf( "command not found\n");
     return -1;
 }

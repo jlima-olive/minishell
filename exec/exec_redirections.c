@@ -102,7 +102,7 @@ int exec_redirections(t_cmds *cmd)
         else if (ft_strcmp(out->token, ">>") == 0)
             flags |= O_APPEND;  // append
         else
-            return (fprintf(stderr, "Unknown redirection: %s\n", out->token), -1);
+            return (fprintf( stderr, "Unknown redirection: %s\n", out->token), -1);
 
         int fd = open(out->file, flags, 0644);
         if (fd < 0)

@@ -53,11 +53,11 @@ char	*ft_itoa(int n)
 /* 
 int main()
 {
-	printf("\n ft_itoa:\n");
+	printf( "\n ft_itoa:\n");
 // 
-	printf("\t%s\n", ft_itoa(-123456));
-	printf("\t%s\n", ft_itoa(-2147483648));
-	printf("\t%s\n", ft_itoa(2147483647));
-	printf("\t%s\n", ft_itoa(10));
-	printf("\t%s\n", ft_itoa(0));	
+	printf( "\t%s\n", ft_itoa(-123456));
+	printf( "\t%s\n", ft_itoa(-2147483648));
+	printf( "\t%s\n", ft_itoa(2147483647));
+	printf( "\t%s\n", ft_itoa(10));
+	printf( "\t%s\n", ft_itoa(0));	
 } */

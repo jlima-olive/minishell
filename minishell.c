@@ -9,8 +9,8 @@ void	print_files(t_infile	*file)
 {
 	while (file)
 	{
-		printf("red is | file is\n");
-		printf("%s	   %s\n", file->token, file->file);
+		printf( "red is | file is\n");
+		printf( "%s	   %s\n", file->token, file->file);
 		file = file->next;
 	}
 } 
@@ -19,17 +19,17 @@ void	print_cmds(t_cmds *cmds)
 {
 	while (cmds)
 	{
-		printf("===============================================================\n");
-		printf("\t\tstarts infile\n");
+		printf( "===============================================================\n");
+		printf( "\t\tstarts infile\n");
 		print_files(cmds->infiles);
-		printf("\t\tend infile\n");
-		printf("\t\tstarts commands\n");
+		printf( "\t\tend infile\n");
+		printf( "\t\tstarts commands\n");
 		ft_print_matrix(cmds->cmd);
-		printf("\t\tend commands\n");
-		printf("\t\tstarts outfiles\n");
+		printf( "\t\tend commands\n");
+		printf( "\t\tstarts outfiles\n");
 		print_files((t_infile *)cmds->outfiles);
-		printf("\t\tend outfiles\n");
-		printf("===============================================================\n");
+		printf( "\t\tend outfiles\n");
+		printf( "===============================================================\n");
 		cmds = cmds->next;
 	}
 }
@@ -37,7 +37,7 @@ void	print_cmds(t_cmds *cmds)
 void	print_tree(t_binary *tree, int sub)
 {
 	// if (sub)
-		// printf("\nentering subshell\n");
+		// printf( "\nentering subshell\n");
 	if (tree == NULL)
 		return ;
 	print_tree(tree->subshell, 1);
@@ -47,7 +47,7 @@ void	print_tree(t_binary *tree, int sub)
 		if (tree->cmds)
 			print_cmds(tree->cmds);
 	if (sub)
-		printf("\n^exiting shubshell^\n");
+		printf( "\n^exiting shubshell^\n");
 }  
 
 t_binary	*btree(void)
@@ -102,5 +102,5 @@ int main(int argc, char *argv[], char **envp)
 		}
 	}
 	
-	return (printf("Closing Minishell\n"), 0);
+	return (printf( "Closing Minishell\n"), 0);
 }

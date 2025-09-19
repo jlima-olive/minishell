@@ -96,9 +96,9 @@ void	print_env_list(void)
 	while (current)
 	{
 		if (current->linux_envs)
-			printf("declare -x %s\n", current->linux_envs);
+			printf( "declare -x %s\n", current->linux_envs);
 		if (current->temp_vars)
-			printf("declare -x %s\n", current->temp_vars);
+			printf( "declare -x %s\n", current->temp_vars);
 		current = current->next;
 	}
 }
@@ -111,7 +111,7 @@ int print_linux_env_list(void)
     while (current)
     {
         if (current->linux_envs)
-                printf("%s\n", current->linux_envs);
+                printf( "%s\n", current->linux_envs);
         current = current->next;
     }
 	return (1);
@@ -244,7 +244,7 @@ int update_shell_level(int amount)
     t_os_envs *current = *get_env_list();
     int level = 0;
 
-    // printf("Updating shell leveln\n"); 
+    // printf( "Updating shell leveln\n"); 
     while (current)
     {
         if (current->linux_envs && strncmp(current->linux_envs, "SHLVL=", 6) == 0)

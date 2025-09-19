@@ -26,7 +26,7 @@ static char	*join_paths(const char *oldpwd, const char *target)
 	newpwd = malloc(len);
 	if (!newpwd)
 		return (NULL);
-	sprintf(newpwd, "%s/%s", oldpwd, target);
+	sprintf( newpwd, "%s/%s", oldpwd, target);
 	return (newpwd);
 }
 
