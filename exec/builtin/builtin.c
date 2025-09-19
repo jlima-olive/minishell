@@ -27,36 +27,26 @@ int is_builtin(char *cmd)
 
 int has_builtin(t_cmds *cmd)
 {
-    if (!cmd)
-        return 0;
-    if (cmd->infiles != NULL || cmd->outfiles != NULL)
-        return 1;
-    int i = 0;
-    while (cmd->cmd && cmd->cmd[i])
-    {
-        if (is_builtin(cmd->cmd[i]))
-            return 1;
-        i++;
-    }
-    return 0;
+    if (!cmd || !cmd->cmd || !cmd->cmd[0])
+        return (0);
+    return (is_builtin(cmd->cmd[0]));
 }
+// void update_env_var(const char *key, const char *value)
+// {
+//     char *arg;
+//     char *args[3];
 
-void update_env_var(const char *key, const char *value)
-{
-    char *arg;
-    char *args[3];
-
-    arg = malloc(strlen(key) + strlen(value) + 1);
-    if (!arg)
-        return;
-    strcpy(arg, key);
-    strcat(arg, value);
-    args[0] = "export";
-    args[1] = arg;
-    args[2] = NULL;
-    builtin_export(args);
-    free(arg);
-}
+//     arg = malloc(strlen(key) + strlen(value) + 1);
+//     if (!arg)
+//         return;
+//     strcpy(arg, key);
+//     strcat(arg, value);
+//     args[0] = "export";
+//     args[1] = arg;
+//     args[2] = NULL;
+//     builtin_export(args);
+//     free(arg);
+// }
 
 static char *logical_pwd_update(const char *oldpwd, const char *target)
 {
@@ -150,21 +140,21 @@ int builtin_cd(char **args)
 }
 
 
-int builtin_pwd(void)
-{
-    char *pwd = find_path_in_list(*get_env_list(), "PWD=");
-    if (pwd)
-        printf("%s\n", pwd);
-    else
-    {
-        char buf[1024];
-        if (getcwd(buf, sizeof(buf)) != NULL)
-            printf("%s\n", buf);
-        else
-            return (perror("pwd"), 0);
-    }
-	return (0);
-}
+// int builtin_pwd(void)
+// {
+//     char *pwd = find_path_in_list(*get_env_list(), "PWD=");
+//     if (pwd)
+//         printf("%s\n", pwd);
+//     else
+//     {
+//         char buf[1024];
+//         if (getcwd(buf, sizeof(buf)) != NULL)
+//             printf("%s\n", buf);
+//         else
+//             return (perror("pwd"), 0);
+//     }
+// 	return (0);
+// }
 
 int builtin_echo(char **args)
 {
