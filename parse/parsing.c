@@ -76,13 +76,7 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 		return (single_error_msg(-wc), NULL);
 		// return (printf( "\nUnclosed |%c|\n", -wc), NULL);
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
-<<<<<<< HEAD
 	// printf("\nwords in the input ->|%d|\n", wc);
-=======
-
-
-	// printf( "\nwords in the input ->|%d|\n", wc);
->>>>>>> main
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
