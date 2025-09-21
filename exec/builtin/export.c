@@ -40,12 +40,12 @@ int make_update_env(const char *str)
     return (0);
 }
 
-void builtin_export(char **args)
+int builtin_export(char **args)
 {
     if (!args[1])
     {
         print_env_list();
-        return;
+        return (0);
     }
     for (int i = 1; args[i]; i++)
     {
@@ -55,7 +55,8 @@ void builtin_export(char **args)
             continue;
         }
         if (make_update_env(args[i]) < 0)
-            perror("minishell: export");
+            return (perror("minishell: export"), 0);
     }
+	return (0);
 }
 

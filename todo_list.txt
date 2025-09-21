@@ -1,1 +1,0 @@
-falta verificar se o codigo funciona com a futura implementação da nova utilização de environ como linked list

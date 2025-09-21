@@ -2,15 +2,18 @@
 #include <string.h>
 #include <unistd.h>
 
+struct shell_meta bash_meta;
+struct shell_meta zsh_meta;
+
 char *find_path(char **envp, char *which_env)
 {
     int i = 0;
-    while (envp[i])
-    {
-        if (strncmp(envp[i], which_env, (strlen(which_env))) == 0)
-            return (strdup(envp[i] + strlen(which_env)));
-        i++;
-    }
+		while (envp[i])
+		{
+			if (ft_strncmp(envp[i], which_env, (ft_strlen(which_env))) == 0)
+				return (ft_strdup(envp[i] + ft_strlen(which_env)));
+			i++;
+   		}
     return (NULL);
 }
 
@@ -21,14 +24,16 @@ char **split_path(char **envp)
         return (NULL);
     char **vars = ft_split(path, ':');
     free(path);
+
     return (vars);
 }
 
 int is_system_path_command(char *cmd, char **envp)
 {
+
     char **paths_to_search = split_path(envp);
     if (!paths_to_search)
-        return (write(2, "PATH not found\n", 15), -1);
+        return (-1);
     int i = 0;
     while (paths_to_search[i])
     {
@@ -151,17 +156,79 @@ int am_i_truly_myself(const char *cmd)
 }
 
 
+void my_ffprintf(char *cmd, char *which_message)
+{
+    write(2, "bash: ", 7);
+    // write(2, ": ", 2);
+    // write(2, strerror(errno), ft_strlen(strerror(errno)));
+    // write(2, "\n", 1);
+    write(2, which_message, ft_strlen(which_message));
+}
+
+void init_shell_meta(void) {
+    struct stat st;
+
+    // Try Bash
+    if (stat("/bin/bash", &st) == 0) {
+        bash_meta.st_dev = st.st_dev;
+        bash_meta.st_ino = st.st_ino;
+    } else {
+        bash_meta.st_dev = 0;
+        bash_meta.st_ino = 0;
+    }
+
+    // Try Zsh
+    if (stat("/usr/bin/zsh", &st) == 0) {
+        zsh_meta.st_dev = st.st_dev;
+        zsh_meta.st_ino = st.st_ino;
+    } else {
+        zsh_meta.st_dev = 0;
+        zsh_meta.st_ino = 0;
+    }
+}
+// env | grep SHLVL
+
+int is_tracked_shell(const char *cmd) {
+    if (!cmd) return 0;
+
+    char resolved[PATH_MAX];
+    if (!realpath(cmd, resolved)) return 0;
+
+    struct stat st;
+    if (stat(resolved, &st) != 0) return 0;
+
+    if ((st.st_dev == bash_meta.st_dev && st.st_ino == bash_meta.st_ino) ||
+        (st.st_dev == zsh_meta.st_dev && st.st_ino == zsh_meta.st_ino)) {
+        return 1;
+    }
+    return 0;
+}
+
 int exec_path(char *cmd, char **args, char **envp)
-{    
+{
+	
     if (am_i_truly_myself(args[0]) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
         update_shell_level(1);
+    if (is_tracked_shell(cmd))
+        update_shell_level(1);
+
     if (cmd[0] == '$')
     {
         char *value = get_env_var(cmd + 1, envp);
-        if (value)
-            return (printf("%s\n", value), 0);
+        if (strchr(value, '/'))
+        {
+            prepare_for_exec();
+            execve(value, args, envp);
+            my_ffprintf( cmd, "No such file or directory\n");
+            return (-1);
+        }
         else
-            return (printf("Variable not found\n"), -1);
+        {
+            prepare_for_exec();
+            execve(value, args, envp);
+            my_ffprintf( cmd, "command not found\n");
+            return (-1);
+        }
     }
     if (strchr(cmd, '/'))
     {
@@ -176,19 +243,23 @@ int exec_path(char *cmd, char **args, char **envp)
             }
         }
     }
+
     if (is_system_path_command(cmd, envp))
     {
+
         if (exec_system_path(cmd, args, envp) == 0)
             return 0;
     }
     else
     {
+
         if (access(cmd, F_OK) == 0)
         {
             if (access(cmd, X_OK) == 0)
             {
                 prepare_for_exec();
                 execve(cmd, args, envp);
+
                 if (errno == ENOEXEC)
                 {
                     char *new_args[3];
@@ -198,13 +269,14 @@ int exec_path(char *cmd, char **args, char **envp)
                     prepare_for_exec();
                     execve(new_args[0], new_args, envp);
                 }
-                perror("execve failed 3\n");
+                perror(cmd);
                 return (-1);
             }
+
             else
                 return (perror("minishell"), -1);
         }
     }
-    printf("command not found\n");
+    printf( "command not found\n");
     return -1;
 }

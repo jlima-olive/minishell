@@ -60,10 +60,9 @@ char **array_to_exec(t_cmds *cmd)
 
 int exec_redirections(t_cmds *cmd)
 {
-    t_infile *in = cmd->infiles;
+    t_infile  *in = cmd->infiles;
     t_outfile *out;
 
-    printf("==EXECUTING REDIRECTIONS ON exec_redirecions\n");
     while (in)
     {
         if (ft_strcmp(in->token, "<") == 0)
@@ -77,19 +76,19 @@ int exec_redirections(t_cmds *cmd)
         }
         else if (ft_strcmp(in->token, "<<") == 0)
         {
-            if (cmd->cmd)
+            if (cmd->cmd) // if command exists, redirect pipe
             {
                 int p[2];
                 if (pipe(p) == -1)
                     return (perror("pipe"), -1);
-                get_here_doc(in->file, p);      // write to pipe
+                get_here_doc(in->file, p); // write to pipe
                 if (dup2(p[0], STDIN_FILENO) < 0)
                     return (perror("dup2"), close(p[0]), -1);
                 close(p[0]);
                 close(p[1]);
             }
             else
-                get_here_doc(in->file, NULL);   // discard input
+                get_here_doc(in->file, NULL);
         }
         in = in->next;
     }
@@ -97,20 +96,25 @@ int exec_redirections(t_cmds *cmd)
     while (out)
     {
         int flags = O_WRONLY | O_CREAT;
-        if (ft_strcmp(out->token, ">>") == 0)
-            flags |= O_APPEND;
+
+        if (ft_strcmp(out->token, ">") == 0)
+            flags |= O_TRUNC;   // overwrite
+        else if (ft_strcmp(out->token, ">>") == 0)
+            flags |= O_APPEND;  // append
         else
-            flags |= O_TRUNC;
+            return (fprintf( stderr, "Unknown redirection: %s\n", out->token), -1);
+
         int fd = open(out->file, flags, 0644);
-        if (fd < 0 || !out->file)
+        if (fd < 0)
             return (perror(out->file), -1);
         if (dup2(fd, STDOUT_FILENO) < 0)
             return (perror("dup2"), close(fd), -1);
         close(fd);
+
         out = out->next;
     }
-
     return 0;
 }
+
 
 

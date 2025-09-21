@@ -70,30 +70,51 @@ void clear_env_list(void)
     *env_list = NULL;
 }
 
-
-void print_env_list(void)
+void	enhanced_sort_wild_vini_goat(t_os_envs *envs)
 {
-    t_os_envs *current = *get_env_list();
+	t_os_envs	*env2;
 
-    while (current)
-    {
-        if (current->linux_envs)
-            printf("declare -x %s\n", current->linux_envs);
-        if (current->temp_vars)
-            printf("declare -x %s\n", current->temp_vars);
-        current = current->next;
-    }
+	while (envs)
+	{
+		env2 = envs->next;
+		while (env2)
+		{
+			if (ft_abs_strcmp(envs->linux_envs, env2->linux_envs) > 0)
+				ft_ult_swap(&envs->linux_envs, &env2->linux_envs);
+			env2 = env2->next;
+		}
+		envs = envs->next;
+	}
 }
-void print_linux_env_list(void)
+
+void	print_env_list(void)
+{
+	t_os_envs	*current;
+
+	current = *get_env_list();
+
+	while (current)
+	{
+		if (current->linux_envs)
+			printf( "declare -x %s\n", current->linux_envs);
+		if (current->temp_vars)
+			printf( "declare -x %s\n", current->temp_vars);
+		current = current->next;
+	}
+}
+
+
+int print_linux_env_list(void)
 {
     t_os_envs *current = *get_env_list();
 
     while (current)
     {
         if (current->linux_envs)
-                printf("%s\n", current->linux_envs);
+                printf( "%s\n", current->linux_envs);
         current = current->next;
     }
+	return (1);
 }
 
 void builtin_env(char **env)
@@ -223,7 +244,7 @@ int update_shell_level(int amount)
     t_os_envs *current = *get_env_list();
     int level = 0;
 
-    // printf("Updating shell leveln\n"); 
+    // printf( "Updating shell leveln\n"); 
     while (current)
     {
         if (current->linux_envs && strncmp(current->linux_envs, "SHLVL=", 6) == 0)

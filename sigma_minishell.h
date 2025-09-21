@@ -39,20 +39,11 @@ typedef struct s_infile
 	struct s_infile	*next;
 }	t_infile;
 
-typedef struct s_os_envs_list{
-	char				*linux_envs;
-	char				*temp_vars;
-	struct s_os_envs_list	*next;
-}   t_os_envs_list;
-
 typedef struct s_os_envs{
 	char *linux_envs;
 	char *temp_vars;
 	struct s_os_envs *next;
 }   t_os_envs;
-
-
-
 
 typedef struct s_cmds
 {
@@ -62,6 +53,16 @@ typedef struct s_cmds
 	t_outfile		*outfiles;
 	struct s_cmds	*next;
 }	t_cmds;
+
+struct shell_meta {
+    dev_t st_dev;
+    ino_t st_ino;
+};
+
+extern struct shell_meta bash_meta;
+extern struct shell_meta zsh_meta;
+
+
 
 typedef struct s_binary
 {
@@ -73,6 +74,7 @@ typedef struct s_binary
 	int				subshell_ret;
 	char			*print_cmd;
 	char			**mat;
+	t_os_envs		*os_env;
 	char			**env;
 	t_cmds			*cmds;
 	struct s_binary	*up;
@@ -88,13 +90,13 @@ void 		init_tree(char **mat);
 
 char *aspas(char *str, int c);
 int is_builtin(char *cmd);
-void builtin_cd(char **args);
-void builtin_pwd(void);
-void builtin_echo(char **args);
-void builtin_exit(char **args, char **envp);
-void builtin_unset(char **args);
+int builtin_cd(char **args);
+int builtin_pwd(void);
+int builtin_echo(char **args);
+int builtin_exit(char **args, char **envp);
+int builtin_unset(char **args);
 int exec_builtin(char *cmd, char **args, char **envp);
-void builtin_export(char **args);
+int builtin_export(char **args);
 void print_env_list(void);
 t_os_envs **get_env_list(void);
 void builtin_env(char **env);
@@ -109,7 +111,7 @@ char *find_path(char **envp, char *which_env);
 void initialize_pwd(char **envp);
 char *find_path_in_list(t_os_envs *env_list, const char *key);
 void		handle_sigint(int sig);
-void		print_linux_env_list(void);
+int print_linux_env_list(void);
 char		*remove_it(char *str, int c);
 void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
@@ -123,6 +125,10 @@ int update_shell_level(int amount);
 int make_update_env(const char *str);
 char **list_to_char(t_os_envs *envs);
 int am_i_truly_myself(const char *cmd);
+int has_builtin(t_cmds *cmd);
+void init_shell_meta(void);
+void	enhanced_sort_wild_vini_goat(t_os_envs *envs);
+void my_ffprintf(char *cmd, char *which_message);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);
@@ -163,7 +169,7 @@ void	quote_matrix(char **mat);
 int		wildsize(t_wild *head);
 
 // expansions.c
-char	*expand(char *str);
+char    *expand(char *str, int ind, int count, int flag);
 char	*quote(char *str);
 
 // syntax_error_msg.c
@@ -190,6 +196,6 @@ void			get_here_doc(char *eof, int fd[2]);
 /*	this function receives char **environment and returns a t_os_envs_list *
 	where every node in the list has as its content one string from
 	environment the list itself contains every string from environment*/
-t_os_envs_list	*get_env(char **environ);
+// t_os_envs_list	*get_env(char **environ);
 
 #endif

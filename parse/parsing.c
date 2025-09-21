@@ -4,7 +4,7 @@
 {
 	while (head)
 	{
-		printf("%s\n", head->file);
+		printf( "%s\n", head->file);
 		head = head->next;
 	}
 } */
@@ -20,7 +20,7 @@ void get_here_doc(char *eof, int fd[2])
     {
         if (fd)
         {
-            char *expanded = expand(str);  // expand input
+            char *expanded = expand(str, 0, 0, 1);  // expand input
             write(fd[1], expanded, ft_strlen(expanded));
             write(fd[1], "\n", 1);
 
@@ -61,9 +61,9 @@ void discard_heredoc(t_infile *infiles)
 
 void	single_error_msg(char wc)
 {
-	ft_putstr_fd("syntax error near unexpected token `", 2);
+	ft_putstr_fd("syntax error near unexpected token: |", 2);
 	ft_putstr_fd(&wc, 1);
-	ft_putstr_fd("'\n", 2);
+	ft_putstr_fd("|\n", 2);
 }
 
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
@@ -74,9 +74,15 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 
 	if (wc < 0)
 		return (single_error_msg(-wc), NULL);
-		// return (printf("\nUnclosed |%c|\n", -wc), NULL);
+		// return (printf( "\nUnclosed |%c|\n", -wc), NULL);
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
+<<<<<<< HEAD
 	// printf("\nwords in the input ->|%d|\n", wc);
+=======
+
+
+	// printf( "\nwords in the input ->|%d|\n", wc);
+>>>>>>> main
 	ret = malloc(sizeof(char *) * (wc + 1));
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
@@ -145,9 +151,9 @@ int	parsing(char *str)
 		mat = tokenization(str, tokens, sep, word_count(str, tokens, sep));
 	if (mat == NULL)
 		return (1);
-	// printf("printing matrix\n");
+	// printf( "printing matrix\n");
 	// ft_print_matrix(mat);
-	// printf("done printing matrix\n");
+	// printf( "done printing matrix\n");
 	if (check_syntax(mat, tokens))
 		return (1);
 	init_tree(mat);

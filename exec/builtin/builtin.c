@@ -2,42 +2,50 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-
 int is_builtin(char *cmd)
 {
+	if (!cmd)
+		return (write(2, "cmd is empty\n", 14), 0);
     if (ft_strncmp(cmd, "cd", 2) == 0)
         return (1);
-    if (ft_strncmp(cmd, "pwd", 3) == 0)
+    else if (ft_strncmp(cmd, "pwd", 3) == 0)
         return (1);
-    if (ft_strncmp(cmd, "env", 3) == 0)
+    else if (ft_strncmp(cmd, "env", 3) == 0)
         return (1);
-    if (ft_strncmp(cmd, "echo", 4) == 0)
+    else if (ft_strncmp(cmd, "echo", 4) == 0)
         return (1);
-    if (ft_strncmp(cmd, "exit", 4) == 0)
+    else if (ft_strncmp(cmd, "exit", 4) == 0)
         return (1);
-    if (ft_strncmp(cmd, "unset", 5) == 0)
+    else if (ft_strncmp(cmd, "unset", 5) == 0)
         return (1);
-    if (ft_strncmp(cmd, "export", 6) == 0)
+    else if (ft_strncmp(cmd, "export", 6) == 0)
         return (1);
-    return (0);
+	else
+    	return (0);
 }
 
-void update_env_var(const char *key, const char *value)
+int has_builtin(t_cmds *cmd)
 {
-    char *arg;
-    char *args[3];
-
-    arg = malloc(strlen(key) + strlen(value) + 1);
-    if (!arg)
-        return;
-    strcpy(arg, key);
-    strcat(arg, value);
-    args[0] = "export";
-    args[1] = arg;
-    args[2] = NULL;
-    builtin_export(args);
-    free(arg);
+    if (!cmd || !cmd->cmd || !cmd->cmd[0])
+        return (0);
+    return (is_builtin(cmd->cmd[0]));
 }
+// void update_env_var(const char *key, const char *value)
+// {
+//     char *arg;
+//     char *args[3];
+
+//     arg = malloc(strlen(key) + strlen(value) + 1);
+//     if (!arg)
+//         return;
+//     strcpy(arg, key);
+//     strcat(arg, value);
+//     args[0] = "export";
+//     args[1] = arg;
+//     args[2] = NULL;
+//     builtin_export(args);
+//     free(arg);
+// }
 
 static char *logical_pwd_update(const char *oldpwd, const char *target)
 {
@@ -68,12 +76,12 @@ static char *logical_pwd_update(const char *oldpwd, const char *target)
         newpwd = malloc(strlen(oldpwd) + 1 + strlen(target) + 1);
         if (!newpwd)
             return NULL;
-        sprintf(newpwd, "%s/%s", oldpwd, target);
+        sprintf( newpwd, "%s/%s", oldpwd, target);
         return newpwd;
     }
 }
 
-void builtin_cd(char **args)
+int builtin_cd(char **args)
 {
     char *oldpwd = find_path_in_list(*get_env_list(), "PWD=");
     char buf[1024];
@@ -85,8 +93,8 @@ void builtin_cd(char **args)
         target = find_path_in_list(*get_env_list(), "HOME=");
         if (!target)
         {
-            fprintf(stderr, "cd: HOME not set\n");
-            return;
+            my_ffprintf(target, "cd: HOME not set\n");
+            return (1);
         }
     }
     else if (strcmp(args[1], "-") == 0)
@@ -94,10 +102,10 @@ void builtin_cd(char **args)
         target = find_path_in_list(*get_env_list(), "OLDPWD=");
         if (!target)
         {
-            fprintf(stderr, "cd: OLDPWD not set\n");
-            return;
+            my_ffprintf(target, "cd: OLDPWD not set\n");
+            return (1);
         }
-        printf("%s\n", target); // bash prints path when using "cd -"
+        printf( "%s\n", target); // bash prints path when using "cd -"
     }
     else
         target = args[1];
@@ -105,7 +113,7 @@ void builtin_cd(char **args)
     if (chdir(target) != 0)
     {
         perror("cd");
-        return;
+        return (1);
     }
 
     // update OLDPWD
@@ -125,27 +133,29 @@ void builtin_cd(char **args)
             free(newpwd);
         }
         else
-            fprintf(stderr, "cd: failed to update PWD\n");
+            fprintf( stderr, "cd: failed to update PWD\n");
     }
+	return (0);
 }
 
 
-void builtin_pwd(void)
-{
-    char *pwd = find_path_in_list(*get_env_list(), "PWD=");
-    if (pwd)
-        printf("%s\n", pwd);
-    else
-    {
-        char buf[1024];
-        if (getcwd(buf, sizeof(buf)) != NULL)
-            printf("%s\n", buf);
-        else
-            perror("pwd");
-    }
-}
+// int builtin_pwd(void)
+// {
+//     char *pwd = find_path_in_list(*get_env_list(), "PWD=");
+//     if (pwd)
+//         printf( "%s\n", pwd);
+//     else
+//     {
+//         char buf[1024];
+//         if (getcwd(buf, sizeof(buf)) != NULL)
+//             printf( "%s\n", buf);
+//         else
+//             return (perror("pwd"), 0);
+//     }
+// 	return (0);
+// }
 
-void builtin_echo(char **args)
+int builtin_echo(char **args)
 {
     int i = 1;
     int suppress_newline = 0;
@@ -158,23 +168,25 @@ void builtin_echo(char **args)
     while (args[i])
     {
         char *arg = args[i];
-        int single_quoted = 0;
-        int double_quoted = 0;
-        if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
-        {
-            single_quoted = 1;
-            arg = remove_it(arg, '\'');
-        }
-        else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
-        {
-            double_quoted = 1;
-            arg = remove_it(arg, '"');
-        }
+        // int single_quoted = 0;
+        // int double_quoted = 0;
+        // if (arg[0] == '\'' && arg[ft_strlen(arg) - 1] == '\'')
+        // {
+        //     single_quoted = 1;
+        //     arg = remove_it(arg, '\'');
+        // }
+        // else if (arg[0] == '"' && arg[ft_strlen(arg) - 1] == '"')
+        // {
+        //     double_quoted = 1;
+        //     arg = remove_it(arg, '"');
+        // }
         char *output;
-        if (single_quoted)
-            output = ft_strdup(arg);
-        else
-            output = expand(arg);
+        // if (single_quoted)
+        output = ft_strdup(arg);
+        // else
+
+        //echo $USER "$USER" '$USER' "'$USER'" '"$USER"'
+        //     output = expand(arg);
         ft_putstr_fd(output, 1);
         // free(output);
         if (args[i + 1])
@@ -183,9 +195,10 @@ void builtin_echo(char **args)
     }
     if (!suppress_newline)
         write(1, "\n", 1);
+	return (0);
 }
 
-void builtin_exit(char **args, char **envp)
+int builtin_exit(char **args, char **envp)
 {
     int status = 0;
 
@@ -200,20 +213,18 @@ void builtin_exit(char **args, char **envp)
 int exec_builtin(char *cmd, char **args, char **envp)
 {
     if (ft_strncmp(cmd, "cd", 2) == 0)
-            builtin_cd(args);
+            return builtin_cd(args);
     else if (ft_strncmp(cmd, "pwd", 3) == 0)
-        builtin_pwd();
+        return builtin_pwd();
     else if (ft_strncmp(cmd, "env", 3) == 0)
-        print_linux_env_list();
+        return print_linux_env_list();
     else if (ft_strncmp(cmd, "echo", 4) == 0)
-        builtin_echo(args);
+        return builtin_echo(args);
     else if (ft_strncmp(cmd, "exit", 4) == 0)
-        builtin_exit(args, envp);
+        return builtin_exit(args, envp);
     else if (ft_strncmp(cmd, "unset", 5) == 0)
-        builtin_unset(args);
+        return builtin_unset(args);
     else if (ft_strncmp(cmd, "export", 6) == 0)
-        builtin_export(args);
-    else
-        return (0);
-    return (0);
+        return (builtin_export(args));
+    return (1);
 }

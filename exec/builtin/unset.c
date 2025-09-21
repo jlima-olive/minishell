@@ -1,6 +1,6 @@
 #include "../../sigma_minishell.h"
 
-void builtin_unset(char **args)
+int builtin_unset(char **args)
 {
     t_os_envs **env_list = get_env_list();
     t_os_envs *cur;
@@ -8,7 +8,7 @@ void builtin_unset(char **args)
     size_t name_len;
 
     if (!args[1])
-        return;
+        return (-1);
 
     for (int i = 1; args[i]; i++)
     {
@@ -44,4 +44,5 @@ void builtin_unset(char **args)
             cur = cur->next;
         }
     }
+	return (0);
 }

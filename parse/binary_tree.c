@@ -6,14 +6,14 @@
 {
 	while (cmds)
 	{
-		printf("===============================================================\n");
-		printf("starts commands\n\n");
+		printf( "===============================================================\n");
+		printf( "starts commands\n\n");
 		ft_print_matrix(cmds->cmd);
-		printf("end commands\n\n");
-		printf("starts outfiles\n\n");
+		printf( "end commands\n\n");
+		printf( "starts outfiles\n\n");
 		print_files((t_infile *)cmds->outfiles);
-		printf("end outfiles\n");
-		printf("===============================================================\n\n");
+		printf( "end outfiles\n");
+		printf( "===============================================================\n\n");
 		cmds = cmds->next;
 	}
 }*/

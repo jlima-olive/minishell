@@ -6,7 +6,7 @@ char	*quote(char *str)
 	int		ind;
 	char	*ret;
 
-	str = expand(str);
+	str = expand(str, 0, 0, 1);
 	ret = str;
 	while (*str)
 	{
@@ -27,6 +27,17 @@ char	*quote(char *str)
 	return (ret);
 }
 
+char	*find_os_env(t_os_envs *env, char *str, int count)
+{
+	while (env)
+	{
+		if (env->linux_envs && ft_strncmp(env->linux_envs, str, count) == 0)
+			return (env->linux_envs);
+		env = env->next;
+	}
+	return (NULL);
+}
+
 char	*expand_aux(char *str, int ind, int count, char *temp)
 {
 	char	*env_var;
@@ -37,7 +48,8 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	temp = ft_strjoin_free(temp, "=", 1);
 	if (temp == NULL)
 		return (btree()->type = ERROR, free (str), NULL);
-	env_var = ft_matnstr(btree()->env, temp, count);
+	env_var = find_os_env(btree()->os_env, temp, count);
+	// printf( "we found %s\n", env_var);
 	free(temp);
 	if (env_var == NULL)
 		env_var = ft_calloc(1, 1);
@@ -54,33 +66,31 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	str = ft_strjoin(str, temp);
 	if (str == NULL)
 		return (btree()->type = ERROR, NULL);
-	return (expand(str));
+	return (expand(str, 0, 0, 1));
 }
 
-char	*expand(char *str)
+char    *expand(char *str, int ind, int count, int flag)
 {
-	int		ind;
-	int		count;
-
-	if (str == NULL)
-		return (btree()->type = ERROR, NULL);
-	ind = 0;
-	count = 0;
-	while (str[ind])
-	{
-		if (str[ind] == '\'' && ++ind)
-			while (str[ind] != '\'')
-				ind++;
-		if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
-		{
-			count++;
-			if (str[ind + 1] == '?')
-				return (expand_aux(str, ind, 2, NULL));
-			while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
-				count++;
-			return (expand_aux(str, ind, count, NULL));
-		}
-		ind++;
-	}
-	return (str);
+    if (str == NULL)
+        return (btree()->type = ERROR, NULL);
+    ind = 0;
+    while (str[ind])
+    {
+        if (flag == 1 && str[ind] == '\'' && ++ind)
+            while (str[ind] != '\'')
+                ind++;
+        if (str[ind] == '\"')
+            flag = -flag;
+        if (str[ind] == '$' && (ft_isalnum(str[ind + 1]) || str[ind + 1] == '?' || str[ind + 1] == '_'))
+        {
+            count++;
+            if (str[ind + 1] == '?')
+                return (expand_aux(str, ind, 2, NULL));
+            while (ft_isalnum((str + ind)[count]) || (str + ind)[count] == '_')
+                count++;
+            return (expand_aux(str, ind, count, NULL));
+        }
+        ind++;
+    }
+    return (str);
 }

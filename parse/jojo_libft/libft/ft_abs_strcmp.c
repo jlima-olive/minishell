@@ -15,6 +15,8 @@ int	ft_abs_strcmp(char *str1, char *str2)
 	char ch1;
 	char ch2;
 
+	if (!str1 || !str2)
+		return (str1 - str2);
 	while (*str1 && *str2)
 	{
 		ch1 = *str1 + (*str1 > 64 && *str1 < 91) * 32;
