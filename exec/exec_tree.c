@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 15:55:08 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 09:36:03 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:51:02 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,6 @@ static void	exec_child(t_cmds *cmd)
 		exec_path(cleaned[0], cleaned, updated_envs);
 	free_matrix(cleaned);
 	free_matrix(updated_envs);
-}
-
-static int	exec_single_cmd_aux(t_cmds *cmd)
-{
-	char	**env_array;
-	int		status;
-
-	if (ft_strncmp(cmd->cmd[0], "exit", 4) == 0)
-	{
-		env_array = list_to_char(*get_env_list());
-		status = exec_builtin(cmd->cmd[0], cmd->cmd, env_array);
-		free_matrix(env_array);
-		free(env_array);
-	}
-	else
-		status = exec_builtin(cmd->cmd[0], cmd->cmd, NULL);
-	return (status);
 }
 
 int	exec_single_cmd(t_cmds *cmd)

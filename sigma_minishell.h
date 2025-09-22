@@ -152,6 +152,7 @@ int	exec_path(char *cmd, char **args, char **envp);
 void	my_ffprintf(char *cmd, char *which_message);
 	char	*find_path(char **envp, char *which_env);
 	bool is_n_flag(const char *arg);
+int	exec_single_cmd_aux(t_cmds *cmd);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

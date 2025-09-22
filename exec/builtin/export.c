@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 23:57:32 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/21 23:43:24 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:47:38 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	make_update_env(const char *str)
 int	builtin_export(char **args)
 {
 	int	i;
+
 	i = 0;
 	if (!args[1])
 		return (print_env_list(), 0);
@@ -104,7 +105,8 @@ int	builtin_export(char **args)
 			i++;
 			continue ;
 		}
-		if (make_update_env(args[i]) < 0){
+		if (make_update_env(args[i]) < 0)
+		{
 			return (perror("minishell: export"), 0);
 		}
 		i++;

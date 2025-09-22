@@ -26,32 +26,31 @@ int	print_linux_env_list(void)
 	return (1);
 }
 
-void initialize_pwd(char **envp)
+void	initialize_pwd(char **envp)
 {
-    char buf[1024];
-    char *pwd_value;
-    char *full;
+	char	buf[1024];
+	char	*pwd_value;
+	char	*full;
 
-    pwd_value = find_path(envp, "PWD=");
-    if (!pwd_value)
-    {
-        if (getcwd(buf, sizeof(buf)) == NULL)
-        {
-            perror("getcwd");
-            return ;
-        }
-        full = malloc(strlen("PWD=") + strlen(buf) + 1);
-        if (!full)
-            return ;
-        strcpy(full, "PWD=");
-        strcat(full, buf);
-        add_new_env_var(get_env_list(), full);
-        free(full);
-    }
-    else
-        free(pwd_value);
+	pwd_value = find_path(envp, "PWD=");
+	if (!pwd_value)
+	{
+		if (getcwd(buf, sizeof(buf)) == NULL)
+		{
+			perror("getcwd");
+			return ;
+		}
+		full = malloc(strlen("PWD=") + strlen(buf) + 1);
+		if (!full)
+			return ;
+		strcpy(full, "PWD=");
+		strcat(full, buf);
+		add_new_env_var(get_env_list(), full);
+		free(full);
+	}
+	else
+		free(pwd_value);
 }
-
 
 char	*find_temp_var(const char *key)
 {

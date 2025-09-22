@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 15:51:02 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/21 23:10:57 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:49:12 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	free_matrix(char **table)
 		free(table[i++]);
 	free(table);
 }
-void free_env_node(t_os_envs *env)
+
+void	free_env_node(t_os_envs *env)
 {
 	if (!env)
 		return ;
@@ -31,9 +32,10 @@ void free_env_node(t_os_envs *env)
 	free(env);
 }
 
-void free_env_list(t_os_envs *head)
+void	free_env_list(t_os_envs *head)
 {
-	t_os_envs *temp;
+	t_os_envs	*temp;
+
 	while (head)
 	{
 		temp = head->next;

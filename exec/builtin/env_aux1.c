@@ -19,7 +19,6 @@ t_os_envs	**get_env_list(void)
 	return (&env_list);
 }
 
-
 t_os_envs	*create_env_node(char *path)
 {
 	t_os_envs	*new_node;
