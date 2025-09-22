@@ -65,17 +65,13 @@ int	simple_syntax(char **mat)
 	return (0);
 }
 
-t_cmds	*get_cmds(char **temp)
+t_cmds	*get_cmds(char **mat)
 {
 	t_cmds	*cmds;
-	char	**mat;
 	int		sep;
 
-	if (*temp == NULL)
-		return (NULL);
-	if (simple_syntax(temp))
-		return (free_matrix_nodes(temp), btree()->type = ERROR, NULL);
-	mat = wildcards(temp, 0, 0);
+	if (simple_syntax(mat))
+		return (free_matrix_nodes(mat), btree()->type = ERROR, NULL);
 	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
 		return (NULL);
 	sep = find_pipe(mat);
@@ -87,7 +83,6 @@ t_cmds	*get_cmds(char **temp)
 	cmds = cmds_new(get_outfile(mat), get_infile(mat), mat);
 	if (cmds == NULL)
 		return (btree()->type = ERROR, NULL);
-	cmds->expanded = (mat != temp);
 	if (sep != -1)
 		cmds->next = get_cmds(mat + sep + 1);
 	return (cmds);
@@ -160,9 +155,12 @@ void	*create_binary_lvl(char **mat, int id, t_binary *tree)
 		return (NULL);
 	sep = separator_comp(mat, 1, ft_matlen(mat) - 1, 0);
 	if (sep == 0)
+	{
 		tree->print_cmd = ft_join_matrix(mat, 0, 0, 0);
-	if (tree->print_cmd == NULL)
-		return (btree()->type = ERROR, free_matrix_nodes(mat), NULL);
+		if (tree->print_cmd == NULL)
+			return (btree()->type = ERROR, free_matrix_nodes(mat), NULL);
+		// printf("printing this %s\n", tree->print_cmd);
+	}
 	if (sep == 0)
 		return (tree->cmds = get_cmds(mat), NULL);
 	tree->left = binary_new(id ,EMPTY, tree, NULL);

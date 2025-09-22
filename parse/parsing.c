@@ -78,6 +78,7 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 	// printf("\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
+	printf("allocced %d slots\n", wc + 1);
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
 	ret[wc] = NULL;
@@ -112,6 +113,7 @@ void init_tree(char	**mat)
 	btree()->logic = NULL;
 	btree()->print_cmd = NULL;
 	btree()->mat = mat;
+	btree()->env = NULL;
 }
 
 int	sep_count(char **mat)
@@ -145,14 +147,12 @@ int	parsing(char *str)
 		mat = tokenization(str, tokens, sep, word_count(str, tokens, sep));
 	if (mat == NULL)
 		return (1);
-	// printf( "printing matrix\n");
-	// ft_print_matrix(mat);
-	// printf( "done printing matrix\n");
 	if (check_syntax(mat, tokens))
 		return (1);
 	init_tree(mat);
 	create_binary_tree(mat, sep_count(mat) + 1, btree());
-	if (btree()->type == ERROR)
-		return (1);
-	return (0);
+	// printf( "printing matrix\n");
+	// ft_print_matrix(mat);
+	// printf( "done printing matrix\n");
+	return (btree()->type == ERROR)
 }

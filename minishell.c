@@ -98,6 +98,7 @@ int main(int argc, char *argv[], char **envp)
 			// set_exit_status(exit_status);
 			
 			free(input);
+			// print_tree(btree(), 0);
 			binary_clear(btree());
 		}
 	}

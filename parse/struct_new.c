@@ -35,6 +35,7 @@ t_cmds	*cmds_new(t_outfile *outfile, t_infile *infile, char **cmd)
 	new = malloc(sizeof(t_cmds));
 	if (new == NULL)
 		return (NULL);
+	new->expanded = 0;
 	new->cmd = cmd;
 	new->outfiles = outfile;
 	new->infiles = infile;
