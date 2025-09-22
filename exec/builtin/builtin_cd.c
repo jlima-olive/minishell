@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:17:21 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 11:29:16 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 13:04:38 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static char	*pwd_update_aux(const char *oldpwd, const char *target)
 	char	*newpwd;
 	char	*slash;
 
-	newpwd = strdup(oldpwd);
+	newpwd = ft_strdup(oldpwd);
 	if (!newpwd)
 		return (NULL);
-	slash = strrchr(newpwd, '/');
+	slash = ft_strrchr(newpwd, '/');
 	if (slash && slash != newpwd)
 		*slash = '\0';
 	else
@@ -61,7 +61,7 @@ static char	*another_auxiliary(char *oldpwd, char *target)
 		free(newpwd);
 	}
 	else
-		fprintf(stderr, "cd: failed to update PWD\n");
+		ft_putstr_fd("cd: failed to update PWD\n", stderr);
 	return (newpwd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:01:02 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/21 15:41:41 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 13:05:31 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	initialize_pwd(char **envp)
 		full = malloc(strlen("PWD=") + strlen(buf) + 1);
 		if (!full)
 			return ;
-		strcpy(full, "PWD=");
-		strcat(full, buf);
+		ft_strcpy(full, "PWD=");
+		ft_strcat(full, buf);
 		add_new_env_var(get_env_list(), full);
 		free(full);
 	}
