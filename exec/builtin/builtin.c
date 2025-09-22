@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:21:23 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:21:30 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 09:19:56 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	builtin_echo(char **args)
 		arg = args[i];
 		output = ft_strdup(arg);
 		ft_putstr_fd(output, 1);
+		free(output);
 		if (args[i + 1])
 			write(1, " ", 1);
 		i++;

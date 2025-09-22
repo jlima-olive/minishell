@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:11:26 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:11:30 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/21 23:31:14 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	**list_to_char(t_os_envs *envs)
 	if (!final_char)
 		return (NULL);
 	if (!fill_env_array(final_char, envs))
-		return (NULL);
+		return (free(final_char), NULL);
 	return (final_char);
 }
 
@@ -91,6 +91,7 @@ void	rebuild_env_list(t_os_envs **env_list, char **env_vars)
 	t_os_envs	*new_node;
 	t_os_envs	*last;
 
+	clear_env_list();
 	while (*env_vars)
 	{
 		new_node = create_env_node(*env_vars);

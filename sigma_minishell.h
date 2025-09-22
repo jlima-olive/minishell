@@ -114,7 +114,6 @@ char *find_path_in_list(t_os_envs *env_list, const char *key);
 void		handle_sigint(int sig);
 int print_linux_env_list(void);
 char		*remove_it(char *str, int c);
-void builtin_env(char **env);
 int exec_path(char *cmd, char **args, char **envp);
 int exec_tree(t_binary *tree);
 int	exec_pipes(t_cmds *cmd, char **env);
@@ -146,6 +145,8 @@ void	clear_env_list(void);
 void	rebuild_env_list(t_os_envs **env_list, char **env_vars);
 char *logical_pwd_update(const char *oldpwd, const char *target);
 int	count_it(char *str, int c);
+int	add_new_env_var(t_os_envs **env_list, const char *str);
+void free_env_list(t_os_envs *head);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

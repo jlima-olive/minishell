@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:00:59 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:02:26 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/21 15:56:28 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_os_envs	**get_env_list(void)
 
 	return (&env_list);
 }
+
 
 t_os_envs	*create_env_node(char *path)
 {

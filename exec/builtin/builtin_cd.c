@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:17:21 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:20:40 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/21 15:16:36 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,6 @@ static char	*pwd_update_aux(const char *oldpwd, const char *target)
 	else
 		*(slash + 1) = '\0';
 	return (newpwd);
-}
-
-char	*logical_pwd_update(const char *oldpwd, const char *target)
-{
-	char	*newpwd;
-
-	if (!oldpwd)
-		return (NULL);
-	if (strcmp(target, "..") == 0)
-	{
-		return (pwd_update_aux(oldpwd, target));
-	}
-	else if (strcmp(target, ".") == 0)
-		return (strdup(oldpwd));
-	else if (target[0] == '/')
-		return (strdup(target));
-	else
-	{
-		newpwd = malloc(strlen(oldpwd) + 1 + strlen(target) + 1);
-		if (!newpwd)
-			return (NULL);
-		sprintf(newpwd, "%s/%s", oldpwd, target);
-		return (newpwd);
-	}
 }
 
 char	*builtin_cd_aux(char **args)

@@ -74,31 +74,25 @@ int	main(int argc, char *argv[], char **envp)
 	btree()->env = list_to_char(*get_env_list());
 	btree()->os_env = *get_env_list();
 	enhanced_sort_wild_vini_goat(btree()->os_env);
+	
 	while (1)
 	{
 		input = readline("minishell$ ");
 		if (!input)
 			break ;
-
 		add_history(input);
 		if (*input == '\0')
 		{
 			free(input);
 			continue ;
 		}
-
 		if (parsing(input) == 0)
 		{
-			// ALL commands now go through exec_tree
 			int exit_status = exec_tree(btree());
-
-			// Set last exit status if needed
-			// set_exit_status(exit_status);
-
 			free(input);
 			binary_clear(btree());
 		}
 	}
-
-	return (printf("Closing Minishell\n"), 0);
+	free_matrix(btree()->env);
+	return (clear_env_list(), printf("Closing Minishell\n"), 0);
 }

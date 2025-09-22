@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 23:57:32 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 23:58:01 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/21 23:43:24 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static size_t	get_env_key_length(const char *str)
 		return (strlen(str));
 }
 
-static int	add_new_env_var(t_os_envs **env_list, const char *str)
+int	add_new_env_var(t_os_envs **env_list, const char *str)
 {
 	t_os_envs	*new_node;
 	t_os_envs	*current;
@@ -93,7 +93,6 @@ int	make_update_env(const char *str)
 int	builtin_export(char **args)
 {
 	int	i;
-
 	i = 0;
 	if (!args[1])
 		return (print_env_list(), 0);
@@ -102,10 +101,12 @@ int	builtin_export(char **args)
 		if (!strchr(args[i], '='))
 		{
 			add_temp_var(args[i]);
+			i++;
 			continue ;
 		}
-		if (make_update_env(args[i]) < 0)
+		if (make_update_env(args[i]) < 0){
 			return (perror("minishell: export"), 0);
+		}
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:01:02 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:02:01 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/21 15:41:41 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,32 @@ int	print_linux_env_list(void)
 	return (1);
 }
 
-void	initialize_pwd(char **envp)
+void initialize_pwd(char **envp)
 {
-	char	buf[1024];
-	char	*export_arg;
-	char	*args[3];
-	char	*pwd_value;
+    char buf[1024];
+    char *pwd_value;
+    char *full;
 
-	pwd_value = find_path(envp, "PWD=");
-	if (!pwd_value)
-	{
-		if (getcwd(buf, sizeof(buf)) == NULL)
-		{
-			perror("getcwd");
-			return ;
-		}
-		export_arg = malloc(strlen("PWD=") + strlen(buf) + 1);
-		if (!export_arg)
-			return ;
-		strcpy(export_arg, "PWD=");
-		strcat(export_arg, buf);
-		args[0] = "export";
-		args[1] = export_arg;
-		args[2] = NULL;
-		builtin_export(args);
-		free(export_arg);
-	}
+    pwd_value = find_path(envp, "PWD=");
+    if (!pwd_value)
+    {
+        if (getcwd(buf, sizeof(buf)) == NULL)
+        {
+            perror("getcwd");
+            return ;
+        }
+        full = malloc(strlen("PWD=") + strlen(buf) + 1);
+        if (!full)
+            return ;
+        strcpy(full, "PWD=");
+        strcat(full, buf);
+        add_new_env_var(get_env_list(), full);
+        free(full);
+    }
+    else
+        free(pwd_value);
 }
+
 
 char	*find_temp_var(const char *key)
 {
