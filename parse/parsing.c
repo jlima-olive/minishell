@@ -84,7 +84,7 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 	// QUANDO COLOCAS SINGLE QUOTES PROGRAMA NAO ENTRA NO > INPUT
 	// printf("\nwords in the input ->|%d|\n", wc);
 	ret = malloc(sizeof(char *) * (wc + 1));
-	printf("allocced %d slots\n", wc + 1);
+	// printf("allocced %d slots\n", wc + 1);
 	if (ret == NULL)
 		return (NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
 	ret[wc] = NULL;

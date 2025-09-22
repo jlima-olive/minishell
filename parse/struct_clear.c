@@ -35,7 +35,7 @@ void	cmds_clear(t_cmds *cmds)
 	infile_clear(cmds->infiles);
 	// printf("deleting ->");
 	// fflush(stdout);
-	ft_print_matrix(cmds->cmd);
+	// ft_print_matrix(cmds->cmd);
 	if (cmds->expanded)
 		free_matrix (cmds->cmd);
 	else
