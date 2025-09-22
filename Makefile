@@ -4,8 +4,11 @@ PARSER_DIR=	parse
 PARSER=		$(PARSER_DIR)/$(PARSER_DIR).a
 EXEC_DIR=	exec
 BIN_DIR=	$(EXEC_DIR)/builtin
-EXEC=		$(wildcard ${EXEC_DIR}/*.c) \
-			$(wildcard ${BIN_DIR}/*.c)
+EXEC_PATH_DIR=	$(EXEC_DIR)/exec_path
+EXEC=			$(wildcard ${EXEC_DIR}/*.c) \
+				$(wildcard ${BIN_DIR}/*.c) \
+				$(wildcard ${EXEC_PATH_DIR}/*.c)
+
 CC=			cc
 AR=			ar rcs
 CFLAGS=		-Wall -Wextra -Werror -g -finstrument-functions
@@ -51,6 +54,10 @@ norm:
 	@norminette $(shell find . -type f \( -name "*.c" -o -name "*.h" \)) \
 	| awk '/c: Error/ { c++; if (c % 2 == 1) printf "\033[1;35m%s\033[0m\n", $$0; else printf "\033[1;36m%s\033[0m\n", $$0 }'
 	@echo "Amount of errors: " && norminette $(shell find . -type f \( -name "*.c" -o -name "*.h" \)) | grep "Error" | wc -l
+
+make val: re
+	clear
+	valgrind --leak-check=full --trace-children=yes --show-leak-kinds=all ./minishell
 
 .PHONY: re fclean clean all exec_rule parse_rule
 

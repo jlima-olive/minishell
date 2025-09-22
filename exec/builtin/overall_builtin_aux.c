@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   overall_builtin_aux.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/19 23:53:03 by vvazzs            #+#    #+#             */
+/*   Updated: 2025/09/19 23:53:04 by vvazzs           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../sigma_minishell.h"
 
 void	update_env_var(const char *key, const char *value)
@@ -26,7 +38,7 @@ static char	*join_paths(const char *oldpwd, const char *target)
 	newpwd = malloc(len);
 	if (!newpwd)
 		return (NULL);
-	sprintf( newpwd, "%s/%s", oldpwd, target);
+	sprintf(newpwd, "%s/%s", oldpwd, target);
 	return (newpwd);
 }
 
@@ -56,4 +68,3 @@ char	*logical_pwd_update(const char *oldpwd, const char *target)
 	else
 		return (join_paths(oldpwd, target));
 }
-

@@ -1,0 +1,58 @@
+minishell$ export ARG=sim && echo $ARG
+sim
+minishell$
+Closing Minishell
+==4087==
+==4087== HEAP SUMMARY:
+==4087==     in use at exit: 246,090 bytes in 381 blocks
+==4087==   total heap usage: 843 allocs, 462 frees, 272,739 bytes allocated
+==4087==
+==4087==
+==4087==
+==4087== 2,430 bytes in 66 blocks are indirectly lost in loss record 52 of 86
+==4087==    at 0x48597A8: malloc (vg_replace_malloc.c:446)
+==4087==    by 0x400989F: ft_calloc (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x400A667: ft_strdup (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40051E3: fill_env_array (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40052B6: list_to_char (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003CF8: exec_single_cmd (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003E7E: exec_node (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F81: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003EFC: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40026F0: main (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==
+
+==4087== 2,438 bytes in 67 blocks are indirectly lost in loss record 53 of 86
+==4087==    at 0x48597A8: malloc (vg_replace_malloc.c:446)
+==4087==    by 0x400989F: ft_calloc (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x400A667: ft_strdup (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40051E3: fill_env_array (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40052B6: list_to_char (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003CF8: exec_single_cmd (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003E7E: exec_node (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F81: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F15: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40026F0: main (in /home/vvazzs/42_Stuff/minishell/minishell)
+
+==4087==
+==4087== 2,966 (536 direct, 2,430 indirect) bytes in 1 blocks are definitely lost in loss record 54 of 86
+==4087==    at 0x48597A8: malloc (vg_replace_malloc.c:446)
+==4087==    by 0x4005291: list_to_char (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003CF8: exec_single_cmd (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003E7E: exec_node (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F81: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003EFC: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40026F0: main (in /home/vvazzs/42_Stuff/minishell/minishell)
+
+==4087==
+==4087== 2,982 (544 direct, 2,438 indirect) bytes in 1 blocks are definitely lost in loss record 55 of 86
+==4087==    at 0x48597A8: malloc (vg_replace_malloc.c:446)
+==4087==    by 0x4005291: list_to_char (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003CF8: exec_single_cmd (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003E7E: exec_node (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F81: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x4003F15: exec_tree (in /home/vvazzs/42_Stuff/minishell/minishell)
+==4087==    by 0x40026F0: main (in /home/vvazzs/42_Stuff/minishell/minishell)
+
+--------------------------------------------------------
+

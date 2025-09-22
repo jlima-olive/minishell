@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:02:51 by jlima-so          #+#    #+#             */
-/*   Updated: 2025/08/08 13:02:58 by vivaz-ca         ###   ########.fr       */
+/*   Updated: 2025/09/20 00:27:08 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		check_one_cmd(char *str, char **env, char **cmd, int value);
 void	rdwr_frm_int_fd(char *cmd_path_inc, char **env, int rd, int wr);
 char	*ft_wrdchr(const char *s, int c);
 int		ft_emptystr(const char *str);
-int ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
 
 typedef struct s_list
 {

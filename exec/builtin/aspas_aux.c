@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   aspas_aux.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/19 15:51:39 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 16:12:03 by vvazzs           ###   ########.fr       */
+/*   Created: 2025/09/20 00:24:11 by vvazzs            #+#    #+#             */
+/*   Updated: 2025/09/20 00:24:13 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../../sigma_minishell.h"
 
-# include <fcntl.h>
-# include <stdarg.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-
-typedef enum e_type
+int	count_it(char *str, int c)
 {
-	CMD,
-	AND,
-	OR,
-	EMPTY,
-	ERROR
-}	t_type;
+	int	i;
+	int	count;
 
-#endif
+	i = 0;
+	count = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}
