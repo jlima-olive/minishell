@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:59:13 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 12:02:03 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 12:03:50 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,10 @@ int							count_it(char *str, int c);
 int							add_new_env_var(t_os_envs **env_list,
 								const char *str);
 int							exec_single_cmd_aux(t_cmds *cmd);
+bool						is_n_flag(const char *arg);
 void						init_tree(char **mat);
 void						print_env_list(void);
+void						free_matrix(char **table);
 void						builtin_env(char **env);
 void						initialize_pwd(char **envp);
 void						handle_sigint(int sig);
