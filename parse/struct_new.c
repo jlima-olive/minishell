@@ -1,4 +1,3 @@
-
 #include "../sigma_minishell.h"
 #include "jojo_libft/libft.h"
 

@@ -102,6 +102,26 @@ int main(int argc, char *argv[], char **envp)
 			binary_clear(btree());
 		}
 	}
-	
+
+	/* char	*str;
+
+
+	signal(SIGQUIT, handle_sigint);
+	signal(SIGINT, SIG_IGN);
+	str = readline("reading >");
+	while (str)
+	{
+		printf("%s\n", str);
+		str = readline("reading >");
+	}
+	// signal(SIGINT, SIG_IGN);
+	// signal(SIGQUIT, handle_sigint);
+
+	str = readline("diff >");
+	while (str)
+	{
+		printf("%s\n", str);
+		str = readline("diff >");
+	} */
 	return (printf( "Closing Minishell\n"), 0);
 }

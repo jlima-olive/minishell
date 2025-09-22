@@ -9,12 +9,19 @@
 	}
 } */
 
+void	handle_heredoc()
+{
+	close(0);
+	write(1, "\n", 1);
+}
+
 void get_here_doc(char *eof, int fd[2])
 {
     char *str;
     char *delimiter = remove_aspas(eof);
     int len = ft_strlen(delimiter);
 
+	// signal(SIGINT, handle_heredoc);
     str = readline("> ");
     while (str && ft_strncmp(str, delimiter, len + 1))
     {
@@ -32,7 +39,6 @@ void get_here_doc(char *eof, int fd[2])
     }
     free(str);
     free(delimiter);
-
     if (fd)
         close(fd[1]);
 }
@@ -61,9 +67,9 @@ void discard_heredoc(t_infile *infiles)
 
 void	single_error_msg(char wc)
 {
-	ft_putstr_fd("syntax error near unexpected token: |", 2);
+	ft_putstr_fd("syntax error near unexpected token: `", 38);
 	ft_putstr_fd(&wc, 1);
-	ft_putstr_fd("|\n", 2);
+	ft_putstr_fd("'\n", 2);
 }
 
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
@@ -154,5 +160,5 @@ int	parsing(char *str)
 	// printf( "printing matrix\n");
 	// ft_print_matrix(mat);
 	// printf( "done printing matrix\n");
-	return (btree()->type == ERROR)
+	return (btree()->type == ERROR);
 }
