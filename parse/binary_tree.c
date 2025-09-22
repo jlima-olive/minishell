@@ -148,27 +148,32 @@ int	open_parethesis(char **mat)
 }
 
 
-void	*create_binary_lvl(char **mat, int id, t_binary *tree)
+void    *create_binary_lvl(char **mat, int id, t_binary *tree)
 {
-	int			sep;
-
-	if (btree()->type == ERROR || mat == NULL || *mat == NULL)
-		return (NULL);
-	while (open_parethesis(mat))
-		mat += 1;
-	if (btree()->type == ERROR)
-		return (NULL);
-	sep = separator_comp(mat, 1, ft_matlen(mat) - 1, 0);
-	if (sep == 0)
-		return (tree->cmds = get_cmds(mat), NULL);
-	tree->left = binary_new(id ,EMPTY, tree, NULL);
-	if (tree->left == NULL)
-		return (btree()->type = ERROR, NULL);
-	tree->right = binary_new(id ,EMPTY, tree, NULL);
-	if (tree->right == NULL)
-		return (btree()->type = ERROR, NULL);
-	tree->logic = mat[sep];
-	mat[sep] = NULL;
-	create_binary_lvl (mat, 1, tree->left);
-	return (create_binary_lvl (mat + sep + 1, 1, tree->right), NULL);
+    int         sep;    if (btree()->type == ERROR || mat == NULL || *mat == NULL)
+        return (NULL);
+    while (open_parethesis(mat))
+        mat += 1;
+    if (btree()->type == ERROR)
+        return (NULL);
+    sep = separator_comp(mat, 1, ft_matlen(mat) - 1, 0);
+    if (sep == 0)
+    {
+        tree->print_cmd = ft_join_matrix(mat, 0, 0, 0);
+        if (tree->print_cmd == NULL)
+            return (btree()->type = ERROR, free_matrix_nodes(mat), NULL);
+        // printf("printing this %s\n", tree->print_cmd);
+    }
+    if (sep == 0)
+        return (tree->cmds = get_cmds(mat), NULL);
+    tree->left = binary_new(id ,EMPTY, tree, NULL);
+    if (tree->left == NULL)
+        return (btree()->type = ERROR, NULL);
+    tree->right = binary_new(id ,EMPTY, tree, NULL);
+    if (tree->right == NULL)
+        return (btree()->type = ERROR, NULL);
+    tree->logic = mat[sep];
+    mat[sep] = NULL;
+    create_binary_lvl (mat, 1, tree->left);
+    return (create_binary_lvl (mat + sep + 1, 1, tree->right), NULL);
 }

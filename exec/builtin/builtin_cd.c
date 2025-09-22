@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:17:21 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 13:04:38 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 16:43:06 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*another_auxiliary(char *oldpwd, char *target)
 		free(newpwd);
 	}
 	else
-		ft_putstr_fd("cd: failed to update PWD\n", stderr);
+		ft_putstr_fd("cd: failed to update PWD\n", 2);
 	return (newpwd);
 }
 

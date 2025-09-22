@@ -15,6 +15,9 @@ void get_here_doc(char *eof, int fd[2])
     char *delimiter = remove_aspas(eof);
     int len = ft_strlen(delimiter);
 
+	if (btree()->global_signal == 130)
+		exit(1);
+	signal(SIGINT, handle_heredoc);
     str = readline("> ");
     while (str && ft_strncmp(str, delimiter, len + 1))
     {
@@ -28,6 +31,8 @@ void get_here_doc(char *eof, int fd[2])
                 free(expanded);
         }
         free(str);
+		if (btree()->global_signal == 130)
+			exit(1);
         str = readline("> ");
     }
     free(str);
@@ -61,9 +66,9 @@ void discard_heredoc(t_infile *infiles)
 
 void	single_error_msg(char wc)
 {
-	ft_putstr_fd("syntax error near unexpected token: |", 2);
+	ft_putstr_fd("syntax error near unexpected token: `", 38);
 	ft_putstr_fd(&wc, 1);
-	ft_putstr_fd("|\n", 2);
+	ft_putstr_fd("'\n", 2);
 }
 
 char **tokenization(char *str, t_token tokens, char **sep, int wc)
@@ -111,7 +116,9 @@ void init_tree(char	**mat)
 	btree()->left = NULL;
 	btree()->right = NULL;
 	btree()->subshell = NULL;
+	btree()->global_signal = 0;
 	btree()->logic = NULL;
+	btree()->print_cmd = NULL;
 	btree()->mat = mat;
 }
 
@@ -122,7 +129,7 @@ int	sep_count(char **mat)
 	count = 0;
 	while (*mat)
 	{
-		if (ft_strncmp(*mat, "&", 2) == 0)
+		if (ft_strncmp(*mat, "&", 2) == 0)	
 			count++;
 		mat++;
 	}

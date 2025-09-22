@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:54:32 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 11:55:07 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 18:27:58 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	main(int argc, char *argv[], char **envp)
 	initialize_stuff(argc, argv, envp);
 	while (1)
 	{
+		// printf("%d\n", getpid());	
 		input = readline("minishell$ ");
 		if (!input)
 			break ;
@@ -103,6 +104,7 @@ int	main(int argc, char *argv[], char **envp)
 		if (parsing(input) == 0)
 		{
 			exit_status = exec_tree(btree());
+			restart_signals();
 			free(input);
 			binary_clear(btree());
 		}

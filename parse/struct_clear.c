@@ -11,10 +11,11 @@ void	binary_clear(t_binary *binary)
 	binary_clear(binary->subshell);
 	cmds_clear(binary->cmds);
 	free (binary->logic);
+	free (binary->print_cmd);
 	if (binary->up)
 		free(binary);
-	// else
-		// env_clear(binary->nv)
+	else
+		free_matrix(binary->mat);
 }
 
 void	cmds_clear(t_cmds *cmds)
@@ -31,8 +32,7 @@ void	cmds_clear(t_cmds *cmds)
 	if (cmds->expanded)
 		free_matrix (cmds->cmd);
 	else
-		while (cmds->cmd && cmds->cmd[++ind])
-			free(cmds->cmd[ind]);
+		free_matrix_nodes(cmds->cmd);
 	free(cmds);
 }
 

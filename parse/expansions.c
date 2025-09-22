@@ -62,8 +62,8 @@ char	*expand_aux(char *str, int ind, int count, char *temp)
 	if (temp == NULL)
 		return (btree()->type = ERROR, free (str), NULL);
 	str[ind] = '\0';
-	// str = ft_strjoin_free(str, temp, 0);
-	str = ft_strjoin(str, temp);
+	str = ft_strjoin_free(str, temp, 0);
+	// str = ft_strjoin(str, temp);
 	if (str == NULL)
 		return (btree()->type = ERROR, NULL);
 	return (expand(str, 0, 0, 1));

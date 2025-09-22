@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sigma_minishell.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:59:13 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 12:03:50 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 17:25:49 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ typedef struct s_binary
 	int						sublvl;
 	int						left_ret;
 	int						right_ret;
+	char					*print_cmd;
 	int						subshell_ret;
+	int				global_signal;
 	char					**mat;
 	t_os_envs				*os_env;
 	char					**env;
@@ -130,7 +132,7 @@ void						discard_heredoc(t_infile *infiles);
 void						init_shell_meta(void);
 void						enhanced_sort_wild_vini_goat(t_os_envs *envs);
 void						my_ffprintf(char *cmd, char *which_message);
-void						expand_agrs(t_cmds *cmd);
+void						expand_args(t_cmds *cmd);
 void						prepare_for_exec(void);
 void						clear_env_list(void);
 void						rebuild_env_list(t_os_envs **env_list,
@@ -230,5 +232,11 @@ void						get_here_doc(char *eof, int fd[2]);
 	where every node in the list has as its content one string from
 	environment the list itself contains every string from environment*/
 // t_os_envs_list	*get_env(char **environ);
+
+
+void set_to_onethirty(int sig);
+void	handle_heredoc(int sig);
+int restart_signals(void);
+
 
 #endif

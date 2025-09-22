@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_aux2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:01:02 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 13:05:31 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 17:20:15 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_temp_var(const char *key)
 	return (NULL);
 }
 
-void	expand_agrs(t_cmds *cmd)
+void	expand_args(t_cmds *cmd)
 {
 	char	**mat;
 	char	**temp;
@@ -92,5 +92,5 @@ void	expand_agrs(t_cmds *cmd)
 			mat[ind] = quote(mat[ind]);
 	}
 	cmd->cmd = mat;
-	expand_agrs(cmd->next);
+	expand_args(cmd->next);
 }

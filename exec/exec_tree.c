@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 15:55:08 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 11:51:02 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 17:20:15 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	exec_child(t_cmds *cmd)
 	char	**cleaned;
 	char	**updated_envs;
 
+	signal(SIGINT, handle_sigint);
 	cleaned = array_to_exec(cmd);
 	updated_envs = list_to_char(*get_env_list());
 	if (has_redir(cmd))
@@ -44,7 +45,7 @@ int	exec_single_cmd(t_cmds *cmd)
 		exec_child(cmd);
 	else
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, set_to_onethirty);
 		waitpid(pid, &status, 0);
 		signal(SIGINT, handle_sigint);
 		return (WEXITSTATUS(status));
@@ -70,7 +71,7 @@ int	exec_node(t_binary *node)
 		return (0);
 	if (node->cmds != NULL)
 	{
-		expand_agrs(node->cmds);
+		expand_args(node->cmds);
 		if (node->cmds->next)
 			return (exec_pipes(node->cmds, btree()->env));
 		else
@@ -85,6 +86,8 @@ int	exec_tree(t_binary *tree)
 {
 	int	ret_left;
 
+	if (btree()->global_signal == 130)
+		return (130);
 	if (!tree)
 		return (0);
 	if (tree->logic && strcmp(tree->logic, "&&") == 0)

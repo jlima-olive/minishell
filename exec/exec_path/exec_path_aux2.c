@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path_aux2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vivaz-ca <vivaz-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:39:31 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 11:26:52 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 18:19:15 by vivaz-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	am_i_truly_myself(const char *cmd)
 
 void	my_ffprintf(char *cmd, char *which_message)
 {
-	write(2, "bash: ", 7);
+	write(2, cmd, ft_strlen(cmd));
+	write(2, ": ", 2);
 	write(2, which_message, ft_strlen(which_message));
 }
