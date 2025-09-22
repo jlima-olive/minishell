@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:21:23 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 09:19:56 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:41:51 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,19 @@ int	has_builtin(t_cmds *cmd)
 
 int	builtin_echo(char **args)
 {
-	int		i;
-	int		suppress_newline;
-	char	*arg;
-	char	*output;
+	int	i;
+	int	suppress_newline;
 
 	i = 1;
 	suppress_newline = 0;
-	if (args[1] && ft_strncmp(args[1], "-n", 2) == 0)
+	while (args[i] && is_n_flag(args[i]))
 	{
 		suppress_newline = 1;
 		i++;
 	}
 	while (args[i])
 	{
-		arg = args[i];
-		output = ft_strdup(arg);
-		ft_putstr_fd(output, 1);
-		free(output);
+		ft_putstr_fd(args[i], 1);
 		if (args[i + 1])
 			write(1, " ", 1);
 		i++;

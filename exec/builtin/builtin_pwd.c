@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:22:16 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/20 00:22:53 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:42:52 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,22 @@ int	builtin_pwd(void)
 			return (perror("pwd"), 0);
 	}
 	return (0);
+}
+
+bool	is_n_flag(const char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-')
+		return (false);
+	i = 1;
+	if (!arg[i])
+		return (false);
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
 }

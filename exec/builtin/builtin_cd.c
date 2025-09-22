@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 00:17:21 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/21 15:16:36 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:29:16 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*builtin_cd_aux(char **args)
 		if (!target)
 			return (my_ffprintf(target, "cd: HOME not set\n"), NULL);
 	}
-	else if (strcmp(args[1], "-") == 0)
+	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		target = find_path_in_list(*get_env_list(), "OLDPWD=");
 		if (!target)

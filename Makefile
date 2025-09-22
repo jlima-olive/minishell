@@ -4,8 +4,11 @@ PARSER_DIR=	parse
 PARSER=		$(PARSER_DIR)/$(PARSER_DIR).a
 EXEC_DIR=	exec
 BIN_DIR=	$(EXEC_DIR)/builtin
-EXEC=		$(wildcard ${EXEC_DIR}/*.c) \
-			$(wildcard ${BIN_DIR}/*.c)
+EXEC_PATH_DIR=	$(EXEC_DIR)/exec_path
+EXEC=			$(wildcard ${EXEC_DIR}/*.c) \
+				$(wildcard ${BIN_DIR}/*.c) \
+				$(wildcard ${EXEC_PATH_DIR}/*.c)
+
 CC=			cc
 AR=			ar rcs
 CFLAGS=		-Wall -Wextra -Werror -g -finstrument-functions

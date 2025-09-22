@@ -6,11 +6,11 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:44:52 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 22:44:53 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:27:03 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../sigma_minishell.h"
+#include "../../sigma_minishell.h"
 #include <string.h>
 #include <unistd.h>
 

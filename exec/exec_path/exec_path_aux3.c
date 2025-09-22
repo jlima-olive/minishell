@@ -6,11 +6,11 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:41:23 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 22:44:14 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:26:58 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../sigma_minishell.h"
+#include "../../sigma_minishell.h"
 
 int	exec_system_path_aux1(char **envp, char ***paths_to_search)
 {

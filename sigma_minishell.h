@@ -147,6 +147,11 @@ char *logical_pwd_update(const char *oldpwd, const char *target);
 int	count_it(char *str, int c);
 int	add_new_env_var(t_os_envs **env_list, const char *str);
 void free_env_list(t_os_envs *head);
+int	am_i_truly_myself(const char *cmd);
+int	exec_path(char *cmd, char **args, char **envp);
+void	my_ffprintf(char *cmd, char *which_message);
+	char	*find_path(char **envp, char *which_env);
+	bool is_n_flag(const char *arg);
 
 // struct_clear.c
 void		binary_clear(t_binary *binary);

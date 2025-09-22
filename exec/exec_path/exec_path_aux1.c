@@ -6,11 +6,11 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 22:36:54 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/19 22:38:54 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 11:26:48 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../sigma_minishell.h"
+#include "../../sigma_minishell.h"
 
 char	*find_path(char **envp, char *which_env)
 {
