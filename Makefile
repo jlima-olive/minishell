@@ -55,7 +55,7 @@ norm:
 	| awk '/c: Error/ { c++; if (c % 2 == 1) printf "\033[1;35m%s\033[0m\n", $$0; else printf "\033[1;36m%s\033[0m\n", $$0 }'
 	@echo "Amount of errors: " && norminette $(shell find . -type f \( -name "*.c" -o -name "*.h" \)) | grep "Error" | wc -l
 
-make val: re
+make val: fclean all re
 	clear
 	valgrind --leak-check=full --trace-children=yes --show-leak-kinds=all ./minishell
 

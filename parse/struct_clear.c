@@ -5,24 +5,24 @@ void	binary_clear(t_binary *binary)
 {
 	if (binary == NULL)
 		return ;
-	// printf("im deleting this\n");
-	// fflush(stdout);
+	printf("im deleting this\n");
+	fflush(stdout);
 	binary_clear(binary->left);
 	binary_clear(binary->right);
 	binary_clear(binary->subshell);
 	cmds_clear(binary->cmds);
-	// printf("deleting %s\n", binary->logic);
-	// fflush(stdout);
+	printf("deleting %s\n", binary->logic);
+	fflush(stdout);
 	free (binary->logic);
-	// printf("deleting print_cmd'%s'\n", binary->print_cmd);
-	// fflush(stdout);
+	printf("deleting print_cmd'%s'\n", binary->print_cmd);
+	fflush(stdout);
 	free (binary->print_cmd);
 	if (binary->up)
 		free(binary);
-	// else
-		// env_clear(binary->nv)
-	// printf("very much deleted that\n");
-	// fflush(stdout);
+	else
+		free_matrix(binary->mat);
+	printf("very much deleted that\n");
+	fflush(stdout);
 }
 
 void	cmds_clear(t_cmds *cmds)
@@ -33,9 +33,9 @@ void	cmds_clear(t_cmds *cmds)
 	cmds->next = NULL;
 	outfile_clear(cmds->outfiles);
 	infile_clear(cmds->infiles);
-	// printf("deleting ->");
-	// fflush(stdout);
-	// ft_print_matrix(cmds->cmd);
+	printf("deleting ->");
+	fflush(stdout);
+	ft_print_matrix(cmds->cmd);
 	if (cmds->expanded)
 		free_matrix (cmds->cmd);
 	else
@@ -48,8 +48,8 @@ void	infile_clear(t_infile *infile)
 	if (infile == NULL)
 		return ;
 	infile_clear(infile->next);
-	// printf("%s %s\n", infile->token, infile->file);
-	// fflush(stdout);
+	printf("%s %s\n", infile->token, infile->file);
+	fflush(stdout);
 	free(infile->file);
 	free(infile->token);
 	free(infile);
@@ -60,8 +60,8 @@ void	outfile_clear(t_outfile *outfile)
 	if (outfile == NULL)
 		return ;
 	outfile_clear(outfile->next);
-	// printf("%s %s\n", outfile->token, outfile->file);
-	// fflush(stdout);
+	printf("%s %s\n", outfile->token, outfile->file);
+	fflush(stdout);
 	free(outfile->file);
 	free(outfile->token);
 	free(outfile);

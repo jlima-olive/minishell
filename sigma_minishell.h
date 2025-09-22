@@ -6,7 +6,7 @@
 /*   By: vvazzs <vvazzs@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 11:59:13 by vvazzs            #+#    #+#             */
-/*   Updated: 2025/09/22 13:06:59 by vvazzs           ###   ########.fr       */
+/*   Updated: 2025/09/22 13:09:28 by vvazzs           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,22 @@ typedef struct s_cmds
 
 typedef struct s_binary
 {
-	char					*logic;
-	t_type					type;
-	int						sublvl;
-	int						left_ret;
-	int						right_ret;
-	int						subshell_ret;
-	char					**mat;
-	t_os_envs				*os_env;
-	char					**env;
-	t_cmds					*cmds;
-	struct s_binary			*up;
-	struct s_binary			*left;
-	struct s_binary			*right;
-	struct s_binary			*subshell;
-	struct termios			orig_termios; //<-- VINI TESTEANDO UMA CRAZY THING
+	char			*logic;
+	t_type			type;
+	int				sublvl;
+	int				left_ret;
+	int				right_ret;
+	int				subshell_ret;
+	char			*print_cmd;
+	char			**mat;
+	t_os_envs		*os_env;
+	char			**env;
+	t_cmds			*cmds;
+	struct s_binary	*up;
+	struct s_binary	*left;
+	struct s_binary	*right;
+	struct s_binary	*subshell;
+	struct termios orig_termios; //<-- VINI TESTEANDO UMA CRAZY THING
 }	t_binary;
 
 int							parsing(char *str);

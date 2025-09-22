@@ -97,6 +97,7 @@ char **tokenization(char *str, t_token tokens, char **sep, int wc)
 			break ;
 		strcount = parsing_strlen(str, tokens, sep);
 		ret[ind] = ft_strndup(str, strcount);
+		printf("ANUCIAR QUE E O TOKENITATION RET[IND]: %s\n", ret[ind]);
 		if (ret[ind] == NULL)
 			return (ft_free_matrix(ret), NULL); // CLOSE PROGRAM INSTEAD OF RETURN NULL WHEN WE FIND MEMORY ERRORS?
 		str += strcount;
